@@ -1,0 +1,68 @@
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:${N8N_PORT:-5678}/
+      - TZ=Africa/Tunis
+    volumes:
+      - ./n8n:/home/node/.n8n
+      - ./shared:/shared
+    depends_on:
+      - ocrservice
+      - extractionservice
+      - validationservice
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  pdfservice:
+    build: ./services/pdfservice
+    environment:
+      - SHARED_DIR=/shared
+    volumes:
+      - ./shared:/shared
+    ports:
+      - "8001:8000"
+
+  ocrservice:
+    build: ./services/ocrservice
+    environment:
+      - SHARED_DIR=/shared
+    volumes:
+      - ./shared:/shared
+    ports:
+      - "8002:8000"
+
+  extractionservice:
+    build: ./services/extractionservice
+    environment:
+      - SHARED_DIR=/shared
+      - OLLAMA_URL=http://ollama:11434/api/chat
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-mistral}
+    volumes:
+      - ./shared:/shared
+    ports:
+      - "8003:8000"
+    depends_on:
+      - ollama
+
+  validationservice:
+    build: ./services/validationservice
+    environment:
+      - SHARED_DIR=/shared
+    volumes:
+      - ./shared:/shared
+    ports:
+      - "8004:8000"
+
+volumes:
+  ollama_data:
