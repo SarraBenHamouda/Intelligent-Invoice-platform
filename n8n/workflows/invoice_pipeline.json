@@ -1,0 +1,223 @@
+{
+  "name": "Invoice Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "invoice-upload",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "Webhook_1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://pdfservice:8000/analyze",
+        "sendBinaryData": true,
+        "binaryPropertyName": "data",
+        "options": {}
+      },
+      "id": "HTTP_PDF",
+      "name": "Analyze PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"source_type\"]}}",
+              "operation": "equal",
+              "value2": "pdf_text"
+            }
+          ]
+        }
+      },
+      "id": "IF_DIGITAL",
+      "name": "Is Digital PDF?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [740, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ocrservice:8000/ocr",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_paths\": {{$json[\"rendered_pages\"]}},\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}"
+      },
+      "id": "HTTP_OCR",
+      "name": "OCR Pages",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [980, 430]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const source = $json;\nreturn [{ json: {\n  raw_text: source.extracted_text,\n  page_count: source.page_count,\n  source_type: source.source_type\n}}];"
+      },
+      "id": "CODE_TEXT",
+      "name": "Prepare Text Branch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [980, 180]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const pdf = $('Analyze PDF').first().json;\nconst ocr = $json;\nreturn [{ json: {\n  raw_text: ocr.full_text,\n  page_count: pdf.page_count,\n  source_type: pdf.source_type\n}}];"
+      },
+      "id": "CODE_OCR",
+      "name": "Prepare OCR Branch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1210, 430]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionservice:8000/extract",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}"
+      },
+      "id": "HTTP_EXTRACT",
+      "name": "Extract Invoice JSON",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"data\": {{$json}}}"
+      },
+      "id": "HTTP_VALIDATE",
+      "name": "Validate Invoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1690, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {}
+      },
+      "id": "RESPOND",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1930, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Analyze PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze PDF": {
+      "main": [
+        [
+          {
+            "node": "Is Digital PDF?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Digital PDF?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Text Branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OCR Pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR Pages": {
+      "main": [
+        [
+          {
+            "node": "Prepare OCR Branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Text Branch": {
+      "main": [
+        [
+          {
+            "node": "Extract Invoice JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare OCR Branch": {
+      "main": [
+        [
+          {
+            "node": "Extract Invoice JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Invoice JSON": {
+      "main": [
+        [
+          {
+            "node": "Validate Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Invoice": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
