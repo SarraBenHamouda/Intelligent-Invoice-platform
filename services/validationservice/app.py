@@ -44,12 +44,14 @@ def validate_invoice(req: ValidationRequest):
     total_tva = float(totals.get("total_tva", 0) or 0)
     total_ttc = float(totals.get("total_ttc", 0) or 0)
 
-    if abs((total_ht + total_tva) - total_ttc) > 0.05:
-        issues.append({
-            "type": "coherence",
-            "field": "totals",
-            "message": "total_ht + total_tva does not match total_ttc"
-        })
+    # Validate totals ONLY if TTC is detected
+    if total_ttc > 0:
+        if abs((total_ht + total_tva) - total_ttc) > 0.05:
+            issues.append({
+                "type": "coherence",
+                "field": "totals",
+                "message": "total_ht + total_tva does not match total_ttc"
+            })
 
     return {
         "is_valid": len(issues) == 0,
