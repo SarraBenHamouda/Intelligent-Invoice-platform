@@ -18,8 +18,17 @@
       "parameters": {
         "method": "POST",
         "url": "http://pdfservice:8000/analyze",
-        "sendBinaryData": true,
-        "binaryPropertyName": "data",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "file",
+              "parameterType": "formBinaryData",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
         "options": {}
       },
       "id": "HTTP_PDF",
@@ -52,7 +61,7 @@
         "url": "http://ocrservice:8000/ocr",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"image_paths\": {{$json[\"rendered_pages\"]}},\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}"
+        "jsonBody": "={\n  \"image_paths\": $json[\"rendered_pages\"],\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}"
       },
       "id": "HTTP_OCR",
       "name": "OCR Pages",
@@ -63,7 +72,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const source = $json;\nreturn [{ json: {\n  raw_text: source.extracted_text,\n  page_count: source.page_count,\n  source_type: source.source_type\n}}];"
+        "jsCode": "return {\n  json: {\n    raw_text: $json.extracted_text,\n    page_count: $json.page_count,\n    source_type: $json.source_type\n  }\n};"
       },
       "id": "CODE_TEXT",
       "name": "Prepare Text Branch",
@@ -74,7 +83,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const pdf = $('Analyze PDF').first().json;\nconst ocr = $json;\nreturn [{ json: {\n  raw_text: ocr.full_text,\n  page_count: pdf.page_count,\n  source_type: pdf.source_type\n}}];"
+        "jsCode": "const pdf = $('Analyze PDF').first().json;\n\nreturn {\n  json: {\n    raw_text: $json.full_text,\n    page_count: pdf.page_count,\n    source_type: pdf.source_type\n  }\n};"
       },
       "id": "CODE_OCR",
       "name": "Prepare OCR Branch",
@@ -88,7 +97,7 @@
         "url": "http://extractionservice:8000/extract",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{$json}}"
+        "jsonBody": "{{ JSON.stringify($json) }}"
       },
       "id": "HTTP_EXTRACT",
       "name": "Extract Invoice JSON",
@@ -102,13 +111,58 @@
         "url": "http://validationservice:8000/validate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\"data\": {{$json}}}"
+        "jsonBody": "{{ JSON.stringify({ data: $json }) }}"
       },
       "id": "HTTP_VALIDATE",
       "name": "Validate Invoice",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [1690, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json[\"is_valid\"]}}",
+              "operation": "true"
+            }
+          ]
+        }
+      },
+      "id": "IF_VALID",
+      "name": "Is Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1930, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionservice:8000/repair",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{{ JSON.stringify({ raw_text: $('Prepare Text Branch').first().json.raw_text, extracted_data: $('Extract Invoice JSON').first().json, validation_issues: $('Validate Invoice').first().json.issues }) }}"
+      },
+      "id": "HTTP_REPAIR",
+      "name": "Repair Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2170, 430]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{{ JSON.stringify({ data: $json }) }}"
+      },
+      "id": "HTTP_VALIDATE_REPAIRED",
+      "name": "Validate Repaired Invoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2410, 430]
     },
     {
       "parameters": {
@@ -120,7 +174,7 @@
       "name": "Respond to Webhook",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1930, 300]
+      "position": [2650, 300]
     }
   ],
   "connections": {
@@ -209,6 +263,46 @@
       ]
     },
     "Validate Invoice": {
+      "main": [
+        [
+          {
+            "node": "Is Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Valid?": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Repair Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Repair Extraction": {
+      "main": [
+        [
+          {
+            "node": "Validate Repaired Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Repaired Invoice": {
       "main": [
         [
           {
