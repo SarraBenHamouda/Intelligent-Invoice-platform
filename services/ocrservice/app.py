@@ -25,7 +25,11 @@ class OCRResponse(BaseModel):
 
 def preprocess(img: Image.Image) -> Image.Image:
     img = img.convert("L")
+
     img = ImageOps.autocontrast(img)
+
+    img = img.point(lambda x: 0 if x < 140 else 255, "1")
+
     return img
 
 
