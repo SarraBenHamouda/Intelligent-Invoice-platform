@@ -9,6 +9,7 @@ services:
       - N8N_PROTOCOL=http
       - WEBHOOK_URL=http://localhost:${N8N_PORT:-5678}/
       - TZ=Africa/Tunis
+      - N8N_BASIC_AUTH_ACTIVE=false
     volumes:
       - ./n8n:/home/node/.n8n
       - ./shared:/shared

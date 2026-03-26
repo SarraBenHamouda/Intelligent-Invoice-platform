@@ -32,6 +32,17 @@ def preprocess(img: Image.Image) -> Image.Image:
 
     return img
 
+for i, line in enumerate(lines):
+
+    price = float(line.get("unit_price", 0) or 0)
+
+    if price > 1000:
+        issues.append({
+            "type": "suspicious",
+            "field": f"lines[{i}].unit_price",
+            "message": "unit_price too large (possible OCR error)"
+        })
+        
 
 @app.get("/health")
 def health():

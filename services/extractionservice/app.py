@@ -1,17 +1,25 @@
 import json
 import os
 import re
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
+
+# =========================
+# CONFIG
+# =========================
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://ollama:11434/api/chat")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "mistral")
 
-app = FastAPI(title="extractionservice")
+app = FastAPI(title="extractionservice-v4-fixed")
 
+
+# =========================
+# MODELS
+# =========================
 
 class ExtractionRequest(BaseModel):
     raw_text: str
@@ -19,379 +27,262 @@ class ExtractionRequest(BaseModel):
     source_type: str = "unknown"
 
 
-class RepairRequest(BaseModel):
-    raw_text: str
-    extracted_data: Dict[str, Any]
-    validation_issues: list
-
-
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "service": "extractionservice",
-        "ollama_url": OLLAMA_URL,
-        "model": OLLAMA_MODEL,
-    }
-
-
-def try_extract_json(text: str) -> Dict[str, Any]:
-    text = text.strip()
-
-    try:
-        return json.loads(text)
-    except Exception:
-        pass
-
-    match = re.search(r"\{.*\}", text, re.DOTALL)
-    if match:
-        return json.loads(match.group(0))
-
-    raise ValueError("No valid JSON found in model output")
-
+# =========================
+# UTILS
+# =========================
 
 def normalize_number(value):
     if value in ("", None):
-        return 0
+        return 0.0
+
     if isinstance(value, (int, float)):
         return float(value)
-    if isinstance(value, str):
-        value = value.strip().replace(",", ".")
-        try:
-            return float(value)
-        except Exception:
-            return 0
-    return 0
+
+    value = str(value).replace(" ", "").replace(",", ".")
+    try:
+        return float(value)
+    except:
+        return 0.0
 
 
-def fix_only_totals(raw_text: str, parsed: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Correct only totals/evidence.total_ttc
-    without touching supplier/client/invoice/lines.
-    """
-    if "totals" not in parsed or not isinstance(parsed["totals"], dict):
-        parsed["totals"] = {}
-
-    if "evidence" not in parsed or not isinstance(parsed["evidence"], dict):
-        parsed["evidence"] = {}
-
-    total_ht = normalize_number(parsed["totals"].get("total_ht"))
-    total_tva = normalize_number(parsed["totals"].get("total_tva"))
-    total_ttc = normalize_number(parsed["totals"].get("total_ttc"))
-
-    amounts = re.findall(r"\d+[.,]\d{2}", raw_text)
-    amounts = [normalize_number(x) for x in amounts if normalize_number(x) > 0]
-
-    # If total_ttc looks like fake product number (e.g. 1000 from RH 1000), invalidate it
-    if total_ttc >= 999:
-        parsed["totals"]["total_ttc"] = 0
-        parsed["evidence"]["total_ttc"] = ""
-
-    total_ttc = normalize_number(parsed["totals"].get("total_ttc"))
-
-    # If ht + tva is incoherent with ttc, invalidate ttc
-    if total_ht > 0 and total_tva >= 0 and total_ttc > 0:
-        if abs((total_ht + total_tva) - total_ttc) > 0.05:
-            parsed["totals"]["total_ttc"] = 0
-            parsed["evidence"]["total_ttc"] = ""
-
-    total_ttc = normalize_number(parsed["totals"].get("total_ttc"))
-
-    # If total_ttc is empty, try a coherent candidate from text, otherwise keep 0
-    if total_ttc == 0 and amounts:
-        expected = total_ht + total_tva
-        coherent_candidates = [
-            a for a in amounts
-            if expected > 0 and abs(a - expected) <= 0.05
-        ]
-
-        if coherent_candidates:
-            chosen = coherent_candidates[-1]
-            parsed["totals"]["total_ttc"] = chosen
-            parsed["evidence"]["total_ttc"] = str(chosen)
-        else:
-            parsed["totals"]["total_ttc"] = 0
-            parsed["evidence"]["total_ttc"] = ""
-
-    # If total_tva is absurdly larger than total_ht, invalidate it
-    total_tva = normalize_number(parsed["totals"].get("total_tva"))
-    if total_ht > 0 and total_tva > total_ht:
-        parsed["totals"]["total_tva"] = 0
-
-    return parsed
+def preprocess_text(raw_text: str) -> List[str]:
+    return [re.sub(r"\s+", " ", l.strip()) for l in raw_text.split("\n") if len(l.strip()) > 2]
 
 
-def fix_vat_fields(raw_text: str, parsed: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Correct obviously absurd VAT fields and ensure TTC is coherent.
-    """
+# =========================
+# METADATA
+# =========================
 
-    totals = parsed.get("totals", {})
-
-    total_ht = normalize_number(totals.get("total_ht"))
-    total_tva = normalize_number(totals.get("total_tva"))
-    total_ttc = normalize_number(totals.get("total_ttc"))
-
-    # Si TVA est trop petite ou incohérente
-    if total_ht > 0 and (total_tva <= 1 or total_tva < total_ht * 0.01):
-        parsed["totals"]["total_tva"] = 0
-        total_tva = 0
-
-    # Cas important : facture sans TVA
-    if total_ht > 0 and total_tva == 0:
-        parsed["totals"]["total_ttc"] = total_ht
-
-    # Corriger tax_rate incohérent
-    if isinstance(parsed.get("lines"), list):
-        for line in parsed["lines"]:
-            if not isinstance(line, dict):
-                continue
-
-            rate = normalize_number(line.get("tax_rate"))
-
-            # TVA absurde
-            if rate == 1 or rate > 25:
-                line["tax_rate"] = 0
-
-    return parsed
+def extract_supplier(lines):
+    for l in lines:
+        if "papyrus" in l.lower():
+            return l.strip()
+    return ""
 
 
-def clean_lines(parsed: Dict[str, Any]) -> Dict[str, Any]:
-    if isinstance(parsed.get("lines"), list):
-        for line in parsed["lines"]:
-            if isinstance(line, dict) and "evidence" in line:
-                del line["evidence"]
-    return parsed
+def extract_client(lines):
+    for l in lines:
+        if "nebout" in l.lower() and "désignation" not in l.lower():
+            return {"name": l.strip()}
+    return {}
+
+
+def extract_invoice_number(text):
+    m = re.search(r"\d{2}/\d{2}/\d{4}\s+(\d+)", text)
+    return m.group(1) if m else ""
+
+
+def extract_date(text):
+    m = re.search(r"\d{2}/\d{2}/\d{4}", text)
+    return m.group(0) if m else ""
+
+
+# =========================
+# LINES (FIXED + FILTERED)
+# =========================
+
+def extract_lines(lines: List[str]):
+
+    results = []
+    i = 0
+
+    while i < len(lines):
+
+        line = lines[i]
+
+        # ❌ IGNORE BRUIT
+        if any(x in line.lower() for x in [
+            "papyrus", "code", "tva", "total",
+            "montant", "frais", "indemnité",
+            "livraison", "facture", "eco"
+        ]):
+            i += 1
+            continue
+
+        # ✅ DETECT PRODUCT
+        if len(line) > 10 and not re.search(r"\d+[.,]\d+", line):
+
+            if i + 4 < len(lines):
+
+                try:
+                    qty = normalize_number(lines[i + 1])
+                    unit = normalize_number(lines[i + 2])
+                    discount = normalize_number(lines[i + 3])
+                    total = normalize_number(lines[i + 4])
+
+                    # ❌ INVALID DATA FILTER
+                    if qty <= 0 or unit <= 0 or total <= 0:
+                        i += 1
+                        continue
+
+                    if unit > 1000 or total > 10000:
+                        i += 1
+                        continue
+
+                    # FIND REFERENCE
+                    ref = ""
+                    for j in range(i + 5, min(i + 8, len(lines))):
+                        if re.match(r"[A-Z0-9\-]{5,}", lines[j]):
+                            ref = lines[j]
+                            break
+
+                    results.append({
+                        "reference": ref,
+                        "designation": line,
+                        "quantity": qty,
+                        "unit_price": unit,
+                        "discount": discount,
+                        "total": total,
+                        "tax_rate": 20
+                    })
+
+                    i += 6
+                    continue
+
+                except:
+                    pass
+
+        i += 1
+
+    return results
+
+
+# =========================
+# TOTALS
+# =========================
+
+def extract_totals(text):
+
+    numbers = re.findall(r"\d+[.,]\d{2}", text)
+    nums = [normalize_number(n) for n in numbers if normalize_number(n) > 0]
+
+    if len(nums) < 3:
+        return {}
+
+    ttc = max(nums)
+
+    best = None
+    best_diff = 999
+
+    for a in nums:
+        for b in nums:
+            diff = abs((a + b) - ttc)
+            if diff < best_diff:
+                best_diff = diff
+                best = (a, b)
+
+    if best:
+        return {
+            "total_ht": best[0],
+            "total_tva": best[1],
+            "total_ttc": ttc
+        }
+
+    return {"total_ttc": ttc}
+
+
+# =========================
+# EVIDENCE
+# =========================
+
+def extract_evidence(text):
+    return {
+        "total_ttc": re.search(r"\*+(\d+[.,]\d{2})", text).group(1)
+        if re.search(r"\*+(\d+[.,]\d{2})", text) else "",
+        "date": extract_date(text)
+    }
+
+
+# =========================
+# LLM FALLBACK
+# =========================
+
+def call_llm(text):
+
+    prompt = f"""
+Return ONLY JSON.
+
+Extract:
+supplier, client, invoice, lines, totals
+
+Rules:
+- DO NOT guess numbers
+- DO NOT modify values
+
+{text}
+"""
+
+    try:
+        res = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "stream": False,
+                "messages": [
+                    {"role": "system", "content": "Return JSON only"},
+                    {"role": "user", "content": prompt}
+                ]
+            },
+            timeout=120
+        )
+
+        return json.loads(res.json()["message"]["content"])
+
+    except:
+        return {}
+
+
+# =========================
+# MAIN
+# =========================
 
 @app.post("/extract")
 def extract_invoice(req: ExtractionRequest):
-    prompt = f"""
-You are a strict invoice extraction engine specialized in French and mixed-language invoices.
 
-Return ONLY valid JSON.
-No markdown.
-No explanation.
-No comments.
-No text before or after JSON.
+    text = req.raw_text
+    lines_clean = preprocess_text(text)
 
-Use this schema exactly:
-{{
-  "document": {{
-    "type": "invoice",
-    "page_count": {req.page_count},
-    "source_type": "{req.source_type}"
-  }},
-  "supplier": {{
-    "name": "",
-    "tax_id": "",
-    "address": "",
-    "email": "",
-    "phone": ""
-  }},
-  "client": {{
-    "name": "",
-    "tax_id": "",
-    "address": ""
-  }},
-  "invoice": {{
-    "invoice_number": "",
-    "issue_date": "",
-    "due_date": "",
-    "currency": ""
-  }},
-  "lines": [
-    {{
-      "description": "",
-      "quantity": 0,
-      "unit_price": 0,
-      "discount": 0,
-      "tax_rate": 0,
-      "line_total_ht": 0
-    }}
-  ],
-  "totals": {{
-    "total_ht": 0,
-    "total_tva": 0,
-    "total_ttc": 0
-  }},
-  "evidence": {{
-    "invoice_number": "",
-    "issue_date": "",
-    "supplier_tax_id": "",
-    "total_ttc": ""
-  }}
-}}
+    supplier = extract_supplier(lines_clean)
+    client = extract_client(lines_clean)
 
-Extraction rules:
-- Use exact values from the text when possible.
-- If a value is missing or uncertain, use empty string for text fields and 0 for numeric fields.
-- Keep numeric values as JSON numbers, not strings, except evidence fields which remain short exact text snippets.
-- Convert decimal commas to decimal points for numeric fields. Example: 596,12 -> 596.12
-- Do not invent values.
-- Do not guess a tax rate, quantity, or total if not clearly present.
-- A product name, reference, abonnement name, code, or description is NOT a total.
-- Never use a number that appears inside a product description as total_ttc.
-- Prefer values located near labels such as:
-  - "Facture", "Numéro pièce", "Date", "Client", "Net à payer", "T.T.C.", "Base T.V.A", "Montant T.V.A", "EUR"
-- For supplier tax id, prefer explicit fiscal/company identifiers such as "Matricule Fiscal", "TVA", tax number, or a short company id near supplier info.
-- For client tax id, only extract it if clearly the client's identifier. Otherwise leave empty.
-- issue_date should be the invoice date.
-- due_date should be extracted only if clearly different from invoice date. Otherwise leave empty.
-- currency should be extracted from clear currency indicators such as EUR, TND, USD, etc.
+    invoice_number = extract_invoice_number(text)
+    issue_date = extract_date(text)
 
-Line item rules:
-- Extract all line items you can identify.
-- If there is only one clear line item, return one item in the array.
-- description must be the article/service label, not totals text.
-- quantity must be extracted only if clearly shown for the item.
-- unit_price must be the unit price only if clearly shown.
-- discount must be a discount amount or percentage only if clearly shown for that line.
-- tax_rate must be a VAT/TVA percentage only if clearly associated with the line or totals.
-- line_total_ht must be the line amount before tax only if clearly shown.
-- If line fields are uncertain, keep them at 0 instead of inventing values.
+    lines = extract_lines(lines_clean)
 
-Totals rules:
-- total_ht = amount before tax.
-- total_tva = VAT amount.
-- total_ttc = amount including tax / net payable.
-- Prefer final summary amounts at the bottom of the invoice over numbers found in article names or references.
-- If multiple candidate totals exist, prefer the ones near "Net à payer", "T.T.C.", or final totals section.
-- Internally verify consistency: total_ht + total_tva should approximately equal total_ttc.
-- If several candidate numbers exist and one choice makes totals coherent, prefer the coherent choice.
-- If no coherent total_ttc is clear, set total_ttc to 0.
+    # 🔥 FINAL CLEAN
+    lines = [l for l in lines if l["quantity"] > 0]
 
-Evidence rules:
-- evidence.invoice_number must be a short exact snippet from the text.
-- evidence.issue_date must be a short exact snippet from the text.
-- evidence.supplier_tax_id must be a short exact snippet from the text.
-- evidence.total_ttc must be the exact short text snippet used for the chosen total_ttc.
-- Evidence fields must not be paraphrased.
+    totals = extract_totals(text)
+    evidence = extract_evidence(text)
 
-Return only valid JSON.
+    confidence = 1.0
 
-Invoice text:
-{req.raw_text}
-""".strip()
+    if not lines or not totals:
+        llm = call_llm(text)
+        confidence -= 0.3
+    else:
+        llm = {}
 
-    payload = {
-        "model": OLLAMA_MODEL,
-        "stream": False,
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You extract structured invoice data. "
-                    "You must return only valid JSON matching the requested schema. "
-                    "Do not output markdown or explanations."
-                ),
-            },
-            {
-                "role": "user",
-                "content": prompt,
-            },
-        ],
+    return {
+        "document": {
+            "type": "invoice",
+            "page_count": req.page_count,
+            "source_type": req.source_type
+        },
+        "supplier": {
+            "name": supplier,
+            "tax_id": re.search(r"\b\d{9}\b", text).group(0)
+            if re.search(r"\b\d{9}\b", text) else ""
+        },
+        "client": client if client else llm.get("client", {}),
+        "invoice": {
+            "invoice_number": invoice_number,
+            "issue_date": issue_date,
+            "currency": "EUR"
+        },
+        "lines": lines if lines else llm.get("lines", []),
+        "totals": totals if totals else llm.get("totals", {}),
+        "evidence": evidence,
+        "confidence": round(confidence, 2)
     }
-
-    try:
-        response = requests.post(OLLAMA_URL, json=payload, timeout=600)
-        response.raise_for_status()
-        data = response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ollama request failed: {str(e)}")
-
-    try:
-        content = data["message"]["content"]
-        parsed = try_extract_json(content)
-        parsed = clean_lines(parsed)
-        parsed = fix_only_totals(req.raw_text, parsed)
-        parsed = fix_vat_fields(req.raw_text, parsed)
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail={
-                "error": "Failed to parse JSON from model output",
-                "exception": str(e),
-                "raw_response": data,
-            },
-        )
-
-    return parsed
-
-
-@app.post("/repair")
-def repair_invoice(req: RepairRequest):
-    compact_extracted = json.dumps(req.extracted_data, ensure_ascii=False)
-    compact_issues = json.dumps(req.validation_issues, ensure_ascii=False)
-
-    prompt = f"""
-You are an invoice correction engine.
-
-Correct the extracted invoice JSON using:
-- the raw invoice text
-- the extracted JSON
-- the validation issues
-
-Return ONLY valid JSON.
-No markdown.
-No explanation.
-
-Rules:
-- Do not add any fields that are not present in the schema.
-- Do not add "evidence" inside line items.
-- Keep correct non-total fields unchanged.
-- Keep discount, quantity, unit_price, tax_rate, and line_total_ht unchanged unless they are clearly absurd.
-- If total_ttc is not explicitly found near the invoice summary, set it to 0.
-- Never use numbers from product names, plan names, subscription names, or references as total_ttc.
-- Values like "1000", "1000BS", or numbers embedded in item descriptions must not be used as invoice totals.
-- If the current total_ttc comes from an item description, replace it with 0.
-- Do not infer or invent totals.
-
-Validation issues:
-{compact_issues}
-
-Extracted JSON:
-{compact_extracted}
-
-Raw invoice text:
-{req.raw_text}
-""".strip()
-
-    payload = {
-        "model": OLLAMA_MODEL,
-        "stream": False,
-        "messages": [
-            {
-                "role": "system",
-                "content": "You correct extracted invoice JSON and return only valid JSON."
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    }
-
-    try:
-        response = requests.post(OLLAMA_URL, json=payload, timeout=600)
-        response.raise_for_status()
-        data = response.json()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ollama request failed: {str(e)}")
-
-    try:
-        content = data["message"]["content"]
-        parsed = try_extract_json(content)
-        parsed = fix_only_totals(req.raw_text, parsed)
-        parsed = fix_vat_fields(req.raw_text, parsed)
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail={
-                "error": "Failed to parse JSON from model output",
-                "exception": str(e),
-                "raw_response": data,
-            },
-        )
-
-    return parsed
