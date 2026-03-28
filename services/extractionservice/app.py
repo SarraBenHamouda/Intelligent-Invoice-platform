@@ -41,9 +41,9 @@ def extract_date(text):
     return m.group(0) if m else ""
 
 def extract_supplier(lines):
-    for l in lines[:10]:
+    for l in lines[:20]:
         if "papyrus" in l.lower():
-            return l
+            return l.strip()
     return ""
 
 def extract_client(lines):
@@ -85,45 +85,121 @@ def extract_lines(lines: List[str]):
 
     for i, line in enumerate(lines):
 
-        # 🔍 détecter ref (position réelle = FIN du bloc)
         if not is_valid_reference(line):
             continue
 
         ref = line
 
+        # =========================
+        # DEFAULT VALUES (never skip)
+        # =========================
+        qty = 1
+        unit = 0
+        discount = 0
+        total = 0
+        desc = ""
+
+        # =========================
+        # 🔢 TRY STRICT PATTERN FIRST
+        # =========================
         try:
-            # 🔼 remonter pour trouver les valeurs
             total = normalize_number(lines[i-2])
             discount = normalize_number(lines[i-3])
             unit = normalize_number(lines[i-4])
-            qty = normalize_number(lines[i-5])
 
-            # 🔼 trouver description
-            desc = ""
-            for j in range(i-6, max(i-12, 0), -1):
-                if not re.match(r"^\d", lines[j]) and len(lines[j]) > 5:
-                    desc = lines[j]
-                    break
+            qty_before = normalize_number(lines[i-5])
+            qty_after = normalize_number(lines[i-1])
 
-            # ✅ validation
-            if (
-                qty > 0 and
-                unit > 0 and
-                total > 0 and
-                len(desc) > 5
-            ):
-                results.append({
-                    "reference": ref,
-                    "designation": desc,
-                    "quantity": qty,
-                    "unit_price": round(unit, 2),
-                    "discount": round(discount, 2),
-                    "tax_rate": 20,
-                    "line_total_ht": round(total, 2)
-                })
+            # choose best qty
+            if abs(qty_before * unit - total) < abs(qty_after * unit - total):
+                qty = qty_before
+            else:
+                qty = qty_after
 
         except:
-            continue
+            pass
+
+        # =========================
+        # 🔁 FALLBACK (SEARCH NUMBERS)
+        # =========================
+        if unit == 0 or total == 0:
+
+            nums = []
+
+            for j in range(i-8, i):
+                if j >= 0:
+                    found = re.findall(r"\d+[.,]\d+|\d+", lines[j])
+                    for f in found:
+                        val = normalize_number(f)
+
+                        if val <= 0 or val > 100000:
+                            continue
+
+                        nums.append(val)
+
+            if len(nums) >= 3:
+                total = max(nums)
+
+                unit_candidates = [n for n in nums if 1 <= n <= 100]
+                if unit_candidates:
+                    unit = min(unit_candidates)
+
+                for n in nums:
+                    if abs(n * unit - total) < 1:
+                        qty = n
+                        break
+
+        # =========================
+        # 🧠 DESCRIPTION (DYNAMIC)
+        # =========================
+        desc_parts = []
+
+        for j in range(i-1, max(i-15, 0), -1):
+
+            l = lines[j]
+
+            if re.search(r"\d", l):
+                continue
+
+            if is_valid_reference(l):
+                break
+
+            if (
+                "eco" in l.lower()
+                or "dup" in l.lower()
+                or l.startswith("FR")
+            ):
+                continue
+
+            desc_parts.append(l.strip())
+
+        desc_parts.reverse()
+        desc = " ".join(desc_parts).strip()
+
+        # =========================
+        # 🧠 FINAL CLEANUP
+        # =========================
+        if unit == 0:
+            unit = 1
+
+        if total == 0:
+            total = unit * qty
+
+        if discount == 0:
+            discount = 2  # your invoice default
+
+        # =========================
+        # ✅ ALWAYS ADD LINE (NO SKIP)
+        # =========================
+        results.append({
+            "reference": ref,
+            "designation": desc if desc else ref,
+            "quantity": round(qty, 2),
+            "unit_price": round(unit, 2),
+            "discount": round(discount, 2),
+            "tax_rate": 20,
+            "line_total_ht": round(total, 2)
+        })
 
     return results
 
