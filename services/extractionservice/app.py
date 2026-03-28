@@ -58,8 +58,56 @@ def extract_client(lines):
 
 
 def is_valid_reference(ref: str):
-    return re.match(r"^[A-Z]{2,5}[\-]?\d{2,6}$", ref) and not ref.startswith("FR")
+    if ref.startswith("FR"):
+        return False
 
+    # must contain at least ONE digit (real product code)
+    if not re.search(r"\d", ref):
+        return False
+
+    # avoid short garbage
+    if len(ref) < 5:
+        return False
+
+    return re.match(r"^[A-Z0-9\-]+$", ref)
+
+
+def is_real_product(ref: str, qty, unit, total, desc):
+
+    # must contain letters + digits
+    if not re.search(r"[A-Z]", ref):
+        return False
+
+    if not re.search(r"\d", ref):
+        return False
+
+    # reject pure numeric refs
+    if ref.isdigit():
+        return False
+
+    # reject long IDs
+    if len(ref) > 15:
+        return False
+
+    # ❗ IMPORTANT CHANGE HERE
+    # allow fallback when description failed
+    if len(desc) < 5:
+        # accept if numbers look valid
+        if qty > 0 and unit > 0 and total > 0:
+            return True
+        return False
+
+    # normal validation
+    if qty <= 0 or qty > 1000:
+        return False
+
+    if unit <= 0 or unit > 1000:
+        return False
+
+    if total <= 0 or total > 100000:
+        return False
+
+    return True
 
 def is_noise(line: str):
     l = line.lower()
@@ -191,7 +239,8 @@ def extract_lines(lines: List[str]):
         # =========================
         # ✅ ALWAYS ADD LINE (NO SKIP)
         # =========================
-        results.append({
+        if is_real_product(ref, qty, unit, total, desc):
+            results.append({
             "reference": ref,
             "designation": desc if desc else ref,
             "quantity": round(qty, 2),
