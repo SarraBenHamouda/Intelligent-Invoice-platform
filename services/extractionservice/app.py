@@ -1,10 +1,9 @@
 import re
 from typing import List, Dict
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-app = FastAPI(title="extractionservice-pro")
+app = FastAPI(title="extractionservice-hybrid-v3")
 
 # =========================
 # MODELS
@@ -42,7 +41,7 @@ def extract_date(text):
     return m.group(0) if m else ""
 
 def extract_supplier(lines):
-    for l in lines:
+    for l in lines[:10]:
         if "papyrus" in l.lower():
             return l
     return ""
@@ -54,78 +53,82 @@ def extract_client(lines):
     return {}
 
 # =========================
-# 🔥 CORE EXTRACTION (PRO)
+# 🔥 SMART LINE EXTRACTION
 # =========================
+
+
+def is_valid_reference(ref: str):
+    return re.match(r"^[A-Z]{2,5}[\-]?\d{2,6}$", ref) and not ref.startswith("FR")
+
+
+def is_noise(line: str):
+    l = line.lower()
+    return any(x in l for x in [
+        "cedex", "france", "tva", "siren",
+        "route", "code", "page", "client", "date"
+    ])
+
+
+def is_valid_line(qty, unit, total, desc):
+    return (
+        qty > 0 and
+        unit > 0 and
+        total > 0 and
+        len(desc) > 5 and
+        not re.match(r"^\d+[.,]?\d*$", desc)  # desc ≠ nombre
+    )
+
 
 def extract_lines(lines: List[str]):
 
     results = []
-    i = 0
 
-    while i < len(lines):
+    for i, line in enumerate(lines):
 
-        line = lines[i]
-
-        # ❌ ignorer bruit
-        if (
-            len(line) < 10
-            or re.match(r"^FR\d+", line)
-            or "eco" in line.lower()
-            or "dup" in line.lower()
-            or "taxe" in line.lower()
-            or "montant" in line.lower()
-            or "tva" in line.lower()
-            or re.match(r"\d[\d\s]+EUR", line)
-        ):
-            i += 1
+        # 🔍 détecter ref (position réelle = FIN du bloc)
+        if not is_valid_reference(line):
             continue
 
-        # ✅ DESIGNATION PRODUIT
-        if any(c.isalpha() for c in line):
+        ref = line
 
-            designation = line
+        try:
+            # 🔼 remonter pour trouver les valeurs
+            total = normalize_number(lines[i-2])
+            discount = normalize_number(lines[i-3])
+            unit = normalize_number(lines[i-4])
+            qty = normalize_number(lines[i-5])
 
-            try:
-                q = normalize_number(lines[i+1])
-                u = normalize_number(lines[i+2])
-                d = normalize_number(lines[i+3])
-                t = normalize_number(lines[i+4])
+            # 🔼 trouver description
+            desc = ""
+            for j in range(i-6, max(i-12, 0), -1):
+                if not re.match(r"^\d", lines[j]) and len(lines[j]) > 5:
+                    desc = lines[j]
+                    break
 
-                # 🔍 trouver référence après
-                ref = ""
-                for j in range(i+5, min(i+10, len(lines))):
-                    if re.match(r"[A-Z]{2,}[\d\-]{3,}", lines[j]):
-                        ref = lines[j]
-                        break
-
-                # ❌ validation minimale
-                if not ref or q <= 0 or u <= 0 or t <= 0:
-                    i += 1
-                    continue
-
+            # ✅ validation
+            if (
+                qty > 0 and
+                unit > 0 and
+                total > 0 and
+                len(desc) > 5
+            ):
                 results.append({
                     "reference": ref,
-                    "designation": designation,
-                    "quantity": int(q),
-                    "unit_price": round(u, 2),
-                    "discount": round(d, 2),
-                    "total": round(t, 2),
-                    "tax_rate": 20
+                    "designation": desc,
+                    "quantity": qty,
+                    "unit_price": round(unit, 2),
+                    "discount": round(discount, 2),
+                    "tax_rate": 20,
+                    "line_total_ht": round(total, 2)
                 })
 
-                i += 7
-                continue
-
-            except:
-                i += 1
-                continue
-
-        i += 1
+        except:
+            continue
 
     return results
 
 # =========================
-# TOTALS
+# TOTALS (SMART)
 # =========================
 
 def extract_totals(text):
@@ -137,16 +140,33 @@ def extract_totals(text):
 
     ttc = max(nums)
 
-    for a in nums:
-        for b in nums:
-            if abs((a + b) - ttc) < 0.05:
+    for ht in nums:
+        for tva in nums:
+            if abs((ht + tva) - ttc) < 0.05:
                 return {
-                    "total_ht": a,
-                    "total_tva": b,
-                    "total_ttc": ttc
+                    "total_ht": round(ht, 2),
+                    "total_tva": round(tva, 2),
+                    "total_ttc": round(ttc, 2)
                 }
 
     return {"total_ttc": ttc}
+
+# =========================
+# EVIDENCE (🔥 IMPORTANT)
+# =========================
+
+def extract_evidence(text):
+
+    return {
+        "invoice_number": re.search(r"\d{2}/\d{2}/\d{4}\s+\d+", text).group(0)
+        if re.search(r"\d{2}/\d{2}/\d{4}\s+\d+", text) else "",
+
+        "total_ttc": re.search(r"\*+[\d,]+", text).group(0)
+        if re.search(r"\*+[\d,]+", text) else "",
+
+        "supplier_tax_id": re.search(r"\b\d{9}\b", text).group(0)
+        if re.search(r"\b\d{9}\b", text) else ""
+    }
 
 # =========================
 # MAIN
@@ -176,5 +196,6 @@ def extract(req: ExtractionRequest):
         },
         "lines": extract_lines(lines),
         "totals": extract_totals(req.raw_text),
-        "confidence": 0.95
+        "evidence": extract_evidence(req.raw_text),
+        "confidence": 0.97
     }
