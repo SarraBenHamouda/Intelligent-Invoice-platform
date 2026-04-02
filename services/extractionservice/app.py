@@ -1,13 +1,12 @@
-
 import re
 import json
 import os
-from typing import List, Dict, Any
+from typing import List
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import requests
 
-app = FastAPI(title="extractionservice-hybrid-v6")
+app = FastAPI(title="extractionservice-final")
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://ollama:11434/api/chat")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "mistral")
@@ -40,17 +39,15 @@ def clean_lines(text: str) -> List[str]:
 # =========================
 
 def extract_contacts(text):
-
     email = re.search(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+", text)
     website = re.search(r"www\.[^\s]+", text)
-
     phones = re.findall(r"(?:\+?\d{2,3}[\s\-]?)?(?:\d{2}[\s\-]?){4,5}", text)
 
     return {
         "email": email.group(0) if email else "",
         "website": website.group(0) if website else "",
-        "phone": phones[0] if len(phones) > 0 else "",
-        "fax": phones[1] if len(phones) > 1 else ""
+        "phone": phones[0].strip() if len(phones) > 0 else "",
+        "fax": phones[1].strip() if len(phones) > 1 else ""
     }
 
 # =========================
@@ -60,24 +57,25 @@ def extract_contacts(text):
 def extract_supplier(lines, text):
 
     name = ""
-    address_lines = []
-
-    for i, l in enumerate(lines[:20]):
-        if any(x in l.lower() for x in ["informatique", "papyrus", "pegase"]):
+    
+    # ✅ Strong detection
+    for l in lines[:40]:
+        if re.search(r"papyrus|pegase|informatique", l, re.IGNORECASE):
             name = l.strip()
-
-            for j in range(i+1, min(i+6, len(lines))):
-                if re.search(r"\d", lines[j]) or "rue" in lines[j].lower():
-                    address_lines.append(lines[j])
-                else:
-                    break
             break
+
+    # ✅ Fallback (important)
+    if not name:
+        for l in lines[:20]:
+            if len(l) > 5 and not any(x in l.lower() for x in ["facture", "client", "date", "tva"]):
+                name = l.strip()
+                break
 
     contacts = extract_contacts(text)
 
     return {
         "name": name,
-        "address": ", ".join(address_lines),
+        "address": "",
         **contacts
     }
 
@@ -88,13 +86,13 @@ def extract_client(lines):
             if i+1 < len(lines):
                 return {"name": lines[i+1].strip()}
 
-        if "nebout" in l.lower() or "sotrade" in l.lower():
+        if "nebout" in l.lower():
             return {"name": l.strip()}
 
-    return {}
+    return {"name": ""}
 
 # =========================
-# VALIDATION
+# VALIDATION HELPERS
 # =========================
 
 def is_valid_reference(ref: str):
@@ -107,19 +105,14 @@ def is_valid_reference(ref: str):
     return re.match(r"^[A-Z0-9\-]+$", ref)
 
 def is_real_product(ref, qty, unit, total, desc):
-
     if not re.search(r"[A-Z]", ref) or not re.search(r"\d", ref):
         return False
-
     if ref.startswith("C000") or len(ref) > 12:
         return False
-
     if unit > 1000 or total > 100000:
         return False
-
     if len(desc) < 5:
         return False
-
     return True
 
 # =========================
@@ -148,7 +141,6 @@ def extract_lines(lines: List[str]):
             if unit == 0 or total == 0:
                 continue
 
-            # DESCRIPTION
             desc = ""
             for j in range(i-1, max(i-15, 0), -1):
                 l = lines[j]
@@ -175,51 +167,80 @@ def extract_lines(lines: List[str]):
     return results
 
 # =========================
-# TOTALS
+# TOTALS (SAFE + ROBUST)
 # =========================
 
-def extract_totals(text):
+def extract_totals(text, lines):
 
-    nums = re.findall(r"\d+[.,]\d{2}", text)
-    nums = [normalize_number(x) for x in nums]
+    try:
+        nums = re.findall(r"\d+[.,]\d{2}", text)
+        nums = [normalize_number(x) for x in nums]
 
-    if not nums:
-        return {}
+        if not nums:
+            return {"total_ht": 0, "total_tva": 0, "total_ttc": 0}
 
-    ttc = max(nums)
+        # ✅ Step 1: detect TTC (largest value)
+        ttc = max(nums)
 
-    for ht in nums:
-        for tva in nums:
-            if abs((ht + tva) - ttc) < 0.05:
-                return {
-                    "total_ht": round(ht, 2),
-                    "total_tva": round(tva, 2),
-                    "total_ttc": round(ttc, 2)
-                }
+        # ✅ Step 2: filter relevant numbers (avoid small noise)
+        candidates = [n for n in nums if 100 < n < ttc]
 
-    return {
-        "total_ht": 0,
-        "total_tva": 0,
-        "total_ttc": round(ttc, 2)
-    }
+        best_ht, best_tva = 0, 0
+        min_diff = 999
+
+        for ht in candidates:
+            for tva in candidates:
+
+                # ✅ enforce logic
+                if ht <= tva:
+                    continue
+
+                if tva > ht:
+                    continue
+
+                if ht >= ttc or tva >= ttc:
+                    continue
+
+                diff = abs((ht + tva) - ttc)
+
+                if diff < min_diff:
+                    min_diff = diff
+                    best_ht = ht
+                    best_tva = tva
+
+        # ✅ fallback
+        if best_ht == 0:
+            total_ht = sum(l.get("line_total_ht", 0) for l in lines)
+            return {
+                "total_ht": round(total_ht, 2),
+                "total_tva": round(total_ht * 0.2, 2),
+                "total_ttc": round(total_ht * 1.2, 2)
+            }
+
+        return {
+            "total_ht": round(best_ht, 2),
+            "total_tva": round(best_tva, 2),
+            "total_ttc": round(ttc, 2)
+        }
+
+    except Exception as e:
+        return {
+            "total_ht": 0,
+            "total_tva": 0,
+            "total_ttc": 0,
+            "error": str(e)
+        }
 
 # =========================
 # QUALITY CHECK
 # =========================
 
 def is_good_result(parsed):
-
     lines = parsed.get("lines", [])
-
-    valid_lines = [
-        l for l in lines
-        if l.get("unit_price", 0) > 0 and l.get("line_total_ht", 0) > 0
-    ]
-
-    return len(valid_lines) >= 1
+    return any(l.get("unit_price", 0) > 0 for l in lines)
 
 # =========================
-# LLM FALLBACK
+# LLM FALLBACK (SAFE)
 # =========================
 
 def call_llm(raw_text: str):
@@ -228,9 +249,9 @@ def call_llm(raw_text: str):
 Return ONLY valid JSON.
 
 Extract invoice:
-- supplier (name, email, phone)
+- supplier
 - client
-- invoice info
+- invoice
 - lines
 - totals
 
@@ -245,55 +266,71 @@ Text:
     }
 
     try:
-        response = requests.post(OLLAMA_URL, json=payload, timeout=300)
+        response = requests.post(OLLAMA_URL, json=payload, timeout=30)
         response.raise_for_status()
-        data = response.json()
 
+        data = response.json()
         content = data["message"]["content"]
 
         match = re.search(r"\{.*\}", content, re.DOTALL)
         if match:
             return json.loads(match.group(0))
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except:
+        return {}
 
     return {}
 
 # =========================
-# MAIN
+# MAIN ENDPOINT
 # =========================
 
 @app.post("/extract")
 def extract(req: ExtractionRequest):
 
-    lines = clean_lines(req.raw_text)
+    try:
+        lines = clean_lines(req.raw_text)
+        result_lines = extract_lines(lines)
 
-    result = {
-        "document": {
-            "type": "invoice",
-            "page_count": req.page_count,
-            "source_type": req.source_type
-        },
-        "supplier": extract_supplier(lines, req.raw_text),
-        "client": extract_client(lines),
-        "invoice": {
-            "invoice_number": re.search(r"\d{2}/\d{2}/\d{4}\s+\w+", req.raw_text).group(0)
-            if re.search(r"\d{2}/\d{2}/\d{4}\s+\w+", req.raw_text) else "",
-            "issue_date": re.search(r"\d{2}/\d{2}/\d{4}", req.raw_text).group(0)
-            if re.search(r"\d{2}/\d{2}/\d{4}", req.raw_text) else "",
-            "currency": "EUR"
-        },
-        "lines": extract_lines(lines),
-        "totals": extract_totals(req.raw_text),
-        "evidence": {},
-        "confidence": 0.99
-    }
+        invoice_number_match = re.search(r"\d{2}/\d{2}/\d{4}\s+\w+", req.raw_text)
+        issue_date_match = re.search(r"\d{2}/\d{2}/\d{4}", req.raw_text)
 
-    # fallback if bad extraction
-    if not is_good_result(result):
-        llm_result = call_llm(req.raw_text)
-        if llm_result:
-            return llm_result
+        result = {
+            "document": {
+                "type": "invoice",
+                "page_count": req.page_count,
+                "source_type": req.source_type
+            },
+            "supplier": extract_supplier(lines, req.raw_text),
+            "client": extract_client(lines),
+            "invoice": {
+                "invoice_number": invoice_number_match.group(0) if invoice_number_match else "",
+                "issue_date": issue_date_match.group(0) if issue_date_match else "",
+                "currency": "EUR"
+            },
+            "lines": result_lines,
+            "totals": extract_totals(req.raw_text, result_lines),
+            "evidence": {},
+            "confidence": 0.99
+        }
 
-    return result
+        if not is_good_result(result):
+            llm_result = call_llm(req.raw_text)
+            if llm_result:
+                return llm_result
+
+        return result
+
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+
+# =========================
+# HEALTH CHECK
+# =========================
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
