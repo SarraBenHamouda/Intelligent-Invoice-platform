@@ -1,0 +1,87 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "40f48655-95f7-4711-8afa-7dfa49f55a8f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    PINO,\n    TIERS,\n    REF,\n    QTE,\n    CR\nFROM MVTL\nWHERE PINO = 10001293"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "bb1807f3-ee50-43bc-8e2c-e3e06f006a5c",
+      "name": "Microsoft SQL",
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const items = $input.all();\n\nconst invoice = {\n  invoice: {\n    number: items[0].json.PINO,\n    currency: \"EUR\"\n  },\n  client: {\n    code: (items[0].json.TIERS || \"\").trim()\n  },\n  lines: [],\n  totals: {\n    ht: 0,\n    ttc: 0\n  }\n};\n\nconst COEF = 2.5;       // adjust if needed\nconst DISCOUNT = 0.02;  // 2% from PDF\n\nfor (const item of items) {\n  const basePrice = Number(item.json.CR || 0);\n  const quantity = Number(item.json.QTE || 0);\n\n  // 🔥 apply discount\n  const unit_price = basePrice * COEF;\n  const discounted_price = unit_price * (1 - DISCOUNT);\n\n  const total_ht = discounted_price * quantity;\n\n  invoice.lines.push({\n    reference: (item.json.REF || \"\").trim(),\n    quantity,\n    unit_price: discounted_price,\n    total_ht\n  });\n\n  invoice.totals.ht += total_ht;\n}\n\n// TVA ~ 19.7% (based on your data)\ninvoice.totals.ttc = invoice.totals.ht * 1.197;\n\nreturn [{ json: invoice }];"
+      },
+      "name": "Get Local Datetime",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        464,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "5d845021-f163-4b25-a570-1353fca09fb5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL": {
+      "main": [
+        [
+          {
+            "node": "Get Local Datetime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b1275427-1d3b-45cc-bbbe-56a1216297c5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
+  },
+  "id": "vog0YAR61ETC6ifGPinVC",
+  "tags": []
+}
