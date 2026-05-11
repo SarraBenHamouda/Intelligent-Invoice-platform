@@ -6,25 +6,71 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        -512,
+        48
       ],
       "id": "40f48655-95f7-4711-8afa-7dfa49f55a8f",
       "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fed3f308-4e7b-4ff1-bd73-ad7621efd979",
+              "leftValue": "={{$json.type}}",
+              "rightValue": "header",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        48
+      ],
+      "id": "c7a5e58c-281a-4c28-af58-0197566ac8b2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "functionCode": "const items = $input.all();\n\n// 🟢 HEADER\nconst header = {\n  invoice_number: items[0].json.invoice_number,\n  issue_date: items[0].json.issue_date,\n  client: items[0].json.client.trim(),\n  currency: items[0].json.currency.trim(),\n  total_ht: items[0].json.total_ht,\n  total_tva: items[0].json.total_tva,\n  total_ttc: items[0].json.total_ttc\n};\n\n// 🟢 LINES\nconst lines = items.map(i => ({\n  reference: i.json.reference.trim(),\n  designation: i.json.designation.trim(),\n  quantity: i.json.quantity,\n  unit_price: i.json.unit_price,\n  discount: i.json.discount,\n  line_total_ht: i.json.line_total_ht\n}));\n\nreturn [\n  { json: { type: \"header\", data: header } },\n  { json: { type: \"lines\", data: lines } }\n];"
+      },
+      "name": "Séparer header / lines",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        -48,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "5d845021-f163-4b25-a570-1353fca09fb5"
+    },
+    {
+      "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT \n    PINO,\n    TIERS,\n    REF,\n    QTE,\n    CR\nFROM MVTL\nWHERE PINO = 10001293"
+        "query": "INSERT INTO  (\n    invoice_number,\n    issue_date,\n    client,\n    currency,\n    total_ht,\n    total_tva,\n    total_ttc\n)\nOUTPUT INSERTED.id\nVALUES (\n    {{$json.data.invoice_number}},\n    {{$json.data.issue_date}},\n    '{{$json.data.client}}',\n    '{{$json.data.currency}}',\n    {{$json.data.total_ht}},\n    {{$json.data.total_tva}},\n    {{$json.data.total_ttc}}\n);"
       },
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        208,
-        0
+        1488,
+        -144
       ],
-      "id": "bb1807f3-ee50-43bc-8e2c-e3e06f006a5c",
-      "name": "Microsoft SQL",
+      "id": "c1d4131b-821a-4dbd-a960-870b11546e5b",
+      "name": "Header",
       "credentials": {
         "microsoftSql": {
           "id": "LxGNeUdh6pVTGKkD",
@@ -34,16 +80,69 @@
     },
     {
       "parameters": {
-        "functionCode": "const items = $input.all();\n\nconst invoice = {\n  invoice: {\n    number: items[0].json.PINO,\n    currency: \"EUR\"\n  },\n  client: {\n    code: (items[0].json.TIERS || \"\").trim()\n  },\n  lines: [],\n  totals: {\n    ht: 0,\n    ttc: 0\n  }\n};\n\nconst COEF = 2.5;       // adjust if needed\nconst DISCOUNT = 0.02;  // 2% from PDF\n\nfor (const item of items) {\n  const basePrice = Number(item.json.CR || 0);\n  const quantity = Number(item.json.QTE || 0);\n\n  // 🔥 apply discount\n  const unit_price = basePrice * COEF;\n  const discounted_price = unit_price * (1 - DISCOUNT);\n\n  const total_ht = discounted_price * quantity;\n\n  invoice.lines.push({\n    reference: (item.json.REF || \"\").trim(),\n    quantity,\n    unit_price: discounted_price,\n    total_ht\n  });\n\n  invoice.totals.ht += total_ht;\n}\n\n// TVA ~ 19.7% (based on your data)\ninvoice.totals.ttc = invoice.totals.ht * 1.197;\n\nreturn [{ json: invoice }];"
+        "jsCode": "const date = new Date($json.data.issue_date);\n\n$json.data.issue_date = date.toISOString().slice(0, 19).replace('T', ' ');\n\nreturn $json;"
       },
-      "name": "Get Local Datetime",
-      "type": "n8n-nodes-base.function",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        464,
-        0
+        1072,
+        -160
       ],
-      "typeVersion": 1,
-      "id": "5d845021-f163-4b25-a570-1353fca09fb5"
+      "id": "0b415933-deb9-4fc2-944c-1e95e2bdb26b",
+      "name": "Fixing the date"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n\n    -- =====================================\n    -- FACTURE\n    -- =====================================\n\n    ENT.DOS,\n\n    ENT.TIERS AS client_code,\n\n    CASE\n        WHEN ISNULL(ENT.PREFPINO, '') = ''\n        THEN CAST(ENT.PINO AS VARCHAR)\n        ELSE ENT.PREFPINO + CAST(ENT.PINO AS VARCHAR)\n    END AS invoice_number,\n\n    CONVERT(VARCHAR, ENT.PIDT, 23) AS invoice_date,\n\n    CONVERT(VARCHAR, ENT.ECHDT, 23) AS due_date,\n\n    ENT.DEV AS currency,\n\n    ENT.HTMT AS base_tva,\n\n    ENT.HTPDTMT AS total_ht,\n\n    ENT.TTCMT AS total_ttc,\n\n    ENT.PIEDMT_0001 AS frais_port_non_soumis,\n\n    ENT.PIEDMT_0002 AS frais_port_soumis,\n\n    ENT.PIEDMT_0003 AS frais_emballage,\n\n    -- =====================================\n    -- TAUX TVA\n    -- =====================================\n\n    T085.TVAP AS tax_rate,\n\n    -- =====================================\n    -- CLIENT\n    -- =====================================\n\n    T1.NOM AS client_name,\n\n    T1.RUE AS client_address,\n\n    T1.VIL AS client_city,\n\n    T1.CPOSTAL AS client_postal_code,\n\n    T1.TEL AS client_phone,\n\n    T1.EMAIL AS client_email,\n\n    T1.PAY AS client_country,\n\n    -- =====================================\n    -- EMETTEUR\n    -- =====================================\n\n    SOC.NOM AS sender_name,\n\n    SOC.RUE AS sender_address,\n\n    SOC.VIL AS sender_city,\n\n    SOC.CPOSTAL AS sender_postal_code,\n\n    SOC.TEL AS sender_phone,\n\n    SOC.EMAIL AS sender_email,\n\n    SOC.WEB AS sender_website,\n\n    SOC.SIRET AS sender_siret,\n\n    SOC.TVANO AS sender_tva,\n\n    -- =====================================\n    -- ARTICLES\n    -- =====================================\n\n    CASE\n        WHEN ISNULL(MOUV.ARTIND, '') = ''\n        THEN MOUV.REF\n        ELSE MOUV.REF + MOUV.ARTIND\n    END AS article_reference,\n\n    MOUV.DES AS designation,\n\n    MOUV.REFQTE AS quantity,\n\n    MOUV.PUB AS unit_price,\n\n    MOUV.MONT AS line_total\n\nFROM ENT\n\n-- =====================================\n-- ARTICLES\n-- =====================================\n\nLEFT JOIN MOUV\n    ON ENT.DOS = MOUV.DOS\n    AND ENT.PINO = MOUV.FANO\n    AND ENT.TIERS = MOUV.TIERS\n\n-- =====================================\n-- CLIENT\n-- =====================================\n\nLEFT JOIN T1\n    ON ENT.DOS = T1.DOS\n    AND ENT.TIERS = T1.TIERS\n    AND T1.ADRCOD = 'SIEGE'\n\n-- =====================================\n-- SOCIETE EMETTRICE\n-- =====================================\n\nLEFT JOIN SOC\n    ON ENT.DOS = SOC.DOS\n\n-- =====================================\n-- TVA\n-- =====================================\n\nLEFT JOIN T085\n    ON T085.TVAP = 20\n\nWHERE\n    ENT.PICOD = '4'\n    AND ENT.TIERS = 'C0001002'\n    AND ENT.PINO = '10001397'\n\nORDER BY\n    MOUV.REF"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -304,
+        48
+      ],
+      "id": "bb1807f3-ee50-43bc-8e2c-e3e06f006a5c",
+      "name": "Import Data",
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO invoice_lines (\n    invoice_id,\n    reference,\n    designation,\n    quantity,\n    unit_price,\n    discount,\n    line_total_ht\n)\nVALUES (\n    {{$node[\"Header\"].json.id}},\n    '{{$json.reference}}',\n    '{{$json.designation}}',\n    {{$json.quantity}},\n    {{$json.unit_price}},\n    {{$json.discount}},\n    {{$json.line_total_ht}}\n);"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        160
+      ],
+      "id": "4db7054a-8b1d-4ab1-91af-c5a4562b85ad",
+      "name": "LInes",
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const lines = $json.data;\n\nreturn lines.map(line => ({\n  json: line\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        160
+      ],
+      "id": "cfb5e44e-749c-4def-a5da-d7059b5a24a4",
+      "name": "Seperate lines"
     }
   ],
   "pinData": {},
@@ -52,18 +151,69 @@
       "main": [
         [
           {
-            "node": "Microsoft SQL",
+            "node": "Import Data",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Microsoft SQL": {
+    "Séparer header / lines": {
       "main": [
         [
           {
-            "node": "Get Local Datetime",
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Fixing the date",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Seperate lines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fixing the date": {
+      "main": [
+        [
+          {
+            "node": "Header",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Import Data": {
+      "main": [
+        [
+          {
+            "node": "Séparer header / lines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seperate lines": {
+      "main": [
+        [
+          {
+            "node": "LInes",
             "type": "main",
             "index": 0
           }
@@ -77,7 +227,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "b1275427-1d3b-45cc-bbbe-56a1216297c5",
+  "versionId": "8b0d9168-5086-4adf-a0de-1fe771a5fc32",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
