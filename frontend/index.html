@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Intelligent Invoice Platform
+    </title>
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- ICONS -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body>
+
+    <!-- VIDEO -->
+
+    <video
+        autoplay
+        muted
+        loop
+        id="bg-video"
+    >
+
+        <source
+            src="background.mp4"
+            type="video/mp4"
+        >
+
+    </video>
+
+    <!-- OVERLAY -->
+
+    <div class="overlay"></div>
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="logo">
+
+            <i data-lucide="brain-circuit"></i>
+
+            <span>
+                InvoiceAI
+            </span>
+
+        </div>
+
+        <div class="nav-links">
+
+            <a href="#">
+                Dashboard
+            </a>
+
+            <a href="#">
+                ERP
+            </a>
+
+            <a href="#">
+                Validation
+            </a>
+
+            <a href="#">
+                TTN
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- MAIN -->
+
+    <main>
+
+        <section class="hero">
+
+            <!-- LEFT -->
+
+            <div class="hero-left">
+
+                <div class="badge">
+
+                    <i data-lucide="sparkles"></i>
+
+                    AI Powered ERP Extraction
+
+                </div>
+
+                <h1>
+                    Intelligent Invoice Platform
+                </h1>
+
+                <p>
+
+                    ERP extraction,
+                    OCR recognition,
+                    AI validation,
+                    TEIF XML generation
+                    and electronic signature.
+
+                </p>
+
+                <!-- FEATURES -->
+
+                <div class="features">
+
+                    <div class="feature-card">
+
+                        <i data-lucide="database"></i>
+
+                        ERP Database
+
+                    </div>
+
+                    <div class="feature-card">
+
+                        <i data-lucide="shield-check"></i>
+
+                        AI Validation
+
+                    </div>
+
+                    <div class="feature-card">
+
+                        <i data-lucide="file-code-2"></i>
+
+                        XML Generation
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SEARCH CARD -->
+
+            <div class="search-card">
+
+                <div class="card-header">
+
+                    <div class="icon-box">
+
+                        <i data-lucide="search"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Search Invoice
+                        </h2>
+
+                        <p>
+                            Retrieve invoice directly from ERP database
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- FORM -->
+
+                <form id="invoiceForm">
+
+                    <input
+                        type="text"
+                        id="invoiceNumber"
+                        placeholder="Invoice Number"
+                    >
+
+                    <input
+                        type="text"
+                        id="clientCode"
+                        placeholder="Client Code"
+                    >
+
+                    <button type="submit">
+
+                        <i data-lucide="database"></i>
+
+                        Extract Invoice
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- RESULT -->
+
+        <div class="result-container"></div>
+
+    </main>
+
+    <!-- ICONS -->
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- JS -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

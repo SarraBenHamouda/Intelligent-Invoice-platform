@@ -1,0 +1,31 @@
+sql_field,human_label
+client_code,Client Code
+invoice_number,Invoice Number
+invoice_date,Invoice Date
+due_date,Due Date
+currency,Currency
+base_tva,Base TVA
+total_ht,Total HT
+total_ttc,Total TTC
+tax_rate,TVA Rate
+client_name,Client Name
+client_address,Client Address
+client_city,Client City
+client_postal_code,Postal Code
+client_phone,Client Phone
+client_email,Client Email
+client_country,Client Country
+sender_name,Supplier Name
+sender_address,Supplier Address
+sender_city,Supplier City
+sender_postal_code,Supplier Postal Code
+sender_phone,Supplier Phone
+sender_email,Supplier Email
+sender_website,Website
+sender_siret,SIRET
+sender_tva,TVA Number
+article_reference,Article Reference
+designation,Designation
+quantity,Quantity
+unit_price,Unit Price
+line_total,Line Total
