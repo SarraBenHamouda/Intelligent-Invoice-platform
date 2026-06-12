@@ -1,0 +1,328 @@
+{
+  "name": "Database",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "name": "ENV",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        -1456,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "7f72c4e8-878d-4917-b212-238d7f2edc9e"
+    },
+    {
+      "parameters": {
+        "filePath": "/shared/input/ENV.csv"
+      },
+      "name": "Read ENV File",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [
+        -1696,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "d1277e73-ced1-4ecb-b8a2-a9dc78007df7"
+    },
+    {
+      "parameters": {
+        "filePath": "/shared/input/universal_mapping.csv"
+      },
+      "name": "Read  MAPPING File",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [
+        -1024,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "5aa7f8ea-ba10-4b36-992c-cce890b5dcc2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "name": "Mapping file",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        -800,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "eede4fce-176f-47ed-8a15-76878c6ede13"
+    },
+    {
+      "parameters": {
+        "formTitle": "Choose a bill ",
+        "formDescription": "we're choose a bill for testing it ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "invoice_id",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "client_code"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -1936,
+        48
+      ],
+      "id": "f55407a3-ae92-4ed3-b35a-a50c76eb44e4",
+      "name": "Select the bill",
+      "webhookId": "913501d8-ab87-4cc8-afe0-da9bdb0fa1b4"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.sql }}"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -336,
+        -160
+      ],
+      "id": "bbcf98ce-513f-44fa-b3e6-605994cb2523",
+      "name": "Microsoft SQL",
+      "alwaysOutputData": true,
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const mappings = $input.all();\n\nconst env = $('Read env').first().json;\n\nconst mainTable = env.main_table;\nconst invoiceField = env.invoice_field;\nconst customerField = env.customer_field;\n\nconst selectFields = [];\nconst joins = new Map();\n\nfor (const item of mappings) {\n\n  const row = item.json;\n\n  if (row.extract_sql !== 'YES') {\n    continue;\n  }\n\n  if (\n    !row.table_name ||\n    !row.field_name ||\n    !row.functional_name\n  ) {\n    continue;\n  }\n\n  selectFields.push(\n    `${row.table_name}.${row.field_name} AS ${row.functional_name}`\n  );\n\n  if (\n    row.join_table &&\n    row.join_condition &&\n    row.join_table !== ''\n  ) {\n    joins.set(\n      row.join_table,\n      row.join_condition\n    );\n  }\n}\n\nconst uniqueFields =\n  [...new Set(selectFields)];\n\nlet joinSql = '';\n\nfor (const [table, condition] of joins.entries()) {\n\n  if (table !== mainTable) {\n\n    joinSql += `\nLEFT JOIN ${table}\nON ${condition}\n`;\n  }\n}\n\nconst invoiceId =\n$('Select the bill').first().json.invoice_id;\n\nconst clientCode =\n$('Select the bill').first().json.client_code;\n\nconst sql = `\nSELECT\n${uniqueFields.join(',\\n')}\n\nFROM ${mainTable}\n\n${joinSql}\n\nWHERE\n${mainTable}.${invoiceField}='${invoiceId}'\nAND\n${mainTable}.${customerField}='${clientCode}'\n`;\n\nreturn [{\n  json: {\n    sql,\n    field_count: uniqueFields.length\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        -160
+      ],
+      "id": "3685567b-28db-4cf2-a0a3-9e45470f95b2",
+      "name": "Generate SQL From Mapping"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sqlRows = $('Microsoft SQL').all();\nconst mappingRows = $('Mapping file').all();\n\nconst first = sqlRows[0].json;\n\nconst result = {};\n\nfunction setValue(obj, path, value) {\n\n  const keys = path.split('.');\n\n  let current = obj;\n\n  for (let i = 0; i < keys.length - 1; i++) {\n\n    if (!current[keys[i]]) {\n      current[keys[i]] = {};\n    }\n\n    current = current[keys[i]];\n  }\n\n  current[keys[keys.length - 1]] = value;\n}\n\n\n// =========================\n// HEADER FIELDS\n// =========================\n\nfor (const m of mappingRows) {\n\n  const map = m.json;\n\n  if (map.source_type === 'LINE') {\n    continue;\n  }\n\n  if (map.table_name === 'CALC') {\n    continue;\n  }\n\n  const value = first[map.functional_name];\n\n  if (value !== undefined) {\n\n    setValue(\n      result,\n      map.json_path,\n      value\n    );\n\n  }\n\n}\n\n\n// =========================\n// CALCULATED HEADER FIELDS\n// =========================\n\nconst vat_amount =\n  Number(first.total_ttc || 0)\n  -\n  Number(first.taxable_amount || 0);\n\nconst net_amount =\n  Number(first.total_ht || 0)\n  +\n  vat_amount;\n\nconst gross_amount =\n  Number(first.taxable_amount || 0)\n  +\n  vat_amount;\n\nsetValue(\n  result,\n  'totals.vat_amount',\n  vat_amount\n);\n\nsetValue(\n  result,\n  'totals.net_amount',\n  net_amount\n);\n\nsetValue(\n  result,\n  'totals.gross_amount',\n  gross_amount\n);\n\n\n// =========================\n// LINES\n// =========================\n\nresult.lines = [];\n\nconst seen = new Set();\n\nfor (const row of sqlRows) {\n\n  const key =\n    `${row.json.reference}_${row.json.designation}`;\n\n  if (seen.has(key)) {\n    continue;\n  }\n\n  seen.add(key);\n\n  const quantity =\n    Number(row.json.quantity || 0);\n\n  const unit_price =\n    Number(row.json.unit_price || 0);\n\n  const line_total_ht =\n    Number(row.json.line_total_ht || 0);\n\n  result.lines.push({\n\n    reference:\n      row.json.reference,\n\n    designation:\n      row.json.designation,\n\n    quantity,\n\n    unit_price,\n\n    line_total_ht,\n\n    tax_rate:\n      row.json.tax_rate,\n\n    vat_code:\n      row.json.vat_code,\n\n    discount:\n      row.json.discount,\n\n    article_variant:\n      row.json.article_variant,\n\n    line_total_calculated:\n      quantity * unit_price,\n\n    discount_amount:\n      (quantity * unit_price)\n      - line_total_ht\n\n  });\n\n}\n\n\n// =========================\n// FULL ADDRESS\n// =========================\n\nif (result.customer) {\n\n  result.customer.full_address = [\n    result.customer.address,\n    result.customer.address2,\n    result.customer.city,\n    result.customer.postal_code\n  ]\n  .filter(Boolean)\n  .join(' ');\n}\n\nif (result.supplier) {\n\n  result.supplier.full_address = [\n    result.supplier.address,\n    result.supplier.address2,\n    result.supplier.city,\n    result.supplier.postal_code\n  ]\n  .filter(Boolean)\n  .join(' ');\n}\n\n\n// =========================\n// PAYMENT DESCRIPTION\n// =========================\n\nif (result.payment) {\n\n  result.payment.description = [\n    result.payment.type,\n    result.payment.code\n  ]\n  .filter(Boolean)\n  .join(' ');\n}\n\n\n// =========================\n// RETURN\n// =========================\n\nreturn [{\n  json: result\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        32
+      ],
+      "id": "49cdd31b-e6e5-4b6d-8197-75bf663bf446",
+      "name": "Node Build Universal JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\n\nconst env = {};\n\nfor (const row of rows) {\n\n  env[row.json.parameter] =\n  row.json.value;\n\n}\n\nreturn [{\n  json: env\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        48
+      ],
+      "id": "c533243a-1cd9-4459-a4d7-3ccefc93d6e7",
+      "name": "Read env"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://teif-api:5000/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        512,
+        32
+      ],
+      "id": "0b9549da-4b66-4540-b126-129fd1b0d222",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -112,
+        48
+      ],
+      "id": "39e7fa2e-e7dc-4d03-8410-ff0ef150b672",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *\nFROM T1\nWHERE TIERS='C0000003'\nAND ADRCOD='CFABADM'"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        464
+      ],
+      "id": "4d0f8ded-a28d-4bf3-aa19-ceb1735e2a99",
+      "name": "Microsoft SQL1",
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "ENV": {
+      "main": [
+        [
+          {
+            "node": "Read env",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read ENV File": {
+      "main": [
+        [
+          {
+            "node": "ENV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read  MAPPING File": {
+      "main": [
+        [
+          {
+            "node": "Mapping file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapping file": {
+      "main": [
+        [
+          {
+            "node": "Generate SQL From Mapping",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Select the bill": {
+      "main": [
+        [
+          {
+            "node": "Read ENV File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SQL From Mapping": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Node Build Universal JSON": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read env": {
+      "main": [
+        [
+          {
+            "node": "Read  MAPPING File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Node Build Universal JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7aef1de8-bcb4-4422-856e-8ab49625c593",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
+  },
+  "id": "61lqLZULNQww3ool9WizE",
+  "tags": []
+}

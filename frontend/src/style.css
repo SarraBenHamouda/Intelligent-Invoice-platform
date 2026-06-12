@@ -1,0 +1,548 @@
+/* =========================================
+   RESET
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* =========================================
+   BODY
+========================================= */
+
+body{
+
+    font-family:
+    Inter,
+    Arial,
+    sans-serif;
+
+    background:#050816;
+
+    color:white;
+
+    overflow-x:hidden;
+}
+
+/* =========================================
+   VIDEO
+========================================= */
+
+#bg-video{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    z-index:-2;
+
+    opacity:0.18;
+}
+
+/* =========================================
+   OVERLAY
+========================================= */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,0,0,0.75),
+        rgba(5,8,22,0.88)
+    );
+
+    z-index:-1;
+}
+
+/* =========================================
+   MAIN
+========================================= */
+
+main{
+
+    padding:40px 70px 100px;
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+nav{
+
+    padding:30px 70px;
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    font-size:28px;
+
+    font-weight:700;
+}
+
+.logo svg{
+
+    color:#10b981;
+
+    width:34px;
+    height:34px;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero{
+
+    margin-top:30px;
+
+    margin-bottom:70px;
+}
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:
+    rgba(16,185,129,0.15);
+
+    border:
+    1px solid rgba(16,185,129,0.3);
+
+    padding:12px 22px;
+
+    border-radius:999px;
+
+    color:#10b981;
+
+    margin-bottom:30px;
+
+    font-weight:600;
+}
+
+.hero h1{
+
+    font-size:72px;
+
+    line-height:1.05;
+
+    max-width:900px;
+
+    margin-bottom:30px;
+}
+
+.hero p{
+
+    color:#cbd5e1;
+
+    font-size:22px;
+
+    line-height:1.8;
+
+    max-width:900px;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+
+    margin-bottom:50px;
+}
+
+.stat-card{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:28px;
+
+    padding:30px;
+
+    transition:0.3s;
+}
+
+.stat-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#10b981;
+}
+
+.stat-card h3{
+
+    font-size:30px;
+
+    margin-bottom:10px;
+}
+
+.stat-card p{
+
+    color:#cbd5e1;
+
+    font-size:18px;
+}
+
+/* =========================================
+   PIPELINE
+========================================= */
+
+.timeline{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:60px;
+}
+
+.timeline-step{
+
+    background:#10b981;
+
+    padding:14px 24px;
+
+    border-radius:16px;
+
+    font-weight:700;
+
+    box-shadow:
+    0 0 20px rgba(16,185,129,0.3);
+}
+
+.timeline-arrow{
+
+    font-size:28px;
+
+    color:#10b981;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.search-card,
+.validation-box,
+.invoice-details,
+.invoice-table,
+.alerts-panel{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(25px);
+
+    border-radius:32px;
+
+    padding:40px;
+
+    margin-bottom:40px;
+
+    box-shadow:
+    0 0 30px rgba(0,0,0,0.35);
+}
+
+/* =========================================
+   TITLES
+========================================= */
+
+.search-card h2,
+.validation-box h2,
+.invoice-details h2,
+.invoice-table h2,
+.alerts-panel h2{
+
+    font-size:38px;
+
+    margin-bottom:30px;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+form{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+}
+
+input{
+
+    flex:1;
+
+    min-width:250px;
+
+    background:
+    rgba(0,0,0,0.35);
+
+    border:
+    1px solid rgba(255,255,255,0.1);
+
+    padding:20px;
+
+    border-radius:18px;
+
+    color:white;
+
+    font-size:16px;
+}
+
+input:focus{
+
+    outline:none;
+
+    border-color:#10b981;
+}
+
+/* =========================================
+   BUTTON
+========================================= */
+
+button{
+
+    background:#10b981;
+
+    border:none;
+
+    padding:20px 35px;
+
+    border-radius:18px;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    background:#059669;
+}
+
+/* =========================================
+   VALIDATION
+========================================= */
+
+.validation-score{
+
+    font-size:70px;
+
+    font-weight:800;
+
+    color:#10b981;
+
+    margin-bottom:15px;
+}
+
+.validation-status{
+
+    font-size:24px;
+
+    font-weight:700;
+}
+
+/* =========================================
+   ALERTS
+========================================= */
+
+.warning-item{
+
+    background:#78350f;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    margin-top:15px;
+}
+
+.error-item{
+
+    background:#7f1d1d;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    margin-top:15px;
+}
+
+/* =========================================
+   INVOICE GRID
+========================================= */
+
+.invoice-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+    margin-top:25px;
+}
+
+.info-card{
+
+    background:
+    rgba(255,255,255,0.06);
+
+    border:
+    1px solid rgba(255,255,255,0.06);
+
+    border-radius:22px;
+
+    padding:28px;
+}
+
+.info-card h3{
+
+    color:#10b981;
+
+    margin-bottom:12px;
+
+    font-size:18px;
+}
+
+.info-card p{
+
+    font-size:20px;
+
+    line-height:1.6;
+
+    color:white;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.invoice-table{
+
+    overflow:hidden;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:25px;
+}
+
+th{
+
+    background:#10b981;
+
+    color:white;
+
+    padding:22px;
+
+    text-align:left;
+
+    font-size:16px;
+}
+
+td{
+
+    padding:22px;
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.08);
+
+    color:#e2e8f0;
+}
+
+tr:hover{
+
+    background:
+    rgba(255,255,255,0.04);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:900px){
+
+    main{
+
+        padding:30px;
+    }
+
+    nav{
+
+        padding:25px 30px;
+    }
+
+    .hero h1{
+
+        font-size:52px;
+    }
+
+    form{
+
+        flex-direction:column;
+    }
+
+    button{
+
+        width:100%;
+    }
+
+}
