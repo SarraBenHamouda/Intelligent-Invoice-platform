@@ -145,6 +145,41 @@
       "name": "Read env"
     },
     {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -112,
+        32
+      ],
+      "id": "39e7fa2e-e7dc-4d03-8410-ff0ef150b672",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://signature-api:5001/sign",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml_content",
+              "value": "={{ $json.xml_content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        720,
+        32
+      ],
+      "id": "9851be7a-0a1d-48fc-bd6e-ebf43e4faa92",
+      "name": "Signature API"
+    },
+    {
       "parameters": {
         "method": "POST",
         "url": "http://teif-api:5000/generate",
@@ -160,38 +195,7 @@
         32
       ],
       "id": "0b9549da-4b66-4540-b126-129fd1b0d222",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        -112,
-        48
-      ],
-      "id": "39e7fa2e-e7dc-4d03-8410-ff0ef150b672",
-      "name": "Merge"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "SELECT *\nFROM T1\nWHERE TIERS='C0000003'\nAND ADRCOD='CFABADM'"
-      },
-      "type": "n8n-nodes-base.microsoftSql",
-      "typeVersion": 1.1,
-      "position": [
-        -560,
-        464
-      ],
-      "id": "4d0f8ded-a28d-4bf3-aa19-ceb1735e2a99",
-      "name": "Microsoft SQL1",
-      "credentials": {
-        "microsoftSql": {
-          "id": "LxGNeUdh6pVTGKkD",
-          "name": "Microsoft SQL account"
-        }
-      }
+      "name": "TEIF Generator"
     }
   ],
   "pinData": {},
@@ -282,7 +286,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "TEIF Generator",
             "type": "main",
             "index": 0
           }
@@ -310,6 +314,17 @@
           }
         ]
       ]
+    },
+    "TEIF Generator": {
+      "main": [
+        [
+          {
+            "node": "Signature API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -318,7 +333,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "7aef1de8-bcb4-4422-856e-8ab49625c593",
+  "versionId": "9ad9716e-4a4e-49f3-a1e3-4b8161cc7b00",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
