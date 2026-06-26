@@ -1,0 +1,84 @@
+table_name;field_name;functional_name;json_path;required_for_json;extract_sql;source_type;join_table;join_condition;is_business_key;calculated;calculation_formula
+
+ENT;DOS;company_code;company.code;YES;YES;HEADER;;;YES
+ENT;TIERS;customer_code;customer.code;YES;YES;HEADER;;;YES
+ENT;PINO;invoice_number;invoice.number;YES;YES;HEADER;;;YES
+ENT;PIDT;invoice_date;invoice.date;YES;YES;HEADER;;;NO
+ENT;ECHDT;due_date;invoice.due_date;YES;YES;HEADER;;;NO
+ENT;DEV;invoice_currency;invoice.currency;YES;YES;HEADER;;;NO
+
+ENT;HTMT;taxable_amount;totals.taxable_amount;YES;YES;HEADER;;;NO
+ENT;HTPDTMT;total_ht;totals.total_ht;YES;YES;HEADER;;;NO
+ENT;TTCMT;total_ttc;totals.total_ttc;YES;YES;HEADER;;;NO
+
+ENT;PIEDMT_0001;shipping_not_taxed;totals.shipping_not_taxed;NO;YES;HEADER;;;NO
+ENT;PIEDMT_0002;shipping_taxed;totals.shipping_taxed;NO;YES;HEADER;;;NO
+ENT;PIEDMT_0003;packaging_cost;totals.packaging_cost;NO;YES;HEADER;;;NO
+
+ENT;REPR_0001;salesperson_code;salesperson.code;NO;YES;HEADER;;;NO
+ENT;RIBCOD;bank_code;payment.bank_code;NO;YES;HEADER;;;NO
+ENT;TVATIE;vat_category;invoice.vat_category;NO;YES;HEADER;;;NO
+
+ENT;PAIEMENTTYP;payment_type;payment.type;NO;YES;HEADER;;;NO
+ENT;REGL;payment_code;payment.code;NO;YES;HEADER;;;NO
+ENT;CONTACT;contact_name;contact.name;NO;YES;HEADER;;;NO
+
+T1;NOM;customer_name;customer.name;YES;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;RUE;customer_address;customer.address;YES;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;ADRCPL2;customer_address2;customer.address2;NO;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;VIL;customer_city;customer.city;YES;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;CPOSTAL;customer_postal_code;customer.postal_code;NO;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;PAY;customer_country;customer.country;NO;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;TEL;customer_phone;customer.phone;NO;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;FAX;customer_fax;customer.fax;NO;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+T1;EMAIL;customer_email;customer.email;NO;YES;HEADER;T1;ENT.DOS=T1.DOS AND ENT.TIERS=T1.TIERS AND T1.ADRCOD='CFABADM';NO
+
+SOC;NOM;supplier_name;supplier.name;YES;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO;NO;
+SOC;RUE;supplier_address;supplier.address;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO;NO;
+SOC;ADRCPL2;supplier_address2;supplier.address2;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;VIL;supplier_city;supplier.city;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO;NO;
+SOC;CPOSTAL;supplier_postal_code;supplier.postal_code;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;PAY;supplier_country;supplier.country;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;TEL;supplier_phone;supplier.phone;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;FAX;supplier_fax;supplier.fax;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;EMAIL;supplier_email;supplier.email;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;WEB;supplier_website;supplier.website;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;SIRET;supplier_siret;supplier.siret;NO;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO
+SOC;TVANO;supplier_vat_number;supplier.vat_number;YES;YES;HEADER;SOC;ENT.DOS=SOC.DOS;NO;NO;
+
+VRP;NOMABR;salesperson_short_name;salesperson.short_name;NO;YES;HEADER;VRP;ENT.REPR_0001=VRP.TIERS;NO
+VRP;NOM;salesperson_name;salesperson.name;NO;YES;HEADER;VRP;ENT.REPR_0001=VRP.TIERS;NO
+VRP;TEL;salesperson_phone;salesperson.phone;NO;YES;HEADER;VRP;ENT.REPR_0001=VRP.TIERS;NO
+VRP;EMAIL;salesperson_email;salesperson.email;NO;YES;HEADER;VRP;ENT.REPR_0001=VRP.TIERS;NO
+
+T3;RIBCOD;bank_account_code;payment.bank_account_code;NO;YES;HEADER;T3;ENT.DOS=T3.DOS AND ENT.DOS=T3.DOS AND ENT.RIBCOD=T3.RIBCOD;NO
+T3;RIBTYP;bank_account_type;payment.account_type;NO;YES;HEADER;T3;ENT.DOS=T3.DOS AND ENT.RIBCOD=T3.RIBCOD;NO
+T3;IBAN3;iban;payment.iban;NO;YES;HEADER;T3;ENT.DOS=T3.DOS AND ENT.RIBCOD=T3.RIBCOD;NO
+T3;RIBBIC;bic;payment.bic;NO;YES;HEADER;T3;ENT.DOS=T3.DOS AND ENT.RIBCOD=T3.RIBCOD;NO
+
+MOUV;REF;reference;lines[].reference;YES;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO;NO;
+MOUV;ARTIND;article_variant;lines[].variant;NO;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO
+MOUV;DES;designation;lines[].designation;YES;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO;NO;
+MOUV;REFQTE;quantity;lines[].quantity;YES;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO;NO;
+MOUV;PUB;unit_price;lines[].unit_price;YES;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO;NO;
+MOUV;REM_0001;discount;lines[].discount;NO;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO
+MOUV;MONT;line_total_ht;lines[].line_total_ht;YES;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO;NO;
+MOUV;TVAART;vat_code;lines[].vat_code;NO;YES;LINE;MOUV;ENT.DOS=MOUV.DOS AND ENT.PINO=MOUV.FANO AND ENT.TIERS=MOUV.TIERS;NO
+
+T085;TVAP;tax_rate;lines[].tax_rate;YES;YES;LINE;T085;MOUV.TVAART=T085.TVAART AND ENT.TVATIE=T085.TVATIE;NO;NO;
+
+CALC;;vat_amount;totals.vat_amount;YES;NO;HEADER;;;NO;YES;total_ttc-taxable_amount
+
+CALC;;net_amount;totals.net_amount;YES;NO;HEADER;;;NO;YES;total_ht+vat_amount
+
+CALC;;gross_amount;totals.gross_amount;NO;NO;HEADER;;;NO;YES;taxable_amount+vat_amount
+
+CALC;;line_total_calculated;lines[].line_total_calculated;NO;NO;LINE;;;NO;YES;quantity*unit_price
+
+CALC;;discount_amount;lines[].discount_amount;NO;NO;LINE;;;NO;YES;(quantity*unit_price)-line_total_ht
+
+CALC;;customer_full_address;customer.full_address;NO;NO;HEADER;;;NO;YES;customer_address+' '+customer_address2+' '+customer_city+' '+customer_postal_code
+
+CALC;;supplier_full_address;supplier.full_address;NO;NO;HEADER;;;NO;YES;supplier_address+' '+supplier_address2+' '+supplier_city+' '+supplier_postal_code
+
+CALC;;payment_description;payment.description;NO;NO;HEADER;;;NO;YES;payment_type+' '+payment_code

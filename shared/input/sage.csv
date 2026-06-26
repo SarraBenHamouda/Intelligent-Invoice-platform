@@ -1,0 +1,9 @@
+parameter;value
+
+erp_name;Sage
+
+main_table;FACTURE
+
+invoice_field;DOCNUM
+
+customer_field;CLIENT_ID

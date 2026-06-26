@@ -65,7 +65,10 @@ services:
       - ./shared:/shared
     ports:
       - "8004:8000"
-
+  teif-api:
+    build: ./services/teif-api
+    ports:
+      - "5004:5000"
   # 🔥 AJOUT SQL SERVER (NOUVEAU)
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -78,6 +81,12 @@ services:
     volumes:
       - sql_data:/var/opt/mssql
 
+  signature-api:
+    build:
+      context: ./services/signature-api
+    container_name: signature-api
+    ports:
+      - "5001:5001"
 volumes:
   ollama_data:
   sql_data:

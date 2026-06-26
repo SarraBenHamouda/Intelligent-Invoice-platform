@@ -1,0 +1,7 @@
+﻿universal_field,erp_field
+
+client_code,partner_id
+invoice_number,name
+invoice_date,invoice_date
+currency,currency_id
+total_ttc,amount_total

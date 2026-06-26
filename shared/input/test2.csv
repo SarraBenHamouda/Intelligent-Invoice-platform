@@ -1,0 +1,69 @@
+source_field,standard_field,description
+
+DOS,dos,Code dossier société
+
+client_code,client_code,Code client
+
+invoice_number,invoice_number,Numéro facture
+
+invoice_date,invoice_date,Date facture
+
+due_date,due_date,Date échéance
+
+currency,currency,Devise
+
+base_tva,base_tva,Base TVA
+
+total_ht,total_ht,Montant HT
+
+total_ttc,total_ttc,Montant TTC
+
+frais_port_non_soumis,shipping_not_taxed,Frais port non soumis
+
+frais_port_soumis,shipping_taxed,Frais port soumis
+
+frais_emballage,packaging_cost,Frais emballage
+
+tax_rate,tax_rate,Taux TVA
+
+client_name,client_name,Nom client
+
+client_address,client_address,Adresse client
+
+client_city,client_city,Ville client
+
+client_postal_code,client_postal_code,Code postal client
+
+client_phone,client_phone,Téléphone client
+
+client_email,client_email,Email client
+
+client_country,client_country,Pays client
+
+sender_name,supplier_name,Nom fournisseur
+
+sender_address,supplier_address,Adresse fournisseur
+
+sender_city,supplier_city,Ville fournisseur
+
+sender_postal_code,supplier_postal_code,Code postal fournisseur
+
+sender_phone,supplier_phone,Téléphone fournisseur
+
+sender_email,supplier_email,Email fournisseur
+
+sender_website,supplier_website,Site web fournisseur
+
+sender_siret,supplier_siret,SIRET fournisseur
+
+sender_tva,supplier_tax_id,TVA fournisseur
+
+article_reference,article_reference,Référence article
+
+designation,designation,Désignation article
+
+quantity,quantity,Quantité
+
+unit_price,unit_price,Prix unitaire
+
+line_total,line_total_ht,Montant ligne HT
