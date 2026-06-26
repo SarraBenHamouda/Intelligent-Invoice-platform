@@ -323,10 +323,12 @@ async def analyze_pdf(file: UploadFile = File(...)):
         words_text = text_from_words(page_words)
 
         # Choose the better native extraction for extractionservice
-        if len(words_text) > len(native_text):
-            best_text = words_text
-        else:
+        # For native PDFs, PyMuPDF native text often keeps invoice rows better.
+        # words_text is useful for visual debugging, but it can split table rows badly.
+        if native_text and len(native_text) > 100:
             best_text = native_text
+        else:
+            best_text = words_text
 
         best_text = normalize_table_text(best_text)
 

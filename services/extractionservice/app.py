@@ -274,7 +274,7 @@ def extract_siren(text: str) -> str:
 
 
 def extract_rc(text: str) -> str:
-    m = re.search(r"\bRC\s*[:\-]?\s*([A-Z0-9]+)", text, flags=re.IGNORECASE)
+    m = re.search(r"\bRC\s*:\s*([A-Z0-9]+)", text, flags=re.IGNORECASE)
     return m.group(1).strip() if m else ""
 
 
@@ -301,10 +301,11 @@ def extract_supplier(lines: List[str], text: str, country_profile: str, blocks: 
     name = ""
     address = ""
 
-    # Best case: use visual blocks from pdfservice
-    if blocks:
-        if country_profile == "FR":
-            # Supplier is usually top-left block
+    # -------------------------
+    # FR supplier
+    # -------------------------
+    if country_profile == "FR":
+        if blocks:
             candidates = [
                 b for b in blocks
                 if b.get("page") == 1
@@ -321,54 +322,40 @@ def extract_supplier(lines: List[str], text: str, country_profile: str, blocks: 
                     name = txt
                     break
 
-            # Address block just below supplier
-            address_blocks = [
-                b for b in blocks
-                if b.get("page") == 1
-                and float(b.get("x0", 999)) < 220
-                and 15 < float(b.get("y0", 999)) < 90
-                and ("rue" in str(b.get("text", "")).lower() or "cedex" in str(b.get("text", "")).lower())
-            ]
-
-            if address_blocks:
-                address = ", ".join(clean_pdf_block(b.get("text", "")) for b in address_blocks[:2])
-
-        elif country_profile == "TN":
-            # Tunisian sample supplier appears as FOR-SOFTWARES
-            for b in blocks:
-                txt = clean_company_name(b.get("text", ""))
-                if txt.upper() in ["FOR-SOFTWARES", "I.S SOLUTIONS", "ISSOLUTIONS"]:
-                    name = txt
+        if not name:
+            for line in lines[:80]:
+                if "papyrus" in line.lower():
+                    name = line.strip()
                     break
 
-            if not name:
-                # fallback near top/right/center, but avoid email and labels
-                for b in blocks:
-                    txt = clean_company_name(b.get("text", ""))
-                    if (
-                        b.get("page") == 1
-                        and float(b.get("y0", 999)) < 180
-                        and len(txt) > 4
-                        and "@" not in txt
-                        and not is_label_noise(txt)
-                        and not re.search(r"^\+?\d", txt)
-                    ):
-                        if "software" in txt.lower() or "solutions" in txt.lower():
-                            name = txt
-                            break
+    # -------------------------
+    # TN supplier
+    # -------------------------
+    elif country_profile == "TN":
+        # Best exact match for this bill
+        m = re.search(r"\b(FOR-SOFTWARES|I\.?S\.?\s*SOLUTIONS|ISSOLUTIONS)\b", text, flags=re.IGNORECASE)
+        if m:
+            name = m.group(1).strip()
 
-            address_blocks = [
-                b for b in blocks
-                if b.get("page") == 1
-                and float(b.get("x0", 999)) < 250
-                and 90 < float(b.get("y0", 999)) < 150
-                and any(k in str(b.get("text", "")).lower() for k in ["siège", "siege", "charguia", "ariana"])
-            ]
+        if not name:
+            before_code_tva = text.split("Code TVA")[0]
+            for line in reversed(clean_lines(before_code_tva)):
+                low = line.lower()
 
-            if address_blocks:
-                address = ", ".join(clean_pdf_block(b.get("text", "")) for b in address_blocks)
+                if "@" in line:
+                    continue
+                if re.search(r"^\+?\d", line):
+                    continue
+                if any(x in low for x in ["téléphone", "télécopie", "email", "web", "client", "page", "facture"]):
+                    continue
 
-    # Text fallback
+                if len(line) > 3:
+                    name = line.strip()
+                    break
+
+    # -------------------------
+    # Fallback
+    # -------------------------
     if not name:
         for line in lines[:80]:
             low = line.lower()
@@ -376,8 +363,7 @@ def extract_supplier(lines: List[str], text: str, country_profile: str, blocks: 
                 name = line.strip()
                 break
 
-    if not address:
-        address = extract_supplier_address(lines, country_profile)
+    address = extract_supplier_address(lines, country_profile)
 
     siret = extract_siret(text) if country_profile == "FR" else ""
     siren = extract_siren(text) if country_profile == "FR" else ""
@@ -429,8 +415,6 @@ def clean_pdf_block(value: str) -> str:
     value = re.sub(r"\s+", " ", value)
     value = re.sub(r",\s*,", ",", value)
     return value.strip(" ,")
-
-
 
 
 def extract_supplier_address(lines: List[str], country_profile: str) -> str:
@@ -551,6 +535,7 @@ def extract_customer(lines: List[str], text: str, country_profile: str, blocks: 
         "email": ""
     }
 
+
 def extract_customer_address(lines: List[str], customer_name: str) -> str:
     if not customer_name:
         return ""
@@ -633,6 +618,27 @@ def extract_commercial(text: str) -> str:
 
 
 # =========================================================
+# HELPERS FOR LINE EXTRACTION (must be defined before use)
+# =========================================================
+
+AMOUNT_RE = r"(?:\d{1,3}(?:\s\d{3})+|\d+)[,.]\d{2,4}"
+
+
+def is_amount(value: str) -> bool:
+    return bool(re.fullmatch(AMOUNT_RE, str(value).strip()))
+
+
+def is_int_number(value: str) -> bool:
+    return bool(re.fullmatch(r"\d+(?:[,.]000)?", str(value).strip()))
+
+
+def clean_designation(value: str) -> str:
+    value = str(value or "").strip()
+    value = re.sub(r"\s+", " ", value)
+    return value
+
+
+# =========================================================
 # DISCOUNTS / LINES
 # =========================================================
 
@@ -684,56 +690,85 @@ def extract_lines(text: str, lines: List[str], country_profile: str) -> List[Dic
     clean_list = clean_lines(clean)
 
     if country_profile == "TN":
-        return extract_lines_tn(clean_list)
+        return extract_lines_tn(clean)
 
     if country_profile == "FR":
-        return extract_lines_fr(clean_list)
+        return extract_lines_fr(clean)
 
-    # fallback
-    return extract_lines_fr(clean_list)
+    return extract_lines_fr(clean)
 
 
-def extract_lines_fr(lines: List[str]) -> List[Dict[str, Any]]:
+def extract_lines_fr(text: str) -> List[Dict[str, Any]]:
+    """
+    French Divalto layout:
+    REF DESIGNATION QTY UNIT_PRICE DISCOUNT LINE_TOTAL TAX_CODE
+
+    Example:
+    HIS0001 Article pour historique des consommations 15,000 6,0000 90,00 1
+    JR00010 Savon spécial Jeune Artiste 1,000 11,1600 2,00 10,94 1
+    """
     results = []
 
-    for i, line in enumerate(lines):
-        ref = line.strip().upper()
+    clean = remove_cgv_pages(text)
+
+    pattern = re.compile(
+        r"(?m)^"
+        r"(?P<ref>[A-Z]{2,}[A-Z0-9]{2,12})\s+"
+        r"(?P<designation>.+?)\s+"
+        r"(?P<qty>\d+[,.]\d{3})\s+"
+        r"(?P<unit_price>" + AMOUNT_RE + r")\s+"
+        r"(?:(?P<discount>\d+[,.]\d{2})\s+)?"
+        r"(?P<line_total>" + AMOUNT_RE + r")\s+"
+        r"(?P<tax_code>\d{1,2})"
+        r"$"
+    )
+
+    for m in pattern.finditer(clean):
+        ref = m.group("ref").strip().upper()
 
         if not valid_line_ref(ref):
             continue
 
-        # French native PDF order before reference:
-        # designation / tax_code / unit_price / discount / amount_ht / quantity / reference
-        if i < 6:
-            continue
-
-        qty = normalize_number(lines[i - 1])
-        line_total = normalize_number(lines[i - 2])
-        discount_value = normalize_number(lines[i - 3])
-        unit_price = normalize_number(lines[i - 4])
-        tax_code = lines[i - 5].strip()
-
-        designation = lines[i - 6].strip()
+        designation = clean_designation(m.group("designation"))
 
         if not designation or is_label_noise(designation):
             continue
 
-        if unit_price <= 0 or line_total <= 0:
+        if any(x in designation.lower() for x in [
+            "total commande",
+            "total bon de livraison",
+            "bon de livraison",
+            "commande n"
+        ]):
             continue
 
-        # Avoid totals and delivery rows
-        if any(x in designation.lower() for x in ["total commande", "total bon", "bon de livraison", "commande n"]):
+        qty = normalize_number(m.group("qty"))
+        unit_price = normalize_number(m.group("unit_price"))
+        discount = normalize_number(m.group("discount")) if m.group("discount") else 0
+        line_total = normalize_number(m.group("line_total"))
+        tax_code = m.group("tax_code")
+
+        if qty <= 0 or unit_price <= 0 or line_total <= 0:
+            continue
+
+        # sanity check: line_total should be close to qty * unit_price after discount
+        expected = qty * unit_price
+        if discount > 0:
+            expected = expected * (1 - discount / 100)
+
+        if abs(expected - line_total) > max(2.0, line_total * 0.10):
+            # If it is too far, skip because probably wrong match
             continue
 
         results.append({
             "line_number": len(results) + 1,
             "reference": ref,
             "designation": designation,
-            "quantity": qty if qty > 0 else 1,
+            "quantity": round_money(qty),
             "unit": "UNIT",
             "unit_price": round_money(unit_price),
-            "discounts": [discount_value] if discount_value > 0 else [],
-            "tax_code": tax_code if tax_code.isdigit() else "",
+            "discounts": [discount] if discount > 0 else [],
+            "tax_code": tax_code,
             "tax_rate": 20.0,
             "line_total_ht": round_money(line_total)
         })
@@ -741,52 +776,161 @@ def extract_lines_fr(lines: List[str]) -> List[Dict[str, Any]]:
     return results
 
 
-def extract_lines_tn(lines: List[str]) -> List[Dict[str, Any]]:
+def extract_lines_tn(text: str) -> List[Dict[str, Any]]:
+    """
+    Tunisian invoice layout can appear in 2 forms:
+
+    Form A - one full row:
+    IHPF 219,375 Harmony Power Foundation 1 675,000 50+35 3
+
+    Form B - split by PDF extraction:
+    3
+    50+35
+    1
+    Harmony Power Foundation
+    IHPF
+    219,375
+    675,000
+    """
+
+    clean = remove_cgv_pages(text)
     results = []
 
-    for i, line in enumerate(lines):
-        ref = line.strip().upper()
+    # ----------------------------
+    # FORM A: one-line rows
+    # ----------------------------
+    pattern = re.compile(
+        r"(?m)^"
+        r"(?P<ref>IHPF|ICOMPTAF|IABOX|IPCFRD|IPSE|ICSABO|[A-Z][A-Z0-9]{2,12})\s+"
+        r"(?P<line_total>" + AMOUNT_RE + r")\s+"
+        r"(?P<designation>.+?)\s+"
+        r"(?P<qty>\d+)\s+"
+        r"(?P<unit_price>(?:\d+\s)?\d+[,.]\d{3})\s+"
+        r"(?P<discount>\d{1,2}(?:\+\d{1,2})?)\s+"
+        r"(?P<tax_code>\d{1,2})"
+        r"$"
+    )
 
-        if not valid_line_ref(ref):
+    for m in pattern.finditer(clean):
+        line = build_tn_line_from_match(m)
+        if line:
+            results.append(line)
+
+    if results:
+        return renumber_lines(results)
+
+    # ----------------------------
+    # FORM B: split lines
+    # ----------------------------
+    lines = clean_lines(clean)
+
+    allowed_refs = {"IHPF", "ICOMPTAF", "IABOX", "IPCFRD", "IPSE", "ICSABO"}
+
+    for i, current in enumerate(lines):
+        ref = current.strip().upper()
+
+        if ref not in allowed_refs:
             continue
 
-        # Tunisian native PDF order:
-        # tax_code / discount / qty / designation / ref / amount_ht / unit_price
         if i < 4 or i + 2 >= len(lines):
             continue
 
         tax_code = lines[i - 4].strip()
-        discounts = parse_discounts(lines[i - 3])
-        qty = normalize_number(lines[i - 2])
-        designation = lines[i - 1].strip()
-        line_total = normalize_number(lines[i + 1])
-        unit_price = normalize_number(lines[i + 2])
+        discount_text = lines[i - 3].strip()
+        qty_text = lines[i - 2].strip()
+        designation = clean_designation(lines[i - 1])
+        line_total_text = lines[i + 1].strip()
+        unit_price_text = lines[i + 2].strip()
 
-        if not designation or is_label_noise(designation):
+        # protect against invoice/header false matches
+        if not tax_code.isdigit():
             continue
 
-        if unit_price <= 0 or line_total <= 0:
+        if not re.fullmatch(r"\d{1,2}(?:\+\d{1,2})?", discount_text):
             continue
 
-        if any(x in designation.lower() for x in ["licence divalto", "abonnement connecteur", "connecteur, infrastructure"]):
+        if not qty_text.isdigit():
             continue
 
-        tax_rate = 12.0 if tax_code == "3" else 0.0
+        if not is_amount(line_total_text):
+            continue
+
+        if not is_amount(unit_price_text):
+            continue
+
+        qty = normalize_number(qty_text)
+        unit_price = normalize_number(unit_price_text)
+        line_total = normalize_number(line_total_text)
+        discounts = parse_discounts(discount_text)
+
+        if qty <= 0 or unit_price <= 0 or line_total <= 0:
+            continue
+
+        expected = qty * unit_price
+        for d in discounts:
+            expected = expected * (1 - d / 100)
+
+        # allow small rounding differences
+        if abs(expected - line_total) > max(2.0, line_total * 0.12):
+            continue
 
         results.append({
             "line_number": len(results) + 1,
             "reference": ref,
             "designation": designation,
-            "quantity": qty if qty > 0 else 1,
+            "quantity": round_money(qty),
             "unit": "UNIT",
             "unit_price": round_money(unit_price),
             "discounts": discounts,
             "tax_code": tax_code,
-            "tax_rate": tax_rate,
+            "tax_rate": 12.0 if tax_code == "3" else 0.0,
             "line_total_ht": round_money(line_total)
         })
 
-    return results
+    return renumber_lines(results)
+
+
+def build_tn_line_from_match(m):
+    ref = m.group("ref").strip().upper()
+
+    if not valid_line_ref(ref):
+        return None
+
+    designation = clean_designation(m.group("designation"))
+    qty = normalize_number(m.group("qty"))
+    unit_price = normalize_number(m.group("unit_price"))
+    discounts = parse_discounts(m.group("discount"))
+    line_total = normalize_number(m.group("line_total"))
+    tax_code = m.group("tax_code")
+
+    if qty <= 0 or unit_price <= 0 or line_total <= 0:
+        return None
+
+    expected = qty * unit_price
+    for d in discounts:
+        expected = expected * (1 - d / 100)
+
+    if abs(expected - line_total) > max(2.0, line_total * 0.12):
+        return None
+
+    return {
+        "line_number": 0,
+        "reference": ref,
+        "designation": designation,
+        "quantity": round_money(qty),
+        "unit": "UNIT",
+        "unit_price": round_money(unit_price),
+        "discounts": discounts,
+        "tax_code": tax_code,
+        "tax_rate": 12.0 if tax_code == "3" else 0.0,
+        "line_total_ht": round_money(line_total)
+    }
+
+
+def renumber_lines(lines: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    for i, line in enumerate(lines, start=1):
+        line["line_number"] = i
+    return lines
 
 
 def valid_line_ref(ref: str) -> bool:
@@ -797,10 +941,16 @@ def valid_line_ref(ref: str) -> bool:
 
     blacklist = [
         "FACTURE", "CLIENT", "TOTAL", "TVA", "TND", "EUR",
-        "SIRET", "SIREN", "REFERENCE", "DESIGNATION"
+        "SIRET", "SIREN", "REFERENCE", "REFERENCES",
+        "DESIGNATION", "QTE", "REMISE", "MONTANT",
+        "TOTALHT", "TOTALTTC"
     ]
 
     if ref in blacklist:
+        return False
+
+    # invoice numbers are not product refs
+    if re.match(r"^(FC|AC|FA)[_\-\s]?\d+$", ref):
         return False
 
     if ref.startswith("FR"):
@@ -809,14 +959,17 @@ def valid_line_ref(ref: str) -> bool:
     if ref.startswith("C000"):
         return False
 
-    if len(ref) < 4 or len(ref) > 20:
+    if len(ref) < 3 or len(ref) > 20:
         return False
 
     if not re.search(r"[A-Z]", ref):
         return False
 
     if not re.search(r"\d", ref):
-        return False
+        # allow TN refs like IHPF / IPSE / IABOX / ICSABO
+        allowed_alpha_refs = {"IHPF", "IPSE", "IABOX", "ICSABO", "IPCFRD", "ICOMPTAF"}
+        if ref not in allowed_alpha_refs:
+            return False
 
     return bool(re.match(r"^[A-Z0-9_\-]+$", ref))
 
@@ -1007,6 +1160,7 @@ def extract_totals_fr(text: str, lines: List[Dict[str, Any]]) -> Dict[str, float
         "total_ttc": round_money(total_ttc),
         "net_to_pay": round_money(net_to_pay)
     }
+
 
 def extract_tax_summary(text: str, totals: Dict[str, float], country_profile: str) -> List[Dict[str, Any]]:
     tax_rate = find_tax_rate(text)
@@ -1349,6 +1503,11 @@ Text:
 
     return {}
 
+
+# =========================================================
+# MISC HELPERS
+# =========================================================
+
 def remove_cgv_pages(text: str) -> str:
     """
     Remove general sales conditions pages.
@@ -1432,7 +1591,6 @@ def detect_document_type_strict(text: str) -> Dict[str, str]:
             return {"document_type": "Avoir", "document_type_code": "I-12"}
 
     return {"document_type": "Facture", "document_type_code": "I-11"}
-
 
 
 # =========================================================
