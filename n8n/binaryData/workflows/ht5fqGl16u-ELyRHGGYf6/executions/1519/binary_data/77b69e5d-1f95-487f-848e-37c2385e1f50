@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="3.0">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-01">1338455HAM000</MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-01">C0001</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier>FC_160083</DocumentIdentifier>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31">311216</DateText>
+      <DateText format="ddMMyy-ddMMyy" functionCode="I-36">011216-311216</DateText>
+      <DateText format="ddMMyy" functionCode="I-32">311216</DateText>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-01">1338455HAM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">ISSolutions</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>ZI CHARGUIA II, 2035 ARIANA, Siège Social : IMM MAHGREBIA. TOUR A - RC</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-815">1338455H</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-101</ComMeansType>
+              <ComMeansValue>+21671940638</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>contact@issolutions.tn</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-01">C0001</PartnerIdentifier>
+          <PartnerName nameType="Qualification">ASSISTANCE PLUS</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription></AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-81">C0001</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Chèque</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IHPF</ItemCode>
+          <ItemDescription>Harmony Power Foundation</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">665.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">259.350</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>2</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>ICOMPTAM</ItemCode>
+          <ItemDescription>Finances Standard</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">2532.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">987.480</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>3</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IPAIE</ItemCode>
+          <ItemDescription>Paie</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">6368.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">2483.520</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>4</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IABOX</ItemCode>
+          <ItemDescription>Abonnement Licences Annuel</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>25.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">1148.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">559.650</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>5</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IPCFRD</ItemCode>
+          <ItemDescription>Power Connector for Relational Database</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>10.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">230.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">207.000</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>6</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IPSE</ItemCode>
+          <ItemDescription>Power Search Engine</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>10.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">128.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">115.200</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>7</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IPDB</ItemCode>
+          <ItemDescription>Power Datawarehouse Builder</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>10.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">102.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">91.800</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>8</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>ICSABO</ItemCode>
+          <ItemDescription>Abonnement annuel</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>10.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>12</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">55.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">49.500</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">4753.500</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">5323.920</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">4753.500</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">570.420</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="TND">0.500</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+</TEIF>

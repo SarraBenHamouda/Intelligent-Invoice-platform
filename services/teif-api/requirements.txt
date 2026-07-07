@@ -1,4 +1,2 @@
-fastapi
-uvicorn[standard]
-pydantic
-lxml
+flask==3.0.3
+lxml==5.2.2

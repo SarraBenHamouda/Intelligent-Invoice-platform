@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="3.0">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-01"></MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-01"></MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier></DocumentIdentifier>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31"></DateText>
+      <DateText format="ddMMyy-ddMMyy" functionCode="I-36"></DateText>
+      <DateText format="ddMMyy" functionCode="I-32"></DateText>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-01"></PartnerIdentifier>
+          <PartnerName nameType="Qualification">Tenor Afrique</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription></AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-101</ComMeansType>
+              <ComMeansValue>29 96 55 38</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>conctact@tenorafrique.com</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-104</ComMeansType>
+              <ComMeansValue>www.tenorafrique.com</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-01"></PartnerIdentifier>
+          <PartnerName nameType="Qualification">IT SOFT</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription></AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Virement bancaire</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection/>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">0.000</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">0.000</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">0.000</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">0.000</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="TND">0.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+</TEIF>

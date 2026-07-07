@@ -1,0 +1,629 @@
+{
+  "name": "Pipeline_TTN signature",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "upload-facture",
+        "options": {}
+      },
+      "id": "212f447b-0873-4333-88fb-99666f32305f",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1664,
+        256
+      ],
+      "webhookId": "3c7f9348-38bc-4017-a73c-ec0595b22427"
+    },
+    {
+      "parameters": {
+        "functionCode": "for (const item of items) {\n  if (item.binary && item.binary.data) {\n    item.binary.file = item.binary.data;\n    delete item.binary.data;\n  }\n}\nreturn items;"
+      },
+      "id": "0e06dfa4-7142-47b7-81c6-68adb318eb01",
+      "name": "Prepare Binary",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -1440,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"source_type\"]}}",
+              "operation": "contains",
+              "value2": "scanned"
+            }
+          ]
+        }
+      },
+      "id": "809064ef-badd-46f4-afb2-e9a6140ed0e4",
+      "name": "Is Scanned?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -992,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ocrservice:8000/ocr",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_paths\": {{JSON.stringify($json[\"rendered_pages\"])}},\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}",
+        "options": {}
+      },
+      "id": "921d6424-f874-4472-af86-68d2f25417d9",
+      "name": "OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -784,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionservice:8000/extract",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  {\n    raw_text: $json.extracted_text,\n    page_count: $json.page_count,\n    source_type: $json.source_type\n  }\n}}",
+        "options": {}
+      },
+      "id": "ae420758-d587-4e7c-9479-41a701be6ed4",
+      "name": "Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -768,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://pdfservice:8000/analyze",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "347b99cb-b423-4a66-8db7-1cb8b95223d4",
+      "name": "Analyze",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1200,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionservice:8000/extract",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "raw_text",
+              "value": "={{ $json.full_text }}"
+            },
+            {
+              "name": "source_type",
+              "value": "={{ $('Is Scanned?').item.json.source_type }}"
+            },
+            {
+              "name": "page_count",
+              "value": "={{ $json.pages }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -576,
+        -48
+      ],
+      "id": "08810932-697e-4cdd-89a7-c0ae07acba2f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://teif-api:5000/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        64,
+        256
+      ],
+      "id": "83d34b90-5b14-4d3d-9123-84298f94dca3",
+      "name": "TEIF Generator"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5001/sign",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ $json.xml_content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        976,
+        240
+      ],
+      "id": "52821d0e-8d64-43d1-ae0c-d0f2080f8ff3",
+      "name": "Signature TTN"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const xml = item.json.xml || item.json.signed_xml;\n\n  if (!xml) {\n    throw new Error(\n      \"XML signé introuvable. Champs disponibles: \" +\n      JSON.stringify(Object.keys(item.json))\n    );\n  }\n\n  const match = xml.match(/<DocumentIdentifier>(.*?)<\\/DocumentIdentifier>/);\n\n  if (!match || !match[1]) {\n    throw new Error(\"Numéro de facture introuvable dans DocumentIdentifier\");\n  }\n\n  const invoiceNumber = match[1]\n    .trim()\n    .replace(/[\\\\/:*?\"<>|]/g, \"_\");\n\n  const fileName = `${invoiceNumber}_signed.xml`;\n\n  item.json.file_name = fileName;\n  item.json.invoice_number = invoiceNumber;\n\n  item.binary = {\n    data: {\n      data: Buffer.from(xml, 'utf8').toString('base64'),\n      mimeType: 'application/xml',\n      fileName: fileName\n    }\n  };\n\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1648,
+        224
+      ],
+      "id": "aead3054-b97b-4e4f-9868-07c217b45a7a",
+      "name": "Write a XML file"
+    },
+    {
+      "parameters": {
+        "fileName": "=/shared/signed_bills/{{ $json.file_name }}",
+        "options": {}
+      },
+      "id": "06e703e0-9710-4323-89f8-51d01085b7f6",
+      "name": "Register the file",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "position": [
+        1856,
+        224
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -560,
+        272
+      ],
+      "id": "0e73f5eb-e67e-4835-8aa2-d596b3d726a9",
+      "name": "Validation1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -368,
+        272
+      ],
+      "id": "3f3542c9-8378-4225-a1d5-e4ea251f7da7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return {\n    json: item.json.data\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        256
+      ],
+      "id": "9b946656-9731-4caa-9f19-ff3dd91e97ad",
+      "name": "Code Restore Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-teif",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ Object.values($json).find(v => typeof v === 'string' && v.includes('<TEIF')) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aad8bc56-4cfb-49a1-bbb6-34794db8e7cf",
+      "name": "Validation TEIF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        272,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        256
+      ],
+      "id": "44dee31d-9332-4816-a5f7-ca90dff6a3b3",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return {\n    json: {\n      xml_content: item.json.xml\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        752,
+        240
+      ],
+      "id": "56755946-1b42-48f9-9dc7-068feea7f6f5",
+      "name": "Code Restore Data1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-signed-xml",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "signed_xml",
+              "value": "={{ $json.signed_xml }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1184,
+        240
+      ],
+      "id": "72071b0b-c66e-47ac-95b6-9415761d80ac",
+      "name": "Validation Signed XML"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1376,
+        240
+      ],
+      "id": "576178c2-ae14-4db9-98bb-53f5ef4347d3",
+      "name": "If2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Binary": {
+      "main": [
+        [
+          {
+            "node": "Analyze",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Scanned?": {
+      "main": [
+        [
+          {
+            "node": "OCR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction": {
+      "main": [
+        [
+          {
+            "node": "Validation1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze": {
+      "main": [
+        [
+          {
+            "node": "Is Scanned?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TEIF Generator": {
+      "main": [
+        [
+          {
+            "node": "Validation TEIF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature TTN": {
+      "main": [
+        [
+          {
+            "node": "Validation Signed XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write a XML file": {
+      "main": [
+        [
+          {
+            "node": "Register the file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code Restore Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Restore Data": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code Restore Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation TEIF": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Restore Data1": {
+      "main": [
+        [
+          {
+            "node": "Signature TTN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Signed XML": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Write a XML file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7dd8b07a-77f3-4c08-8eda-f63e463110a4",
+  "meta": {
+    "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
+  },
+  "id": "94bwc_TmOUa6dYzhPWm8U",
+  "tags": []
+}

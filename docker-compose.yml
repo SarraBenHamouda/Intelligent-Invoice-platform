@@ -11,13 +11,18 @@ services:
       - TZ=Africa/Tunis
       - N8N_BASIC_AUTH_ACTIVE=false
       - N8N_RESTRICT_FILE_ACCESS_TO=/shared
+      - N8N_BINARY_DATA_MODE=filesystem
     volumes:
       - ./n8n:/home/node/.n8n
       - ./shared:/shared
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - ocrservice
       - extractionservice
       - validationservice
+      - teif-api
+      - signature-api
 
   ollama:
     image: ollama/ollama:latest
@@ -65,11 +70,14 @@ services:
       - ./shared:/shared
     ports:
       - "8004:8000"
+
   teif-api:
     build: ./services/teif-api
     ports:
       - "5004:5000"
-  # 🔥 AJOUT SQL SERVER (NOUVEAU)
+    volumes:
+      - ./shared:/shared
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
@@ -81,15 +89,16 @@ services:
     volumes:
       - sql_data:/var/opt/mssql
 
+  # Signature MOCK / FAKE sans clé USB
+  # Dans Docker/n8n : http://signature-api:5001
+  # Depuis Windows : http://localhost:5002
   signature-api:
     build:
       context: ./services/signature-api
     container_name: signature-api
     ports:
-      - "5001:5001"
+      - "5002:5001"
+
 volumes:
   ollama_data:
   sql_data:
-
-networks:
-  app-network:

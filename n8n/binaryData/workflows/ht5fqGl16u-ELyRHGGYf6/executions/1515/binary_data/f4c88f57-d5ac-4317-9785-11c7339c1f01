@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="1.8.8">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-01">1338455HAM000</MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-01">1369372BBM000</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier>FA260002</DocumentIdentifier>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31">070126</DateText>
+      <DateText format="ddMMyy-ddMMyy" functionCode="I-36">010126-310126</DateText>
+      <DateText format="ddMMyy" functionCode="I-32">070126</DateText>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-01">1338455HAM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">Tenor Afrique</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>AVENUE DE L'ENVIRONNEMENT</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-815">1338455H</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-101</ComMeansType>
+              <ComMeansValue>29 96 55 38</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>conctact@tenorafrique.com</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-104</ComMeansType>
+              <ComMeansValue>www.tenorafrique.com</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-01">1369372BBM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">IT SOFT</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>AVENUE DE L'ENVIRONNEMENT, 02097 BOUMHELL, TN TUNISIE, 2046, AVENUE DE L'ENVIRONNEMENT</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-81">1369372B/B/M/000</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Virement bancaire</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTPCK01</ItemCode>
+          <ItemDescription>Contrat Bronze Pack Duo Compta Gestion Ed. Entreprise</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">2383.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">929.370</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>2</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTGES99</ItemCode>
+          <ItemDescription>Contrat Bronze Gestion Ed. Entreprise Utilisateur Supplémentaire</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">3</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">299.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">349.830</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>3</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTCPT99</ItemCode>
+          <ItemDescription>Contrat Bronze Compta Ed. Entreprise Utilisateur Supplémentaire</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">299.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">116.610</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>4</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTTPV01</ItemCode>
+          <ItemDescription>Contrat Bronze TPV Principal par magasin Ed. Entreprise</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">642.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">250.380</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>5</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTTPV99</ItemCode>
+          <ItemDescription>Contrat Bronze TPV Supplémentaire Ed. Entreprise</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">299.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">116.610</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1762.798</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">2099.730</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1762.798</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">334.932</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="TND">1.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+</TEIF>

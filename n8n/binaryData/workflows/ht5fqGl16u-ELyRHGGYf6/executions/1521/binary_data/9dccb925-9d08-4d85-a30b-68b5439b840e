@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="3.0">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-04">FR552124568552</MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-04">C0000003</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier>10001403</DocumentIdentifier>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31">120325</DateText>
+      <DateText format="ddMMyy-ddMMyy" functionCode="I-36">010325-310325</DateText>
+      <DateText format="ddMMyy" functionCode="I-32">120425</DateText>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-04">FR552124568552</PartnerIdentifier>
+          <PartnerName nameType="Qualification">Papyrus (vX.13)</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription></AdressDescription>
+            <Country codeList="ISO_3166-1">FR</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-815">FR552124568552</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>info@papyrus.als</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-104</ComMeansType>
+              <ComMeansValue>www.papyrus.als</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-04">C0000003</PartnerIdentifier>
+          <PartnerName nameType="Qualification">CFAB Somme</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>19, rue Pierre Rollin, 80090 AMIENS CEDEX, FR FRANCE</AdressDescription>
+            <Country codeList="ISO_3166-1">FR</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-81">C0000003</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Chèque</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>HIS0001</ItemCode>
+          <ItemDescription>Article pour historique des consommations</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">15</Quantity>
+        </LinQty>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">6.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">90.000</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">100.000</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">120.000</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">100.000</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">20.000</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="EUR">0.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+</TEIF>
