@@ -3,7 +3,7 @@ import re
 from typing import Any, Dict, List, Tuple
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from PIL import Image, ImageOps, ImageFilter
 import pytesseract
 from pytesseract import Output
@@ -76,8 +76,7 @@ def preprocess_binary(img: Image.Image) -> Image.Image:
     img = ImageOps.autocontrast(img)
     img = img.filter(ImageFilter.SHARPEN)
 
-    # Adaptive-ish threshold using fixed value.
-    # 180 works better than 140 for many invoice scans.
+    # Threshold. 180 works better than 140 for many invoice scans.
     img = img.point(lambda p: 255 if p > 180 else 0)
 
     return img
@@ -126,15 +125,18 @@ def clean_ocr_text(text: str) -> str:
     text = text.replace("\r", "\n")
     text = text.replace("\u00a0", " ")
 
-    # Fix common OCR confusions for invoice words
     replacements = {
         "T.V.A": "TVA",
         "T V A": "TVA",
-        "H.T": "HT",
+        "T.T.C.": "TTC",
         "T.T.C": "TTC",
+        "T T C": "TTC",
+        "H.T": "HT",
+        "H T": "HT",
         "NET À PAYER": "NET A PAYER",
         "NET A PAYER": "NET A PAYER",
         "N°": "Numero",
+        "Nº": "Numero",
     }
 
     for old, new in replacements.items():
@@ -144,6 +146,80 @@ def clean_ocr_text(text: str) -> str:
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     return text.strip()
+
+
+def postprocess_invoice_ocr(text: str) -> str:
+    """
+    Post-processing métier pour factures OCR.
+    Ne remplace pas l'extraction, mais améliore le texte avant extractionserviceocr.
+    """
+    if not text:
+        return ""
+
+    fixes = {
+        "Frage": "Page",
+        "Fage": "Page",
+        "T.V.A": "TVA",
+        "T T C": "TTC",
+        "T.T.C.": "TTC",
+        "T.T.C": "TTC",
+        "Net a": "Net à",
+        "Net A": "Net à",
+        "NET A PAYER": "NET A PAYER",
+        "e_mail": "email",
+        "E_mail": "email",
+        "Site WEB": "Site Web",
+        "site WEB": "Site Web",
+    }
+
+    for old, new in fixes.items():
+        text = text.replace(old, new)
+
+    # Nettoyer les caractères parasites après les nombres: 600,000] -> 600,000
+    text = re.sub(r"(\d+[,.]\d{2,3})\]", r"\1", text)
+
+    # Corriger les codes client OCR:
+    # co000088 / c0000088 / C000088 -> C0000088
+    text = re.sub(
+        r"\b[cC][oO0](\d{5,})\b",
+        lambda m: "C0" + m.group(1),
+        text
+    )
+
+    # Corriger FA 260079 si OCR lit F4 ou espace bizarre
+    text = re.sub(r"\bF[A4]\s+(\d{4,})\b", r"FA \1", text)
+
+    # Corriger quelques erreurs fréquentes sur Tenor
+    text = re.sub(r"\bT[EÉ]NOR\b", "TENOR", text, flags=re.IGNORECASE)
+    text = re.sub(r"\bAFRIQUE\b", "AFRIQUE", text, flags=re.IGNORECASE)
+
+    clean_lines = []
+    useful_keywords = [
+        "facture", "date", "client", "total", "tva", "ttc", "ht",
+        "référence", "reference", "désignation", "designation",
+        "matricule", "fiscal", "net", "payer", "tenor",
+        "montant", "prix", "quantité", "quantite", "remise",
+        "livré", "livre", "assistance", "consultix", "tunis",
+        "timbre", "page", "email", "site", "web"
+    ]
+
+    for line in text.splitlines():
+        l = line.strip()
+        if not l:
+            continue
+
+        lower = l.lower()
+        has_digit = bool(re.search(r"\d", l))
+        has_keyword = any(k in lower for k in useful_keywords)
+
+        # Supprimer seulement les petites lignes clairement inutiles.
+        # Exemple: ÉTÉPER, KEXXX, signes isolés.
+        if len(l) <= 10 and not has_digit and not has_keyword:
+            continue
+
+        clean_lines.append(l)
+
+    return "\n".join(clean_lines).strip()
 
 
 def build_tesseract_config(psm: int) -> str:
@@ -176,7 +252,6 @@ def run_tesseract(img: Image.Image, lang: str, psm: int) -> Tuple[str, Dict[str,
 
 def words_from_tesseract_data(data: Dict[str, Any], page_index: int) -> List[Dict[str, Any]]:
     page_words: List[Dict[str, Any]] = []
-
     count = len(data.get("text", []))
 
     for idx in range(count):
@@ -222,7 +297,7 @@ def confidence_from_words(words: List[Dict[str, Any]]) -> float:
 def reconstruct_text_from_words(words: List[Dict[str, Any]]) -> str:
     """
     Rebuild lines using OCR coordinates.
-    This is very important for invoice tables.
+    Important for invoice tables.
     """
     if not words:
         return ""
@@ -278,12 +353,12 @@ def score_ocr_result(text: str, words: List[Dict[str, Any]]) -> float:
     confidence = confidence_from_words(words)
     score += confidence
 
-    # Reward invoice keywords
     keywords = [
         "facture", "avoir", "total", "tva", "ttc", "ht",
         "client", "date", "reference", "référence",
         "designation", "désignation", "quantité", "quantite",
-        "prix", "montant", "net a payer", "timbre", "siret", "siren"
+        "prix", "montant", "net a payer", "net à payer",
+        "timbre", "siret", "siren", "matricule", "fiscal"
     ]
 
     lower = text.lower()
@@ -296,6 +371,14 @@ def score_ocr_result(text: str, words: List[Dict[str, Any]]) -> float:
     numbers = re.findall(r"\d+[,.]\d{2,4}", text)
     score += min(len(numbers), 20)
 
+    # Reward invoice numbers
+    if re.search(r"\bFA\s*\d{4,}\b", text, re.IGNORECASE):
+        score += 5
+
+    # Reward date
+    if re.search(r"\b\d{2}/\d{2}/\d{4}\b", text):
+        score += 5
+
     # Penalize too short text
     if len(text) < 100:
         score -= 30
@@ -306,7 +389,6 @@ def score_ocr_result(text: str, words: List[Dict[str, Any]]) -> float:
 def choose_best_ocr(img: Image.Image, lang: str, requested_psm: int, page_index: int) -> Dict[str, Any]:
     """
     Try multiple OCR strategies.
-    This improves results across different bill layouts.
     """
     variants = []
 
@@ -316,11 +398,6 @@ def choose_best_ocr(img: Image.Image, lang: str, requested_psm: int, page_index:
     soft = try_orientation_fix(soft)
     binary = try_orientation_fix(binary)
 
-    # PSM choices:
-    # 6 = uniform block
-    # 4 = single column variable sizes
-    # 11 = sparse text
-    # requested_psm remains first
     psm_candidates = []
     for psm in [requested_psm, 6, 4, 11]:
         if psm not in psm_candidates:
@@ -369,24 +446,52 @@ def build_quality(
 ) -> Dict[str, Any]:
     warnings = []
 
-    if confidence < 60:
-        warnings.append("OCR average confidence is low. Extraction may be incomplete.")
+    full_text = "\n".join(page.get("text", "") for page in per_page)
+
+    if confidence < 70:
+        warnings.append("OCR confidence is under 70%. Manual validation is recommended.")
 
     if not all_words:
         warnings.append("No OCR words detected.")
 
+    required_patterns = {
+        "invoice_or_facture": r"\bFA\s*\d{4,}\b|\bFacture\b",
+        "date": r"\b\d{2}/\d{2}/\d{4}\b",
+        "client": r"\bC\d{5,}\b",
+        "total_ttc": r"\b\d+[,.]\d{3}\s*TND\b|\bTTC\b",
+        "tax": r"\bTVA\b|\b19[,.]00\b|\b7[,.]00\b",
+    }
+
+    missing = []
+
+    for name, pattern in required_patterns.items():
+        if not re.search(pattern, full_text, re.IGNORECASE):
+            missing.append(name)
+
+    if missing:
+        warnings.append(f"Missing important invoice fields after OCR: {', '.join(missing)}")
+
+    garbage_words = [
+        w for w in all_words
+        if w.get("conf", 100) < 40 and len(str(w.get("text", ""))) > 3
+    ]
+
+    if len(garbage_words) >= 5:
+        warnings.append("Several low-confidence suspicious OCR words detected.")
+
     for page in per_page:
-        if page.get("confidence", 0) < 60:
-            warnings.append(f"Page {page.get('page')} has low OCR confidence.")
+        if page.get("confidence", 0) < 70:
+            warnings.append(f"Page {page.get('page')} has weak OCR confidence.")
 
         if len(page.get("text", "")) < 100:
             warnings.append(f"Page {page.get('page')} has very little OCR text.")
 
     return {
-        "status": "ok" if not warnings else "needs_attention",
+        "status": "ok" if not warnings else "needs_manual_validation",
         "warnings": warnings,
-        "low_confidence_threshold": 60,
-        "word_count": len(all_words)
+        "low_confidence_threshold": 70,
+        "word_count": len(all_words),
+        "missing_fields": missing,
     }
 
 
@@ -449,14 +554,16 @@ def run_ocr(req: OCRRequest):
         confidences.append(best["confidence"])
 
         page_reconstructed = reconstruct_text_from_words(page_words)
+        page_reconstructed = postprocess_invoice_ocr(page_reconstructed)
 
-        # Prefer reconstructed text if it is richer.
         chosen_text = best["text"]
 
+        # Prefer reconstructed text if it is rich enough.
         if len(page_reconstructed) > len(chosen_text) * 0.8:
             chosen_text = page_reconstructed
 
         chosen_text = clean_ocr_text(chosen_text)
+        chosen_text = postprocess_invoice_ocr(chosen_text)
 
         per_page.append({
             "page": page_index,
@@ -476,7 +583,10 @@ def run_ocr(req: OCRRequest):
         full_text_parts.append(f"\n===== PAGE {page['page']} =====\n{page['text']}")
 
     full_text = clean_ocr_text("\n".join(full_text_parts))
+    full_text = postprocess_invoice_ocr(full_text)
+
     reconstructed_text = reconstruct_text_from_words(all_words)
+    reconstructed_text = postprocess_invoice_ocr(reconstructed_text)
 
     confidence = round(sum(confidences) / len(confidences), 2) if confidences else 0.0
 
