@@ -1,0 +1,16 @@
+
+# Local databases - DO NOT PUSH
+database.sqlite
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-wal
+*.db-shm
+
+# n8n local data
+n8n/database.sqlite
+n8n/database.sqlite-wal
+n8n/database.sqlite-shm
+n8n/database/
+n8n/binaryData/
