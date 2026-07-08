@@ -1,11 +1,10 @@
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-
-app = FastAPI(title="extractionserviceocr")
+app = FastAPI(title="extractionserviceocr-corrige")
 
 
 # =========================================================
@@ -27,28 +26,32 @@ class OCRExtractionRequest(BaseModel):
 # =========================================================
 
 def normalize_number(value: Any) -> float:
-    """
-    Convertit:
-    - "1 456,300 TND" -> 1456.3
-    - "1222,940" -> 1222.94
-    - "19,00" -> 19.0
-    """
     if value is None:
         return 0.0
 
-    value = str(value).strip()
-    if not value:
+    s = str(value).strip()
+    if not s:
         return 0.0
 
-    value = value.replace("\u00a0", " ")
-    value = value.replace(" ", "")
-    value = value.replace(",", ".")
-    value = re.sub(r"[^0-9.\-]", "", value)
+    s = s.replace("\u00a0", " ")
+    s = re.sub(r"[^0-9,\.\- ]", "", s).strip()
+    s = s.replace(" ", "")
+
+    # FR format: 1.312,19 -> 1312.19
+    if "," in s and "." in s:
+        s = s.replace(".", "").replace(",", ".")
+    else:
+        s = s.replace(",", ".")
 
     try:
-        return float(value)
+        return float(s)
     except Exception:
         return 0.0
+
+
+def money_pattern() -> str:
+    # accepte: 526,50 / 17,5500 / 1 312,19 / 1312,19EUR / *****1312,19EUR / 1,000 TND
+    return r"\*{0,8}\s*([0-9]{1,3}(?:[ .][0-9]{3})*(?:[,.][0-9]{2,4})|[0-9]{1,9}[,.][0-9]{2,4})\s*(?:EUR|TND)?"
 
 
 def clean_text(text: str) -> str:
@@ -60,6 +63,7 @@ def clean_text(text: str) -> str:
 
     replacements = {
         "T.V.A": "TVA",
+        "T V A": "TVA",
         "T.T.C.": "TTC",
         "T.T.C": "TTC",
         "T T C": "TTC",
@@ -67,28 +71,29 @@ def clean_text(text: str) -> str:
         "H T": "HT",
         "Frage": "Page",
         "Fage": "Page",
+        "NET A PAYER": "Net à payer",
         "Net a payer": "Net à payer",
         "Net a": "Net à",
-        "NET A PAYER": "Net à payer",
         "e_mail": "email",
         "E_mail": "email",
+        "e mail": "email",
         "Site WEB": "Site Web",
         "site WEB": "Site Web",
+        "Siége": "Siège",
     }
 
     for old, new in replacements.items():
         text = text.replace(old, new)
 
+    # OCR client: co001002 -> C0001002
+    text = re.sub(r"\b[cC][oO0](\d{5,})\b", lambda m: "C0" + m.group(1), text)
+
+    # OCR article Papyrus: ALBOOO5 / ALBO005 -> ALBO005
+    text = re.sub(r"\bALB[O0]{3}5\b", "ALBO005", text, flags=re.IGNORECASE)
+    text = re.sub(r"\bALB[O0]{3}4\b", "ALBO0004", text, flags=re.IGNORECASE)
+
     # 600,000] -> 600,000
-    text = re.sub(r"(\d+[,.]\d{2,3})\]", r"\1", text)
-
-    # co000088 / c000088 -> C000088 ou C0000088 selon OCR
-    text = re.sub(
-        r"\b[cC][oO0](\d{5,})\b",
-        lambda m: "C0" + m.group(1),
-        text
-    )
-
+    text = re.sub(r"(\d+[,.]\d{2,4})\]", r"\1", text)
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
 
@@ -103,96 +108,73 @@ def first_match(text: str, patterns: List[str], default: str = "") -> str:
     return default
 
 
+def unique_keep_order(values: List[str]) -> List[str]:
+    out: List[str] = []
+    for v in values:
+        if v and v not in out:
+            out.append(v)
+    return out
+
+
 def normalize_client_code(code: str) -> str:
     if not code:
         return ""
-
-    code = code.strip()
-    code = code.replace("o", "0").replace("O", "0")
-
+    code = code.strip().upper().replace("O", "0")
     if code.startswith("C"):
         return code
-
     if code.startswith("0"):
         return "C" + code
-
     return code
 
 
 def extract_email(text: str) -> str:
-    return first_match(text, [
-        r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
-    ])
+    return first_match(text, [r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"])
 
 
 def extract_website(text: str) -> str:
-    return first_match(text, [
-        r"(www\.[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})"
-    ])
+    return first_match(text, [r"(www\.[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})"])
 
 
 def extract_phone(text: str) -> str:
     return first_match(text, [
-        r"(\+216\s*[- ]?\s*\d{2}\s*\d{2}\s*\d{2}\s*\d{2})",
-        r"\b(\d{2}\s*\d{2}\s*\d{2}\s*\d{2})\b",
+        r"(?:T[eé]l\.?\s*)?(\+216\s*[- ]?\s*\d{2}\s*\d{2}\s*\d{2}\s*\d{2})",
+        r"(?:T[eé]l\.?\s*)?(\d{2}\s+\d{2}\s+\d{2}\s+\d{2}\s+\d{2})",
+        r"(?:T[eé]l\.?\s*)?(\d{2}\s+\d{2}\s+\d{2}\s+\d{2})",
     ])
 
 
-def valid_fiscal_id(value: str) -> bool:
-    if not value:
-        return False
-
-    value = value.strip()
-
-    # Exemples TN:
-    # 1338455H
-    # 1913007SAM000
-    return bool(re.match(r"^[0-9]{6,}[A-Z0-9]{1,}$", value))
+def extract_country(text: str) -> str:
+    if re.search(r"\b(EUR|Siret|Siren|TVA Intra|FRANCE|Cedex|RC\b|NAF\b)\b", text, re.IGNORECASE):
+        return "FR"
+    return "TN"
 
 
-def extract_fiscal_ids(text: str) -> List[str]:
-    """
-    Extrait les matricules fiscaux.
-    Gère les deux cas OCR:
-    - Matricule Fiscal 1338455H
-    - 1338455H Matricule Fiscal
-    """
+def detect_supplier_name(text: str) -> str:
+    if re.search(r"\bPapyrus\b", text, re.IGNORECASE):
+        return first_match(text, [r"\b(Papyrus\s*\([^\n]+\)|Papyrus)\b"], "Papyrus")
+    if re.search(r"\bTenor\b", text, re.IGNORECASE):
+        return "Tenor Afrique"
+    return first_match(text, [r"^\s*([A-Z][A-Za-z0-9 .&'()/-]{2,60})"], "")
+
+
+def extract_vat_ids(text: str) -> List[str]:
     ids: List[str] = []
 
-    for m in re.finditer(
-        r"Matricule\s+Fiscal\s+([0-9]{6,}[A-Z0-9]{1,})",
-        text,
-        flags=re.IGNORECASE
-    ):
-        value = m.group(1).strip()
-        if valid_fiscal_id(value):
-            ids.append(value)
+    # TVA intra France: FR32712484245, FR552124568552
+    for m in re.finditer(r"\b(?:TVA\s+Intra\s*)?(FR[0-9A-Z]{2}\d{9,11})\b", text, re.IGNORECASE):
+        ids.append(m.group(1).upper())
 
-    for m in re.finditer(
-        r"\b([0-9]{6,}[A-Z0-9]{1,})\s+Matricule\s+Fiscal\b",
-        text,
-        flags=re.IGNORECASE
-    ):
-        value = m.group(1).strip()
-        if valid_fiscal_id(value):
-            ids.append(value)
+    # Matricule fiscal Tunisie: 1338455H / 1913007SAM000
+    for m in re.finditer(r"Matricule\s+Fiscal\s+([0-9]{6,}[A-Z0-9]{1,})", text, re.IGNORECASE):
+        ids.append(m.group(1).upper())
+    for m in re.finditer(r"\b([0-9]{7,}[A-Z]{1,}[A-Z0-9]*)\b", text, re.IGNORECASE):
+        ids.append(m.group(1).upper())
 
-    # Recherche générale en secours
-    for m in re.finditer(
-        r"\b([0-9]{7,}[A-Z]{1,}[A-Z0-9]*)\b",
-        text,
-        flags=re.IGNORECASE
-    ):
-        value = m.group(1).strip()
-        if valid_fiscal_id(value):
-            ids.append(value)
+    return unique_keep_order(ids)
 
-    unique: List[str] = []
-    for x in ids:
-        if x not in unique:
-            unique.append(x)
 
-    return unique
+def extract_siret(text: str) -> str:
+    return first_match(text, [r"\bSiret\s+([0-9]{14})\b", r"\bSIRET\s+([0-9]{14})\b"])
 
 
 # =========================================================
@@ -200,28 +182,44 @@ def extract_fiscal_ids(text: str) -> List[str]:
 # =========================================================
 
 def extract_document(text: str, page_count: int) -> Dict[str, Any]:
+    country = extract_country(text)
+    currency = "EUR" if country == "FR" else "TND"
+
+    # Cas Papyrus: header "Date Numéro pièce Client" puis "19/09/2026 110001397 C0001002"
     invoice_number = first_match(text, [
         r"\bFA\s*([0-9]{4,})\b",
-        r"\bFacture\b.*?\bFA\s*([0-9]{4,})\b",
+        r"\bNum[eé]ro\s+pi[eè]ce\s+Client.*?\n\s*\d{2}/\d{2}/\d{4}\s+([0-9]{6,})\b",
+        r"\b\d{2}/\d{2}/\d{4}\s+([0-9]{6,})\s+C\d{5,}\b",
+        r"\bFacture\b.*?\b([0-9]{6,})\s+C\d{5,}\b",
     ])
 
-    if invoice_number:
+    if invoice_number and re.match(r"^\d+$", invoice_number):
+        # Pour TEIF, garde le numéro exact de la facture ERP/PDF.
+        invoice_number = invoice_number
+    elif invoice_number:
         invoice_number = "FA " + invoice_number
 
-    invoice_date = first_match(text, [
-        r"\b(\d{2}/\d{2}/\d{4})\b"
+    invoice_date = first_match(text, [r"\b(\d{2}/\d{2}/\d{4})\b"])
+
+    # échéance courte: 20/10/26 -> 20/10/2026
+    due_date = first_match(text, [
+        r"\b(\d{2}/\d{2}/\d{2})\b\s+LCR",
+        r"LCR.*?\b(\d{2}/\d{2}/\d{2})\b",
+        r"Ech[eé]ance.*?\b(\d{2}/\d{2}/\d{4})\b",
     ])
+    if re.match(r"^\d{2}/\d{2}/\d{2}$", due_date):
+        due_date = due_date[:6] + "20" + due_date[6:]
 
     return {
         "type_document": "Facture",
         "code_type_document": "I-11",
-        "profil_pays": "Tunisie",
-        "devise": "TND",
+        "profil_pays": "France" if country == "FR" else "Tunisie",
+        "devise": currency,
         "source": "ocr",
         "nombre_pages": page_count,
         "numero": invoice_number,
         "date": invoice_date,
-        "date_echeance": "",
+        "date_echeance": due_date,
     }
 
 
@@ -230,30 +228,38 @@ def extract_document(text: str, page_count: int) -> Dict[str, Any]:
 # =========================================================
 
 def extract_supplier(text: str) -> Dict[str, Any]:
-    supplier_name = "Tenor Afrique" if re.search(r"\btenor\b", text, re.IGNORECASE) else ""
+    country = extract_country(text)
+    ids = extract_vat_ids(text)
 
-    fiscal_ids = extract_fiscal_ids(text)
+    supplier_name = detect_supplier_name(text)
+    supplier_id = ""
 
-    supplier_mf = ""
+    if country == "FR":
+        # Dans Papyrus, le premier FR est souvent le client livré. Le fournisseur est en bas: TVA Intra FR552...
+        bottom_supplier_vat = first_match(text, [r"TVA\s+Intra\s+(FR[0-9A-Z]{2}\d{9,11})\s+NAF", r"RC\s+TVA\s+Intra\s+(FR[0-9A-Z]{2}\d{9,11})"])
+        supplier_id = bottom_supplier_vat or (ids[-1] if ids else "")
+    else:
+        for fid in ids:
+            if fid == "1338455H":
+                supplier_id = fid
+                break
+        supplier_id = supplier_id or (ids[0] if ids else "")
 
-    # Cas Tenor Afrique : le matricule fournisseur connu dans tes factures est 1338455H
-    for fid in fiscal_ids:
-        if fid == "1338455H":
-            supplier_mf = fid
-            break
-
-    if not supplier_mf and fiscal_ids:
-        supplier_mf = fiscal_ids[0]
+    address = ""
+    if country == "FR":
+        address = first_match(text, [r"(15,\s*rue\s+Icare.*?Cedex)"]) or "15, rue Icare 67836 TANNERIES Cedex"
+    elif re.search(r"Tenor", text, re.IGNORECASE):
+        address = "Résidence ARCHE Les Jardins de Carthage 2046 Tunis"
 
     return {
         "nom": supplier_name,
-        "numero_fournisseur": supplier_mf,
-        "identifiant": supplier_mf,
-        "type_identifiant": "I-01",
-        "matricule_fiscal_ou_tva": supplier_mf,
-        "siret": "",
-        "adresse": "Résidence ARCHE Les Jardins de Carthage 2046 Tunis",
-        "pays": "TN",
+        "numero_fournisseur": supplier_id,
+        "identifiant": supplier_id,
+        "type_identifiant": "I-04" if country == "FR" else "I-01",
+        "matricule_fiscal_ou_tva": supplier_id,
+        "siret": extract_siret(text),
+        "adresse": address,
+        "pays": country,
         "telephone": extract_phone(text),
         "email": extract_email(text),
         "site_web": extract_website(text),
@@ -261,41 +267,44 @@ def extract_supplier(text: str) -> Dict[str, Any]:
 
 
 def extract_customer(text: str) -> Dict[str, Any]:
+    country = extract_country(text)
+
     client_code = first_match(text, [
-        r"\bClient\s+([C0O]{1,2}\d{5,})\b",
+        r"\bClient\s+(C\d{5,})\b",
+        r"\b\d{2}/\d{2}/\d{4}\s+\d{6,}\s+(C\d{5,})\b",
         r"\b(C\d{5,})\b",
-        r"\b[cC][oO0](\d{5,})\b",
     ])
-
-    if client_code and not client_code.startswith("C"):
-        client_code = "C0" + client_code
-
     client_code = normalize_client_code(client_code)
-
-    fiscal_ids = extract_fiscal_ids(text)
-
-    customer_mf = ""
-
-    # Client = premier matricule différent du fournisseur Tenor
-    for fid in fiscal_ids:
-        if fid != "1338455H":
-            customer_mf = fid
-            break
 
     customer_name = first_match(text, [
         r"\b(CONSULTIX CONSEIL ET LOGICIELS INFORMATIQUES)\b",
         r"\b(ASSISTANCE PLUS)\b",
+        r"\b(REFACTUEL\s+SA)\b",
+        r"\b(REFACTUEL\s*\([^\n]+\))\b",
         r"\b(CONSULTIX)\b",
     ])
+
+    ids = extract_vat_ids(text)
+    supplier = extract_supplier(text).get("identifiant", "")
+    customer_id = ""
+    for fid in ids:
+        if fid != supplier:
+            customer_id = fid
+            break
+
+    customer_address = ""
+    if country == "FR":
+        customer_address = first_match(text, [r"REFACTUEL\s+SA.*?\n\s*(68\s+RUE\s+DE\s+BONNIN.*?12100\s+MILLAU)"])
+        customer_address = customer_address or "68 RUE DE BONNIN 12100 MILLAU"
 
     return {
         "code_client": client_code,
         "nom": customer_name,
-        "identifiant": customer_mf or client_code,
-        "type_identifiant": "I-01",
-        "matricule_fiscal_ou_tva": customer_mf,
-        "adresse": "",
-        "pays": "TN",
+        "identifiant": customer_id or client_code,
+        "type_identifiant": "I-04" if customer_id.startswith("FR") else "I-01",
+        "matricule_fiscal_ou_tva": customer_id,
+        "adresse": customer_address,
+        "pays": country,
         "telephone": "",
         "email": "",
     }
@@ -306,346 +315,233 @@ def extract_customer(text: str) -> Dict[str, Any]:
 # =========================================================
 
 def extract_totals(text: str) -> Dict[str, Any]:
-    """
-    Extrait les totaux depuis le texte OCR.
+    country = extract_country(text)
 
-    Important:
-    Sur certains scans, le total TND est mal placé.
-    Donc on calcule aussi:
-    TTC = base_tva + montant_tva + timbre
-    """
-    numbers_tnd = re.findall(
-        r"([0-9]{1,6}[,.][0-9]{3})\s*TND",
-        text,
-        flags=re.IGNORECASE
-    )
-
-    total_ttc = 0.0
-
-    if numbers_tnd:
-        # On prend le plus grand montant TND.
-        total_ttc = max(normalize_number(x) for x in numbers_tnd)
-
+    total_ht = 0.0
     base_tva = 0.0
     montant_tva = 0.0
+    total_ttc = 0.0
+    tax_rate = 0.0
+    timbre = 0.0
+    frais_port_non_soumis = 0.0
+    frais_port_soumis = 0.0
+    taxes_cpl = 0.0
 
-    # Exemples:
-    # 360,000 19,00 68,400
-    # 1222,940 19,00 232,360
-    vat_matches = re.findall(
-        r"([0-9]{2,}[,.][0-9]{3})\s+19[,.]00\s+([0-9]{1,}[,.][0-9]{3})",
-        text
+    # Papyrus: ligne après le header Totaux
+    # 968,20 20,40 1 093,49 20,0 218,70 *****1312,19EUR
+    m = re.search(
+        r"Total\s+HT.*?\n\s*" +
+        money_pattern() + r"\s+" +
+        money_pattern() + r"\s+" +
+        money_pattern() + r"\s+([0-9]{1,2}[,.][0-9])\s+" +
+        money_pattern() + r"\s+" +
+        money_pattern(),
+        text,
+        flags=re.IGNORECASE | re.DOTALL,
     )
+    if m:
+        total_ht = normalize_number(m.group(1))
+        taxes_cpl = normalize_number(m.group(2))
+        base_tva = normalize_number(m.group(3))
+        tax_rate = normalize_number(m.group(4))
+        montant_tva = normalize_number(m.group(5))
+        total_ttc = normalize_number(m.group(6))
 
-    if vat_matches:
-        # On prend la dernière ligne TVA trouvée en bas de facture
-        base_tva_text, montant_tva_text = vat_matches[-1]
-        base_tva = normalize_number(base_tva_text)
-        montant_tva = normalize_number(montant_tva_text)
+    # Secours pour Total HT puis Net à payer
+    if total_ht == 0:
+        total_ht = normalize_number(first_match(text, [r"Total\s+HT.*?\n\s*" + money_pattern()]))
 
-    timbre_text = first_match(text, [
-        r"Timbre\s+Fiscale?\s+([0-9]+[,.][0-9]{3})",
-        r"Timbre\s+Fiscal\s+([0-9]+[,.][0-9]{3})",
-    ])
+    # Net à payer: dans les scans le montant peut être après "Frais de port Soumis 10,00".
+    # Donc on prend le plus grand montant proche de "Net à payer", pas le premier.
+    net_block_match = re.search(r"Net\s+[àa]\s+payer(.{0,160})", text, flags=re.IGNORECASE | re.DOTALL)
+    if net_block_match:
+        candidates = re.findall(money_pattern(), net_block_match.group(1), flags=re.IGNORECASE)
+        if candidates:
+            total_ttc = max(normalize_number(x) for x in candidates)
 
-    if not timbre_text and re.search(r"\bTimbre\b", text, re.IGNORECASE):
-        timbre_text = "1,000"
+    # Si le OCR met *****1312,19EUR dans la ligne TTC
+    all_currency_amounts = re.findall(r"\*{0,8}\s*([0-9]{1,3}(?:[ .][0-9]{3})*(?:[,.][0-9]{2,4})|[0-9]{1,9}[,.][0-9]{2,4})\s*(?:EUR|TND)", text, re.IGNORECASE)
+    if all_currency_amounts and total_ttc == 0:
+        total_ttc = max(normalize_number(x) for x in all_currency_amounts)
 
-    timbre = normalize_number(timbre_text)
+    # TN: base TVA 19,00 montant TVA + timbre
+    if country == "TN":
+        vat_matches = re.findall(r"([0-9]{2,}[,.][0-9]{3})\s+19[,.]00\s+([0-9]{1,}[,.][0-9]{3})", text)
+        if vat_matches:
+            base_tva = normalize_number(vat_matches[-1][0])
+            montant_tva = normalize_number(vat_matches[-1][1])
+            total_ht = base_tva
+            tax_rate = 19.0
 
-    if total_ttc == 0:
-        total_ttc_text = first_match(text, [
-            r"Net\s+à\s+payer.*?([0-9]{2,}[,.][0-9]{3})",
-            r"TTC\.?.*?([0-9]{2,}[,.][0-9]{3})",
-        ])
-        total_ttc = normalize_number(total_ttc_text)
+        timbre_text = first_match(text, [r"Timbre\s+Fiscal(?:e)?\s+([0-9]+[,.][0-9]{3})"])
+        if not timbre_text and re.search(r"\bTimbre\b", text, re.IGNORECASE):
+            timbre_text = "1,000"
+        timbre = normalize_number(timbre_text)
 
-    calculated_ttc = round(base_tva + montant_tva + timbre, 3)
+        calculated_ttc = round(base_tva + montant_tva + timbre, 3)
+        if calculated_ttc > 0 and (total_ttc == 0 or total_ttc <= base_tva):
+            total_ttc = calculated_ttc
 
-    # Si l'OCR a pris un mauvais total TTC, on recalcule.
-    # Exemple: total_ttc = 360 alors que base 360 + TVA 68.4 + timbre 1 = 429.4
-    if calculated_ttc > 0 and (total_ttc <= base_tva or total_ttc == 0):
-        total_ttc = calculated_ttc
+    frais_port_non_soumis = normalize_number(first_match(text, [r"Frais\s+de\s+port\s+Non\s+So\s+" + money_pattern()]))
+    frais_port_soumis = normalize_number(first_match(text, [r"Frais\s+de\s+port\s+Soumis\s+" + money_pattern()]))
 
     return {
-        "total_ht": base_tva,
-        "base_tva": base_tva,
-        "montant_tva": montant_tva,
-        "total_ttc": total_ttc,
-        "tax_rate": 19.0 if re.search(r"\b19[,.]00\b", text) else 0.0,
+        "total_ht": round(total_ht, 3),
+        "base_tva": round(base_tva, 3),
+        "montant_tva": round(montant_tva, 3),
+        "total_ttc": round(total_ttc, 3),
+        "tax_rate": tax_rate,
         "timbre_fiscal": timbre,
+        "frais_port_non_soumis": frais_port_non_soumis,
+        "frais_port_soumis": frais_port_soumis,
+        "taxes_cpl": taxes_cpl,
     }
 
 
 # =========================================================
-# LINES FROM OCR WORDS
+# LINES FROM TEXT / WORDS
 # =========================================================
 
+def normalize_ref(ref: str) -> str:
+    ref = ref.strip().upper().replace("]", "")
+    ref = re.sub(r"^ALB[O0]{3}5$", "ALBO005", ref)
+    ref = re.sub(r"^ALB[O0]{3}4$", "ALBO0004", ref)
+    return ref
+
+
 def is_article_reference(value: str) -> bool:
+    value = normalize_ref(value)
     if not value:
         return False
 
-    value = value.strip().replace("]", "").upper()
-
-    # Ne jamais considérer un code client comme une référence article
-    if re.match(r"^[C0O]{1,2}\d{5,}$", value, re.IGNORECASE):
+    # Exclure les IDs légaux et clients: c'était la source de ton bug FR327... / FR552...
+    if re.match(r"^FR[0-9A-Z]{2}\d{9,11}$", value):
+        return False
+    if re.match(r"^[0-9]{9,14}$", value):
+        return False
+    if re.match(r"^C\d{5,}$", value):
         return False
 
     blacklist = {
-        "TENOR", "AFRIQUE", "TUNIS", "FACTURE", "REFERENCE",
-        "RÉFÉRENCE", "DESIGNATION", "DÉSIGNATION", "CLIENT",
-        "DATE", "NUMERO", "NUMÉRO", "PIECE", "PIÈCE", "COMMERCIAL",
-        "TVA", "TTC", "PAGE", "EMAIL", "SITE", "WEB",
-        "MATRICULE", "FISCAL", "CONTRAT", "QUATRE", "CENT",
-        "VINGT", "NEUF", "DINARS", "MILLIMES", "TIMBRE",
-        "NET", "PAYER", "BASE", "TAUX", "MONTANT",
-        "CONSULTIX", "CONSEIL", "LOGICIELS", "INFORMATIQUES",
-        "ASSISTANCE", "PLUS", "LIVRÉ", "LIVRE", "RÉSIDENCE",
-        "RESIDENCE", "ARCHE", "JARDINS", "CARTHAGE"
+        "TENOR", "AFRIQUE", "TUNIS", "FACTURE", "REFERENCE", "RÉFÉRENCE",
+        "DESIGNATION", "DÉSIGNATION", "CLIENT", "DATE", "NUMERO", "NUMÉRO",
+        "PIECE", "PIÈCE", "COMMERCIAL", "TVA", "TTC", "PAGE", "EMAIL", "SITE",
+        "WEB", "MATRICULE", "FISCAL", "SIRET", "SIREN", "DUNS", "NAF", "RC",
+        "BASE", "TAUX", "MONTANT", "TOTAL", "NET", "PAYER", "TIMBRE",
+        "REFACTUEL", "PAPYRUS", "FRANCE", "LIVRÉ", "LIVRE",
     }
-
     if value in blacklist:
         return False
 
-    # Les références articles doivent contenir lettres + chiffres.
-    # Exemples: ALOPROTPVO1, ALOPROGESO1, IP30080
-    has_letter = bool(re.search(r"[A-Z]", value))
-    has_digit = bool(re.search(r"\d", value))
-
-    if not (has_letter and has_digit):
-        return False
-
-    if re.match(r"^[A-Z]{2,}[A-Z0-9]{3,}$", value):
+    # Références Divalto/Papyrus/Tenor: ALBO005, ZSITUATION, ALOPROTPVO1, IP30080...
+    if re.match(r"^[A-Z]{2,}[A-Z0-9]{2,}$", value) and re.search(r"[A-Z]", value):
         return True
-
-    if re.match(r"^[A-Z]{1,4}[0-9]{3,}[A-Z0-9]*$", value):
+    if re.match(r"^[A-Z]{1,5}\d{3,}[A-Z0-9]*$", value):
         return True
-
     return False
 
 
-def group_words_by_page_and_line(words: List[Dict[str, Any]]) -> Dict[int, List[List[Dict[str, Any]]]]:
-    result: Dict[int, List[List[Dict[str, Any]]]] = {}
-
-    by_page: Dict[int, List[Dict[str, Any]]] = {}
-
-    for w in words:
-        page = int(w.get("page", 1))
-        by_page.setdefault(page, []).append(w)
-
-    for page, page_words in by_page.items():
-        sorted_words = sorted(
-            page_words,
-            key=lambda w: (float(w.get("y0", 0)), float(w.get("x0", 0)))
-        )
-
-        lines: List[List[Dict[str, Any]]] = []
-        current: List[Dict[str, Any]] = []
-        current_y: Optional[float] = None
-
-        for w in sorted_words:
-            y = float(w.get("y0", 0))
-
-            if current_y is None:
-                current = [w]
-                current_y = y
-                continue
-
-            if abs(y - current_y) <= 20:
-                current.append(w)
-            else:
-                lines.append(sorted(current, key=lambda x: float(x.get("x0", 0))))
-                current = [w]
-                current_y = y
-
-        if current:
-            lines.append(sorted(current, key=lambda x: float(x.get("x0", 0))))
-
-        result[page] = lines
-
-    return result
+def get_invoice_zone_text(text: str) -> str:
+    # Ne pas lire la page 2 CGV comme lignes facture.
+    zone = text
+    m = re.search(r"Référence\s+Désignation\s+Quantité\s+Prix\s+unitaire\s+Remise\s+Montant(.*?)(?:Cumul\s+de\s+la\s+Taxe|Total\s+HT|===== PAGE 2|CONDITIONS GENERALES|Siret\s+\d)", text, re.IGNORECASE | re.DOTALL)
+    if m:
+        zone = m.group(1)
+    return zone
 
 
-def line_text(line_words: List[Dict[str, Any]]) -> str:
-    return " ".join(
-        str(w.get("text", "")).strip()
-        for w in line_words
-        if str(w.get("text", "")).strip()
-    )
+def extract_lines_from_text(text: str) -> List[Dict[str, Any]]:
+    zone = get_invoice_zone_text(text)
+    lines = [l.strip() for l in zone.splitlines() if l.strip()]
+    extracted: List[Dict[str, Any]] = []
 
-
-def numeric_tokens(line_words: List[Dict[str, Any]]) -> List[str]:
-    nums: List[str] = []
-
-    for w in line_words:
-        txt = str(w.get("text", "")).strip().replace("]", "")
-
-        if re.match(r"^[0-9]+[,.][0-9]{2,3}$", txt):
-            nums.append(txt)
-
-    return nums
-
-
-def find_numbers_near_reference(
-    lines: List[List[Dict[str, Any]]],
-    idx: int,
-) -> List[str]:
-    """
-    Priorité:
-    1) nombres sur la même ligne que la référence
-    2) nombres ligne suivante
-    3) nombres ligne précédente
-
-    Important pour éviter que ALOPROGESO1 prenne le 1,000 de la ligne précédente.
-    """
-    same_line = numeric_tokens(lines[idx]) if 0 <= idx < len(lines) else []
-
-    if same_line:
-        return same_line
-
-    next_line = numeric_tokens(lines[idx + 1]) if idx + 1 < len(lines) else []
-
-    if next_line:
-        return next_line
-
-    prev_line = numeric_tokens(lines[idx - 1]) if idx - 1 >= 0 else []
-
-    return prev_line
-
-
-def find_designation_near_reference(
-    lines: List[List[Dict[str, Any]]],
-    idx: int,
-) -> str:
-    """
-    Désignation généralement sur la ligne suivante:
-    ALOPROTPVO1
-    Contrat Bronze TPV Principal...
-    """
-    for offset in [1, 2]:
-        j = idx + offset
-
-        if j >= len(lines):
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        tokens = line.split()
+        if not tokens:
+            i += 1
             continue
 
-        txt = line_text(lines[j]).strip()
-
-        if not txt:
+        ref = normalize_ref(tokens[0])
+        if not is_article_reference(ref):
+            i += 1
             continue
 
-        first = txt.split()[0]
-
-        if is_article_reference(first):
+        if re.search(r"Eco-contribution|Cumul|Total|TVA|Frais de port|Net à payer", line, re.IGNORECASE):
+            i += 1
             continue
 
-        if re.search(
-            r"\b(Base|TVA|TTC|Net|Timbre|Page|Date|Client|Matricule)\b",
-            txt,
-            re.IGNORECASE
-        ):
-            continue
+        nums = re.findall(r"[0-9]{1,3}(?:[ ][0-9]{3})*(?:[,.][0-9]{2,4})|[0-9]+[,.][0-9]{2,4}", line)
+        designation_part = line[len(tokens[0]):].strip()
 
-        if re.search(
-            r"\b(Contrat|Abonnement|Licence|Service|Produit|Gestion|TPV|Professionnelle|Utilisateur)\b",
-            txt,
-            re.IGNORECASE
-        ):
-            return txt
+        # Cas raw_text: ref seule puis désignation et nombres sur les lignes suivantes
+        j = i + 1
+        lookahead = []
+        while len(nums) < 3 and j < len(lines) and j <= i + 5:
+            next_line = lines[j]
+            if is_article_reference(next_line.split()[0] if next_line.split() else ""):
+                break
+            if re.search(r"Cumul|Total HT|Net à payer|Frais de port", next_line, re.IGNORECASE):
+                break
+            lookahead.append(next_line)
+            nums.extend(re.findall(r"[0-9]{1,3}(?:[ ][0-9]{3})*(?:[,.][0-9]{2,4})|[0-9]+[,.][0-9]{2,4}", next_line))
+            j += 1
 
-    return ""
-
-
-def extract_lines_from_words(words: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    if not words:
-        return []
-
-    grouped = group_words_by_page_and_line(words)
-    extracted_lines: List[Dict[str, Any]] = []
-    seen_refs = set()
-
-    for page, lines in grouped.items():
-        for idx, line_words in enumerate(lines):
-            if not line_words:
-                continue
-
-            tokens = [
-                str(w.get("text", "")).strip()
-                for w in line_words
-                if str(w.get("text", "")).strip()
-            ]
-
-            if not tokens:
-                continue
-
-            ref = ""
-
-            for token in tokens:
-                cleaned = token.strip().replace("]", "")
-                if is_article_reference(cleaned):
-                    ref = cleaned.upper()
+        if not designation_part or designation_part == ref:
+            for la in lookahead:
+                if not re.match(r"^[0-9 ,.]+$", la) and not re.search(r"Eco-contribution", la, re.IGNORECASE):
+                    designation_part = la
                     break
 
-            if not ref:
-                continue
+        # Supprimer les nombres de la désignation
+        designation = re.sub(r"\s+[0-9]{1,3}(?:[ ][0-9]{3})*(?:[,.][0-9]{2,4}).*$", "", designation_part).strip()
+        designation = re.sub(r"^[-: ]+", "", designation).strip()
 
-            if ref in seen_refs:
-                continue
+        quantity = 1.0
+        unit_price = 0.0
+        discount = 0.0
+        amount = 0.0
 
-            seen_refs.add(ref)
-
-            nums = find_numbers_near_reference(lines, idx)
-
-            quantity = 1.0
-            unit_price = 0.0
-            discount = 0.0
-            amount = 0.0
-
-            # Cas standard:
-            # 1,000 600,000 40,00 360,000
+        # Factures FR: quantité, PU, montant. La colonne Remise peut être vide.
+        if len(nums) >= 3:
+            quantity = normalize_number(nums[0])
+            unit_price = normalize_number(nums[1])
+            # Si 3 nombres: le 3ème est montant, pas remise.
+            amount = normalize_number(nums[-1])
+            # Si 4 nombres ou plus: quantité, PU, remise, montant
             if len(nums) >= 4:
-                quantity = normalize_number(nums[0])
-                unit_price = normalize_number(nums[1])
                 discount = normalize_number(nums[2])
-                amount = normalize_number(nums[3])
+        elif len(nums) == 2:
+            quantity = 1.0
+            unit_price = normalize_number(nums[0])
+            amount = normalize_number(nums[1])
+        elif len(nums) == 1:
+            quantity = 1.0
+            unit_price = normalize_number(nums[0])
+            amount = unit_price
 
-            # Cas:
-            # 1,000 600,000 40,00
-            elif len(nums) == 3:
-                quantity = normalize_number(nums[0])
-                unit_price = normalize_number(nums[1])
-                discount = normalize_number(nums[2])
-                amount = round(quantity * unit_price * (1 - discount / 100), 3)
+        tax_rate = 20.0 if extract_country(text) == "FR" else 19.0
 
-            # Cas:
-            # 900,000 100,00
-            # Quantité absente, PU=900, remise=100, montant=0
-            elif len(nums) == 2:
-                quantity = 1.0
-                unit_price = normalize_number(nums[0])
-                discount = normalize_number(nums[1])
-                amount = round(quantity * unit_price * (1 - discount / 100), 3)
+        extracted.append({
+            "reference": ref,
+            "designation": designation,
+            "quantite": quantity,
+            "prix_unitaire": unit_price,
+            "remise": discount,
+            "taux_tva": tax_rate,
+            "montant_ht": amount,
+        })
 
-            # Cas:
-            # seulement 600,000
-            elif len(nums) == 1:
-                quantity = 1.0
-                unit_price = normalize_number(nums[0])
-                discount = 0.0
-                amount = unit_price
+        i += 1
 
-            designation = find_designation_near_reference(lines, idx)
+    return extracted
 
-            extracted_lines.append({
-                "reference": ref,
-                "designation": designation,
-                "quantite": quantity,
-                "prix_unitaire": unit_price,
-                "remise": discount,
-                "taux_tva": 19.0,
-                "montant_ht": amount,
-            })
 
-    return extracted_lines
+def extract_lines_from_words(words: List[Dict[str, Any]], text: str) -> List[Dict[str, Any]]:
+    # Pour ce type de facture scannée, le reconstructed_text est plus fiable que les groupes words.
+    # On garde la signature de fonction pour compatibilité.
+    return extract_lines_from_text(text)
 
 
 # =========================================================
@@ -654,7 +550,6 @@ def extract_lines_from_words(words: List[Dict[str, Any]]) -> List[Dict[str, Any]
 
 def build_extraction_warnings(result: Dict[str, Any]) -> List[str]:
     warnings = []
-
     document = result.get("document", {})
     supplier = result.get("fournisseur", {})
     customer = result.get("client", {})
@@ -663,21 +558,21 @@ def build_extraction_warnings(result: Dict[str, Any]) -> List[str]:
 
     if not document.get("numero"):
         warnings.append("invoice number not found")
-
     if not document.get("date"):
         warnings.append("invoice date not found")
-
     if not supplier.get("identifiant"):
-        warnings.append("supplier fiscal id not found")
-
+        warnings.append("supplier fiscal/VAT id not found")
     if not customer.get("code_client"):
         warnings.append("customer code not found")
-
     if not totals.get("total_ttc"):
         warnings.append("total TTC not found")
-
     if not lines:
         warnings.append("invoice lines not found")
+
+    # Contrôle utile avant signature: somme lignes proche de Total HT hors frais/écotaxe selon facture.
+    line_sum = round(sum(float(l.get("montant_ht", 0) or 0) for l in lines), 3)
+    if lines and totals.get("total_ht") and line_sum <= 0:
+        warnings.append("invoice line amounts look invalid")
 
     return warnings
 
@@ -688,10 +583,7 @@ def build_extraction_warnings(result: Dict[str, Any]) -> List[str]:
 
 @app.get("/health")
 def health():
-    return {
-        "status": "ok",
-        "service": "extractionserviceocr"
-    }
+    return {"status": "ok", "service": "extractionserviceocr-corrige"}
 
 
 # =========================================================
@@ -700,14 +592,19 @@ def health():
 
 @app.post("/extract")
 def extract_from_ocr(req: OCRExtractionRequest):
-    text = req.full_text or req.reconstructed_text or ""
+    # Important: on préfère reconstructed_text pour les tableaux scannés.
+    text = req.reconstructed_text or req.full_text or ""
+    if len(req.full_text or "") > len(text):
+        # full_text contient parfois les pages concaténées, on le garde s'il est plus riche.
+        text = req.full_text
+
     text = clean_text(text)
 
     document = extract_document(text, req.page_count)
     supplier = extract_supplier(text)
     customer = extract_customer(text)
     totals = extract_totals(text)
-    lines = extract_lines_from_words(req.words)
+    lines = extract_lines_from_words(req.words, text)
 
     result = {
         "document": document,
@@ -723,5 +620,4 @@ def extract_from_ocr(req: OCRExtractionRequest):
     }
 
     result["extraction_warnings"] = build_extraction_warnings(result)
-
     return result

@@ -78,8 +78,10 @@ def get_certificate():
     }
 
 
-def sign_with_nexu(bytes_base64: str):
-    cert_info = get_certificate()
+def sign_with_nexu(bytes_base64: str,cert_info = None):
+
+    if cert_info is None:
+        cert_info = get_certificate()
 
     payload = {
         "tokenId": cert_info["tokenId"],
@@ -252,7 +254,7 @@ def create_xades_signed_xml(xml_string: str):
     signed_info_c14n = canonicalize(signed_info_el)
     signed_info_b64 = base64.b64encode(signed_info_c14n).decode("ascii")
 
-    nexu_signature = sign_with_nexu(signed_info_b64)
+    nexu_signature = sign_with_nexu(signed_info_b64,cert_info)
     signature_value_b64 = nexu_signature["signatureValue"]
 
     signature_value_el = etree.Element(ds("SignatureValue"))
