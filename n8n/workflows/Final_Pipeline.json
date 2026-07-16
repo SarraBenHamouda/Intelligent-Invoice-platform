@@ -1,0 +1,979 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "upload-facture",
+        "options": {}
+      },
+      "id": "c0ba3592-c695-4bd8-85ed-b26563f078b1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        464
+      ],
+      "webhookId": "3c7f9348-38bc-4017-a73c-ec0595b22427"
+    },
+    {
+      "parameters": {
+        "functionCode": "for (const item of items) {\n  if (item.binary && item.binary.data) {\n    item.binary.file = item.binary.data;\n    delete item.binary.data;\n  }\n}\nreturn items;"
+      },
+      "id": "a1db5512-17e5-47f6-b7b5-6c68827bc008",
+      "name": "Prepare Binary",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"source_type\"]}}",
+              "operation": "contains",
+              "value2": "scanned"
+            }
+          ]
+        }
+      },
+      "id": "5e772050-88af-4311-a0e3-8dc1d44a3612",
+      "name": "Is Scanned?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ocrservice:8000/ocr",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_paths\": {{JSON.stringify($json[\"rendered_pages\"])}},\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}",
+        "options": {}
+      },
+      "id": "59aa56aa-b23f-47b3-8c88-9b12b5356f15",
+      "name": "OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -320,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionservice:8000/extract",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  {\n    raw_text: $json.extracted_text,\n    page_count: $json.page_count,\n    source_type: $json.source_type\n  }\n}}",
+        "options": {
+          "timeout": 1200000
+        }
+      },
+      "id": "75f79e1c-f13d-42ae-95dc-a8b8ab569878",
+      "name": "Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -320,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://pdfservice:8000/analyze",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a778cad4-cb41-4c66-85ad-f5ceed492e72",
+      "name": "Analyze",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -736,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://teif-api:5000/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        160
+      ],
+      "id": "bbbaef99-8e1f-4e26-969f-4adf42167475",
+      "name": "TEIF Generator"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5001/sign",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ $json.xml_content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2896,
+        144
+      ],
+      "id": "b11a2b09-02c2-4c8e-a967-abb5171290c3",
+      "name": "Signature TTN"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mettez ici le nom EXACT du nœud qui contient la facture OCR complète.\n// Ce nœud doit avoir document.numero = \"110001397\".\nconst SOURCE_NODE_NAME = 'Code Restore Data';\n\nfunction readNode(nodeName) {\n  try {\n    return $(nodeName).first().json || {};\n  } catch (error) {\n    return {};\n  }\n}\n\nfunction firstNonEmpty(values) {\n  for (const value of values) {\n    if (\n      value !== undefined &&\n      value !== null &&\n      String(value).trim() !== ''\n    ) {\n      return String(value).trim();\n    }\n  }\n\n  return '';\n}\n\nfunction sanitizeFileName(value) {\n  return String(value)\n    .trim()\n    .replace(/[\\\\/:*?\"<>|]/g, '_');\n}\n\nconst sourceData = readNode(SOURCE_NODE_NAME);\n\nreturn items.map(item => {\n  const xml =\n    item.json.xml ||\n    item.json.signed_xml ||\n    '';\n\n  if (!xml) {\n    throw new Error(\n      'XML signé introuvable. Champs disponibles : ' +\n      JSON.stringify(Object.keys(item.json))\n    );\n  }\n\n  // 1. Chercher dans le XML\n  const documentMatch = xml.match(\n    /<DocumentIdentifier[^>]*>\\s*([^<]+?)\\s*<\\/DocumentIdentifier>/i\n  );\n\n  let invoiceNumber =\n    documentMatch?.[1]?.trim() || '';\n\n  let invoiceNumberSource = invoiceNumber\n    ? 'DocumentIdentifier'\n    : '';\n\n  // 2. Chercher dans l’item courant\n  if (!invoiceNumber) {\n    invoiceNumber = firstNonEmpty([\n      item.json.invoice_number,\n\n      item.json.document?.numero,\n      item.json.facture?.numero,\n\n      item.json.data?.document?.numero,\n      item.json.data?.facture?.numero,\n\n      item.json.corrected_data?.document?.numero,\n      item.json.corrected_data?.facture?.numero,\n\n      item.json.original_data?.document?.numero,\n      item.json.original_data?.facture?.numero,\n    ]);\n\n    if (invoiceNumber) {\n      invoiceNumberSource = 'item courant';\n    }\n  }\n\n  // 3. Chercher dans le nœud OCR/source\n  if (!invoiceNumber) {\n    invoiceNumber = firstNonEmpty([\n      sourceData.invoice_number,\n\n      sourceData.document?.numero,\n      sourceData.facture?.numero,\n\n      sourceData.data?.document?.numero,\n      sourceData.data?.facture?.numero,\n\n      sourceData.corrected_data?.document?.numero,\n      sourceData.corrected_data?.facture?.numero,\n    ]);\n\n    if (invoiceNumber) {\n      invoiceNumberSource = SOURCE_NODE_NAME;\n    }\n  }\n\n  // 4. Chercher dans les corrections humaines\n  if (!invoiceNumber) {\n    const correctedNode =\n      readNode('Appliquer corrections humaines');\n\n    invoiceNumber = firstNonEmpty([\n      correctedNode.corrected_data?.document?.numero,\n      correctedNode.corrected_data?.facture?.numero,\n      correctedNode.document?.numero,\n      correctedNode.facture?.numero,\n    ]);\n\n    if (invoiceNumber) {\n      invoiceNumberSource =\n        'Appliquer corrections humaines';\n    }\n  }\n\n  // 5. Chercher dans la revalidation\n  if (!invoiceNumber) {\n    const revalidationNode =\n      readNode('Revalidation après correction');\n\n    invoiceNumber = firstNonEmpty([\n      revalidationNode.data?.document?.numero,\n      revalidationNode.data?.facture?.numero,\n\n      revalidationNode.corrected_data?.document?.numero,\n      revalidationNode.corrected_data?.facture?.numero,\n\n      revalidationNode.document?.numero,\n      revalidationNode.facture?.numero,\n    ]);\n\n    if (invoiceNumber) {\n      invoiceNumberSource =\n        'Revalidation après correction';\n    }\n  }\n\n  if (!invoiceNumber) {\n    throw new Error(\n      `Numéro de facture introuvable. Vérifiez que le nœud ` +\n      `\"${SOURCE_NODE_NAME}\" existe exactement avec ce nom. ` +\n      `Clés trouvées dans ce nœud : ` +\n      JSON.stringify(Object.keys(sourceData))\n    );\n  }\n\n  const safeInvoiceNumber =\n    sanitizeFileName(invoiceNumber);\n\n  const fileName =\n    `${safeInvoiceNumber}_signed.xml`;\n\n  return {\n    json: {\n      ...item.json,\n      invoice_number: safeInvoiceNumber,\n      file_name: fileName,\n      invoice_number_source: invoiceNumberSource,\n    },\n\n    binary: {\n      ...(item.binary || {}),\n\n      data: {\n        data: Buffer\n          .from(xml, 'utf8')\n          .toString('base64'),\n\n        mimeType: 'application/xml',\n        fileExtension: 'xml',\n        fileName,\n      },\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3568,
+        128
+      ],
+      "id": "c91d2257-1137-4af7-a612-bdbfbb7576de",
+      "name": "Write a XML file"
+    },
+    {
+      "parameters": {
+        "fileName": "=/shared/signed_bills/{{ $json.file_name }}",
+        "options": {}
+      },
+      "id": "c8e552b4-0aef-4716-a692-fcc7f499ed74",
+      "name": "Register the file",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "position": [
+        3776,
+        128
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -112,
+        480
+      ],
+      "id": "a42c51bb-e126-40f7-bde4-614164209060",
+      "name": "Validation1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        176
+      ],
+      "id": "20d9d41a-7e10-4e69-a70d-54dd60fbd274",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const restoredData =\n    item.json.data ??\n    item.json.corrected_data ??\n    item.json;\n\n  if (\n    !restoredData ||\n    typeof restoredData !== 'object' ||\n    Array.isArray(restoredData)\n  ) {\n    throw new Error(\n      'Données de facture introuvables. Champs disponibles : ' +\n      JSON.stringify(Object.keys(item.json))\n    );\n  }\n\n  return {\n    json: restoredData,\n    binary: item.binary,\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        160
+      ],
+      "id": "5bdad466-e9d4-4d6a-b35f-1009548775cd",
+      "name": "Code Restore Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-teif",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ Object.values($json).find(v => typeof v === 'string' && v.includes('<TEIF')) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e246af8c-9c57-42c7-a1a0-7ada186c431c",
+      "name": "Validation TEIF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2240,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2448,
+        160
+      ],
+      "id": "2ad885fc-d64b-4f74-b4bc-8a309315fd12",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return {\n    json: {\n      xml_content: item.json.xml\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2688,
+        144
+      ],
+      "id": "cc3216d0-4363-4c7f-a8ec-ff3b509e45c4",
+      "name": "Code Restore Data1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-signed-xml",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "signed_xml",
+              "value": "={{ $json.signed_xml }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3104,
+        144
+      ],
+      "id": "e9253bea-9f0b-4763-8d31-a8e8291f8ccf",
+      "name": "Validation Signed XML"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3312,
+        144
+      ],
+      "id": "b91da412-7d77-460a-8b03-be7979f6c8ce",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionserviceocr:8000/extract",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "full_text",
+              "value": "={{ $json.full_text }}"
+            },
+            {
+              "name": "reconstructed_text",
+              "value": "={{ $json.reconstructed_text }}"
+            },
+            {
+              "name": "words",
+              "value": "={{ $json.per_page[0].words }}"
+            },
+            {
+              "name": "confidence",
+              "value": "={{ $json.confidence }}"
+            },
+            {
+              "name": "=quality",
+              "value": "={{ $json.quality }}"
+            },
+            {
+              "name": "source_type",
+              "value": "={{ $json.source_type }}"
+            },
+            {
+              "name": "page_count",
+              "value": "={{ $json.pages }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -112,
+        208
+      ],
+      "id": "0729b1fa-0f6f-4067-8b85-53be7295e309",
+      "name": "ExtractionOCR"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ttn-orchestrator-api:8000/submit-signed-xml",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "invoice_number",
+              "value": "={{ $json.invoice_number }}"
+            },
+            {
+              "name": "signed_xml",
+              "value": "={{ $json.xml }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4000,
+        128
+      ],
+      "id": "49fc00d1-08da-413b-bb60-d3f93c9a4144",
+      "name": "TTN API"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5094bd86-4851-43c7-b338-bcf3e4df8fbe",
+              "leftValue": "={{\n  $json.valid === false\n  ||\n  $json.is_valid === false\n  ||\n  ($json.error_count || 0) > 0\n  ||\n  $json.data?.controle_validation?.peut_generer_teif === false\n  ||\n  ($json.data?.controle_validation?.erreurs_bloquantes || []).length > 0\n  ||\n  ($json.data?.controle_validation?.avertissements || []).length > 0\n}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        480
+      ],
+      "id": "d822b118-d5e0-4a3a-bc12-8c4c4c73f969",
+      "name": "Vérification humaine nécessaire ?"
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "Vérification humaine de la facture",
+        "formDescription": "={{\n`Facture : ${$json.invoice_number}\n\n${($json.validation_errors || [])\n  .map((error, index) => {\n    const currentValue = $json.current_error_values?.[error.field] ?? '';\n\n    return `${index + 1}. Champ : ${error.field}\nErreur : ${error.message}\nValeur actuelle : ${currentValue}`;\n  })\n  .join('\\n\\n')}\n\nSaisissez ci-dessous uniquement les corrections nécessaires`\n}}",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "APPROVED"
+                  },
+                  {
+                    "option": "REJECTED"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "reviewed_by"
+            },
+            {
+              "fieldLabel": "corrections",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        464
+      ],
+      "id": "50b37167-1175-43a0-8ccb-949f465a4784",
+      "name": "Formulaire de correction humaine",
+      "webhookId": "47d7dc58-4193-48a6-ad4b-92f40ed9747f"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const prepared =\n  $('Préparer vérification humaine').first().json;\n\nconst submitted = $json.body ?? $json;\n\nconst originalData = prepared.original_data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'original_data est absent dans Préparer vérification humaine.'\n  );\n}\n\nconst corrected = JSON.parse(\n  JSON.stringify(originalData)\n);\n\nconst decision =\n  String(submitted.decision || 'REJECTED')\n    .trim()\n    .toUpperCase();\n\nconst correctionsText =\n  String(submitted.corrections || '').trim();\n\nconst allowedFields = Array.isArray(prepared.error_fields)\n  ? prepared.error_fields\n  : [];\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nfunction setNestedValue(object, path, value) {\n  const keys = String(path).split('.');\n  let cursor = object;\n\n  for (let index = 0; index < keys.length - 1; index++) {\n    const key = keys[index];\n\n    if (\n      cursor[key] === undefined ||\n      cursor[key] === null ||\n      typeof cursor[key] !== 'object'\n    ) {\n      cursor[key] = {};\n    }\n\n    cursor = cursor[key];\n  }\n\n  cursor[keys[keys.length - 1]] = value;\n}\n\nfunction resolveField(inputField) {\n  const normalizedInput = String(inputField).trim();\n\n  // Exemple : totaux.montant_tva\n  if (allowedFields.includes(normalizedInput)) {\n    return normalizedInput;\n  }\n\n  // Accepte aussi montant_tva\n  const matches = allowedFields.filter(\n    field =>\n      String(field).split('.').pop() === normalizedInput\n  );\n\n  if (matches.length === 1) {\n    return matches[0];\n  }\n\n  return null;\n}\n\nfunction parseValue(rawValue, originalValue) {\n  const value = String(rawValue ?? '').trim();\n\n  if (typeof originalValue === 'number') {\n    const parsed = Number(\n      value\n        .replace(/\\s/g, '')\n        .replace(',', '.')\n        .replace(/[^0-9.-]/g, '')\n    );\n\n    return Number.isFinite(parsed)\n      ? parsed\n      : originalValue;\n  }\n\n  return value;\n}\n\nconst appliedCorrections = [];\nconst ignoredCorrections = [];\n\nif (decision === 'APPROVED') {\n  const lines = correctionsText\n    .split(/\\r?\\n/)\n    .map(line => line.trim())\n    .filter(Boolean);\n\n  for (const line of lines) {\n    const separatorIndex = line.indexOf('=');\n\n    if (separatorIndex === -1) {\n      ignoredCorrections.push({\n        line,\n        reason: 'Format invalide. Utiliser champ=valeur',\n      });\n\n      continue;\n    }\n\n    const enteredField = line\n      .slice(0, separatorIndex)\n      .trim();\n\n    const rawValue = line\n      .slice(separatorIndex + 1)\n      .trim();\n\n    const resolvedField = resolveField(enteredField);\n\n    if (!resolvedField) {\n      ignoredCorrections.push({\n        field: enteredField,\n        reason:\n          'Ce champ ne figure pas dans les erreurs de validation',\n      });\n\n      continue;\n    }\n\n    const previousValue = getNestedValue(\n      originalData,\n      resolvedField\n    );\n\n    const newValue = parseValue(\n      rawValue,\n      previousValue\n    );\n\n    setNestedValue(\n      corrected,\n      resolvedField,\n      newValue\n    );\n\n    appliedCorrections.push({\n      field: resolvedField,\n      previous_value: previousValue,\n      new_value: newValue,\n    });\n  }\n}\n\ncorrected.verification_humaine = {\n  decision,\n  reviewed_by: submitted.reviewed_by || '',\n  commentaire: submitted.commentaire || '',\n  reviewed_at: new Date().toISOString(),\n  erreurs_initiales: prepared.validation_errors || [],\n  corrections_appliquees: appliedCorrections,\n  corrections_ignorees: ignoredCorrections,\n};\n\nreturn {\n  json: {\n    decision,\n    corrected_data: corrected,\n    applied_corrections: appliedCorrections,\n    ignored_corrections: ignoredCorrections,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        464
+      ],
+      "id": "092c1e79-da3c-4a5e-b8f4-0c3b30965c41",
+      "name": "Appliquer les corrections"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e85bd173-1f4e-49d3-929f-1135f6c4a69c",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "APPROVED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1072,
+        464
+      ],
+      "id": "392e7610-158c-4c1c-aa42-d471b53fc717",
+      "name": "Facture approuvée ?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.corrected_data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1664,
+        448
+      ],
+      "id": "c0e70f87-bb23-4b4d-b578-cc41826cf3b1",
+      "name": "Revalidation après correction"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5094bd86-4851-43c7-b338-bcf3e4df8fbe",
+              "leftValue": "={{\n  $json.valid === true\n  &&\n  $json.is_valid === true\n  &&\n  ($json.error_count || 0) === 0\n}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1856,
+        448
+      ],
+      "id": "25539f5d-ac07-47d8-8aa3-e246baaeedf6",
+      "name": "Correction valide ?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Remplacez \"Validation\" par le nom exact de votre nœud de validation\nconst validationResult = $('Validation1').first().json;\n\nconst errors = Array.isArray(validationResult.errors)\n  ? validationResult.errors\n  : [];\n\nconst warnings = Array.isArray(validationResult.warnings)\n  ? validationResult.warnings\n  : [];\n\nconst originalData = validationResult.data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'Le nœud Validation ne contient pas de propriété data valide.'\n  );\n}\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nconst errorFields = errors\n  .map(error => error.field)\n  .filter(Boolean);\n\nconst currentErrorValues = {};\n\nfor (const field of errorFields) {\n  currentErrorValues[field] = getNestedValue(\n    originalData,\n    field\n  );\n}\n\nreturn {\n  json: {\n    review_status: 'PENDING_REVIEW',\n\n    invoice_number:\n      originalData.facture?.numero || '',\n\n    currency:\n      originalData.document?.devise || '',\n\n    validation_stage:\n      validationResult.stage || 'json_extraction',\n\n    validation_errors: errors,\n\n    validation_warnings: warnings,\n\n    error_fields: errorFields,\n\n    current_error_values: currentErrorValues,\n\n    review_reason: errors\n      .map(error =>\n        `${error.field}: ${error.message}`\n      )\n      .join(' | '),\n\n    original_data: JSON.parse(\n      JSON.stringify(originalData)\n    ),\n\n    review_created_at:\n      new Date().toISOString(),\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        464
+      ],
+      "id": "b455af06-98fe-457d-a3f6-9718c6815426",
+      "name": "Préparer vérification humaine"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Binary": {
+      "main": [
+        [
+          {
+            "node": "Analyze",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Scanned?": {
+      "main": [
+        [
+          {
+            "node": "OCR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR": {
+      "main": [
+        [
+          {
+            "node": "ExtractionOCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction": {
+      "main": [
+        [
+          {
+            "node": "Validation1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze": {
+      "main": [
+        [
+          {
+            "node": "Is Scanned?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TEIF Generator": {
+      "main": [
+        [
+          {
+            "node": "Validation TEIF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature TTN": {
+      "main": [
+        [
+          {
+            "node": "Validation Signed XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write a XML file": {
+      "main": [
+        [
+          {
+            "node": "Register the file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register the file": {
+      "main": [
+        [
+          {
+            "node": "TTN API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code Restore Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Restore Data": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation TEIF": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code Restore Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Restore Data1": {
+      "main": [
+        [
+          {
+            "node": "Signature TTN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Signed XML": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Write a XML file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation1": {
+      "main": [
+        [
+          {
+            "node": "Vérification humaine nécessaire ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vérification humaine nécessaire ?": {
+      "main": [
+        [
+          {
+            "node": "Préparer vérification humaine",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formulaire de correction humaine": {
+      "main": [
+        [
+          {
+            "node": "Appliquer les corrections",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appliquer les corrections": {
+      "main": [
+        [
+          {
+            "node": "Facture approuvée ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facture approuvée ?": {
+      "main": [
+        [
+          {
+            "node": "Revalidation après correction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revalidation après correction": {
+      "main": [
+        [
+          {
+            "node": "Correction valide ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correction valide ?": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Vérification humaine nécessaire ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer vérification humaine": {
+      "main": [
+        [
+          {
+            "node": "Formulaire de correction humaine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExtractionOCR": {
+      "main": [
+        [
+          {
+            "node": "Vérification humaine nécessaire ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "41a17f65-c11f-48ea-a493-98bbba35d080",
+  "meta": {
+    "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
+  },
+  "id": "gA5GY16BUIgXHqSMs-oBd",
+  "tags": []
+}
