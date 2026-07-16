@@ -1,0 +1,8 @@
+{
+  "transaction_id": "TTN-20260711-B7FB05D983",
+  "invoice_number": "TEST004",
+  "status": "ERROR",
+  "error_type": "EMPTY_SIGNED_XML",
+  "message": "Le XML signé est vide ou invalide",
+  "date": "2026-07-11T22:50:37.494778Z"
+}

@@ -1,0 +1,13 @@
+{
+  "transaction_id": "TTN-20260711-30EF8AA829",
+  "invoice_number": "TEST003",
+  "status": "ERROR",
+  "message": "Nombre maximum de tentatives atteint (3)",
+  "error_type": "MAX_RETRIES_EXCEEDED",
+  "last_error_type": "TTN_UNAVAILABLE",
+  "ttn_reason": "Service TTN temporairement indisponible",
+  "http_status": 503,
+  "attempt": 3,
+  "max_retries": 3,
+  "date": "2026-07-11T23:01:09.859690Z"
+}

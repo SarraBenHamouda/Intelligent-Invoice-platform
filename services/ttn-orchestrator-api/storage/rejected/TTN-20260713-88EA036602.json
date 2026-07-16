@@ -1,0 +1,12 @@
+{
+  "transaction_id": "TTN-20260713-88EA036602",
+  "invoice_number": "10001403",
+  "status": "REJECTED",
+  "message": "Signature invalide : la signature XAdES ne correspond pas aux exigences attendues",
+  "http_status": 400,
+  "error_type": "SIGNATURE_INVALID",
+  "ttn_reason": "Signature invalide : la signature XAdES ne correspond pas aux exigences attendues",
+  "suggested_action": "Refaire la signature à partir du XML TEIF non signé",
+  "attempt": 1,
+  "date": "2026-07-13T14:48:32.883878+00:00"
+}

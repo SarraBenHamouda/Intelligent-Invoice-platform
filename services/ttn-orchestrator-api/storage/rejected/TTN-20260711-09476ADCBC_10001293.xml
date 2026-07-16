@@ -1,0 +1,1530 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="3.0">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-04">FR552124568552</MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-04">C0000001</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier>10001293</DocumentIdentifier>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31">290626</DateText>
+      <DateText format="ddMMyy-ddMMyy" functionCode="I-36">010626-300626</DateText>
+      <DateText format="ddMMyy" functionCode="I-32">300726</DateText>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-04">FR552124568552</PartnerIdentifier>
+          <PartnerName nameType="Qualification">Papyrus (vX.13)</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription/>
+            <Country codeList="ISO_3166-1">FR</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-815">FR552124568552</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>info@papyrus.als</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-104</ComMeansType>
+              <ComMeansValue>www.papyrus.als</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-04">C0000001</PartnerIdentifier>
+          <PartnerName nameType="Qualification">NEBOUT SA (Siège social)</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>55, bld Victor Hugo, 87000 LIMOGES, FR FRANCE</AdressDescription>
+            <Country codeList="ISO_3166-1">FR</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-81">C0000001</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Chèque</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>JR00010</ItemCode>
+          <ItemDescription>Savon spécial Jeune Artiste</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">11.1600</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.940</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>2</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FCH0121</ItemCode>
+          <ItemDescription>Chevalet géant 'Onsagher'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">422.5400</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">414.090</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>3</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>JR00014</ItemCode>
+          <ItemDescription>Pastels Secs * 150 pièces spécial Enfants</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">13</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">108.9700</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">1388.280</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>4</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>JR00011</ItemCode>
+          <ItemDescription>Gouache Gel Pailletée Enfant 50 gr</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">8.0900</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">15.860</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>5</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>JR00010</ItemCode>
+          <ItemDescription>Savon spécial Jeune Artiste</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">11.1600</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.940</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>6</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>JR00015</ItemCode>
+          <ItemDescription>Gouache ART FORM tout support Enfant 10 couleurs</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">18.4400</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">18.070</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>7</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0052</ItemCode>
+          <ItemDescription>Gouache tube - Toliev - majenta / cyan / jaune citron</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">4</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">1.7000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">6.660</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>8</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0053</ItemCode>
+          <ItemDescription>Gouache tube - Toliev - blanc et noir</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">1.5500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">1.520</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>9</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0083</ItemCode>
+          <ItemDescription>Pinceau Kolinsky Rond 1/8'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">8.9800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">8.800</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>10</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0082</ItemCode>
+          <ItemDescription>Pinceau Kolinsky Plat 1/2'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.9000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.680</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>11</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0052</ItemCode>
+          <ItemDescription>Gouache tube - Toliev - majenta / cyan / jaune citron</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">11</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">1.7000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">18.330</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>12</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0094</ItemCode>
+          <ItemDescription>Brosse Barentz Rond 3/16'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">3.9800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">7.800</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>13</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0050</ItemCode>
+          <ItemDescription>Gouache - Minsk - 8 couleurs</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">3</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">2.3200</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">6.820</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>14</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0083</ItemCode>
+          <ItemDescription>Pinceau Kolinsky Rond 1/8'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">5</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">8.9800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">44.000</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>15</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0095</ItemCode>
+          <ItemDescription>Brosse Barentz Rond 1/4'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.1300</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.030</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>16</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPS0045</ItemCode>
+          <ItemDescription>Pastels Secs Mistral</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">6</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">2.2500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">13.230</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>17</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0082</ItemCode>
+          <ItemDescription>Pinceau Kolinsky Plat 1/2'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.9000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.680</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>18</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPS0044</ItemCode>
+          <ItemDescription>Pastels huile - modèle 'Katarina'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">7</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">2.5700</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">17.630</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>19</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPS0045</ItemCode>
+          <ItemDescription>Pastels Secs Mistral</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">19</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">2.2500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">41.900</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>20</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0095</ItemCode>
+          <ItemDescription>Brosse Barentz Rond 1/4'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.1300</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.030</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>21</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0053</ItemCode>
+          <ItemDescription>Gouache tube - Toliev - blanc et noir</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">7</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">1.5500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.630</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>22</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0021</ItemCode>
+          <ItemDescription>Fusains - Krasnoïarsk - 20 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">4.6200</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">4.530</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>23</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0015</ItemCode>
+          <ItemDescription>Sanguines - Krasnoïarsk - 20 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">4</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.7800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">22.660</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>24</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0021</ItemCode>
+          <ItemDescription>Fusains - Krasnoïarsk - 20 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">12</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">4.6200</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">54.340</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>25</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0023</ItemCode>
+          <ItemDescription>Fusains -Lakoutsk - 100 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">5</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">24.3400</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">119.260</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>26</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0022</ItemCode>
+          <ItemDescription>Sanguines -Llakoutsk - 50 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">9</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">12.8100</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">112.980</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>27</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0015</ItemCode>
+          <ItemDescription>Sanguines - Krasnoïarsk - 20 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">20</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.3400</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">104.660</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>28</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FFS0019</ItemCode>
+          <ItemDescription>Fusains - Krasnoïarsk sans boîte - 100 pièces</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">3</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">22.0300</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">64.770</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>29</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0076</ItemCode>
+          <ItemDescription>Coffret Huiles - 'Adriatico' - 20 tubes</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">59.3500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">58.160</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>30</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0108</ItemCode>
+          <ItemDescription>Pinceau acrylique - 'Elba' - 3/16'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">9</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">6.7700</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">59.720</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>31</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0075</ItemCode>
+          <ItemDescription>Huile - Orkneys - Boite 'Viking' - 20 tubes</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">10</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">79.7400</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">781.450</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>32</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0069</ItemCode>
+          <ItemDescription>Huile - Orkneys - Blanc</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">3.9800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">3.900</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>33</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0059</ItemCode>
+          <ItemDescription>Gouache - Montrose - 32 couleurs</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">58.9900</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">115.620</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>34</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0071</ItemCode>
+          <ItemDescription>Huile - Orkneys - Cyan, magenta, citron, ocre</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">5.5300</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">10.840</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>35</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0076</ItemCode>
+          <ItemDescription>Coffret Huiles - 'Adriatico' - 20 tubes</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">59.3500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">58.160</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>36</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0106</ItemCode>
+          <ItemDescription>Pinceau aquarelle - 'Leonardo da Vinci' - 1/4'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">7.4800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">14.660</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>37</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPT0076</ItemCode>
+          <ItemDescription>Coffret Huiles - 'Adriatico' - 20 tubes</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">12</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">59.3500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">697.960</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>38</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0108</ItemCode>
+          <ItemDescription>Pinceau acrylique - 'Elba' - 3/16'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">17</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">6.7700</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">112.800</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>39</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPN0106</ItemCode>
+          <ItemDescription>Pinceau aquarelle - 'Leonardo da Vinci' - 1/4'</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">13</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">7.4800</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">95.290</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>40</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FSV0112</ItemCode>
+          <ItemDescription>Gel texture rugueuse - Acrylique</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">18</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">7.6900</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">135.650</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>41</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPP0041</ItemCode>
+          <ItemDescription>Calque Margé - 25 pages</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">12.6900</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">24.870</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>42</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FSV0114</ItemCode>
+          <ItemDescription>Huile de lin pression à froid - 75 ml</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">2</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">15.3700</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">30.130</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>43</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>FPP0030</ItemCode>
+          <ItemDescription>Bloc Ingres - 20 feuilles - 150 g</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">27</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>2.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>20</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">8.0900</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="EUR">214.060</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">5383.908</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">6460.690</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">5383.908</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="EUR">1076.782</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="EUR">0.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="SIG-d515a4fb0d6e4af2a81150ddd5ae123a"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI="#SignedProperties-SIG-d515a4fb0d6e4af2a81150ddd5ae123a" Type="http://uri.etsi.org/01903#SignedProperties"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>ko+3FXk4K7GL2pk5+UAKTKy7vYVIcl93h6QT37PnwWk=</ds:DigestValue></ds:Reference><ds:Reference Id="REF-DOC-SIG-d515a4fb0d6e4af2a81150ddd5ae123a" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>kCGHbWsy8hd/vKTeLwLQ87RExkGXIgd3KVdmVciLMvY=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>aLYAM4HiNrGglgkZ0+OSMDTPJyhhVTnVAjVL0CGytqYAD+gJO1NOIgK0oFmEnJKr+BOzVYoz4cDCMe1dXBOJ0XwqJw0/zt6Ks97fsb55BoGvwjw6ZgnsBVF5WF96nwLaqNZPGHZiF8k5OdUCYXCwp6tnaCpSURgcb3fO14McA+TirA9gWuq79xDUIq/+FBUdcldGpADzlSoHDYf96ANuMIAG6Wbo533XwvUSq+ZM7Guixnt81EQ+42AbWyhlDrVYHdHETl4TVT0KBr8uVfDjgSHpjc1G9B7AJYswjn+n+w8B/0y/2gQlFTjQGMhosNx4agDokBavUfXikqvkr8UGCQ==</ds:SignatureValue><ds:KeyInfo Id="KeyInfo-SIG-d515a4fb0d6e4af2a81150ddd5ae123a"><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties Target="#SIG-d515a4fb0d6e4af2a81150ddd5ae123a"><xades:SignedProperties Id="SignedProperties-SIG-d515a4fb0d6e4af2a81150ddd5ae123a"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-11T22:52:16+00:00</xades:SigningTime><xades:SigningCertificateV2><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nvEZGC8DJQyidRUwIEkZj0wrjWl4/2xuC7AC5m6/JRg=</ds:DigestValue></xades:CertDigest></xades:Cert></xades:SigningCertificateV2></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#REF-DOC-SIG-d515a4fb0d6e4af2a81150ddd5ae123a"><xades:MimeType>text/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></TEIF>

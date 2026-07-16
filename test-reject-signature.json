@@ -1,0 +1,5 @@
+﻿{
+  "invoice_number": "TEST-REJECT-SIGNATURE",
+  "signed_xml": "<TEIF><Invoice>REJECT_SIGNATURE</Invoice><ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\">FAKE_SIGNATURE</ds:Signature></TEIF>",
+  "source": "manual-test"
+}

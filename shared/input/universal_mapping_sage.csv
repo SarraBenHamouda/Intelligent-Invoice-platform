@@ -1,0 +1,14 @@
+table_name;field_name;functional_name;json_path;required_for_json;source_type;join_table;join_condition
+
+FACTURE;DOCNUM;invoice_number;invoice.number;YES;HEADER;;
+FACTURE;CLIENT_ID;customer_code;customer.code;YES;HEADER;;
+FACTURE;DATE_DOC;invoice_date;invoice.date;YES;HEADER;;
+FACTURE;TOTAL_HT;total_ht;totals.total_ht;YES;HEADER;;
+
+CLIENT;NOM_CLIENT;customer_name;customer.name;YES;HEADER;CLIENT;FACTURE.CLIENT_ID=CLIENT.CLIENT_ID
+
+LIGNE_FACTURE;ARTICLE;reference;lines[].reference;YES;LINE;LIGNE_FACTURE;FACTURE.DOCNUM=LIGNE_FACTURE.DOCNUM
+LIGNE_FACTURE;LIBELLE;designation;lines[].designation;YES;LINE;LIGNE_FACTURE;FACTURE.DOCNUM=LIGNE_FACTURE.DOCNUM
+LIGNE_FACTURE;QTE;quantity;lines[].quantity;YES;LINE;LIGNE_FACTURE;FACTURE.DOCNUM=LIGNE_FACTURE.DOCNUM
+LIGNE_FACTURE;PU;unit_price;lines[].unit_price;YES;LINE;LIGNE_FACTURE;FACTURE.DOCNUM=LIGNE_FACTURE.DOCNUM
+LIGNE_FACTURE;MONTANT;line_total_ht;lines[].line_total_ht;YES;LINE;LIGNE_FACTURE;FACTURE.DOCNUM=LIGNE_FACTURE.DOCNUM

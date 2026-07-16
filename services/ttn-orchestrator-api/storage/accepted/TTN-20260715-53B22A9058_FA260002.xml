@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="3.0">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-01">1369372BAM000</MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-01">1369372BBM000</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier>FA260002</DocumentIdentifier>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31">070126</DateText>
+      <DateText format="ddMMyy-ddMMyy" functionCode="I-36">010126-310126</DateText>
+      <DateText format="ddMMyy" functionCode="I-32">070126</DateText>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-01">1369372BAM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">Tenor Afrique</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>TN TUNISIE, 2046</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-815">1369372B</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-101</ComMeansType>
+              <ComMeansValue>29 96 55 38</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>conctact@tenorafrique.com</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-104</ComMeansType>
+              <ComMeansValue>www.tenorafrique.com</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-01">1369372BBM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">Remise</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>AVENUE DE L'ENVIRONNEMENT, 02097 BOUMHELL, TN TUNISIE</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-81">1369372BBM000</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Chèque</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTPCK01</ItemCode>
+          <ItemDescription>Contrat Bronze Pack Duo Compta Gestion Ed. Entreprise</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">2383.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">929.370</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>2</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTGES99</ItemCode>
+          <ItemDescription>Contrat Bronze Gestion Ed. Entreprise Utilisateur Supplémentaire</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">3</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">299.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">349.830</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>3</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTCPT99</ItemCode>
+          <ItemDescription>Contrat Bronze Compta Ed. Entreprise Utilisateur Supplémentaire</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">299.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">116.610</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>4</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTTPV01</ItemCode>
+          <ItemDescription>Contrat Bronze TPV Principal par magasin Ed. Entreprise</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">642.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">250.380</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+      <Lin>
+        <ItemIdentifier>5</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>AL0ENTTPV99</ItemCode>
+          <ItemDescription>Contrat Bronze TPV Supplémentaire Ed. Entreprise</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>35.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinAlc>
+          <Alc allowanceOrChargeCode="I-151">
+            <AlcRate>40.0</AlcRate>
+          </Alc>
+        </LinAlc>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">299.0000</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">116.610</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1762.800</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">2098.730</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1762.800</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">334.930</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="TND">0.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="SIG-77e34c7b2cea4a58adf6fac0a6ca88dc"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI="#SignedProperties-SIG-77e34c7b2cea4a58adf6fac0a6ca88dc" Type="http://uri.etsi.org/01903#SignedProperties"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>/c4eRBaQKCa1j05ktAf07JtB2ZwHoyjp2WEFd9JJH+o=</ds:DigestValue></ds:Reference><ds:Reference Id="REF-DOC-SIG-77e34c7b2cea4a58adf6fac0a6ca88dc" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>d0EnJ/uVZe7/Kp6T+B8kymsgWp2/xVBmWYzCjwfyFp4=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>C3oGQrDQqayNWI3SvaJ+2kJAFFKQ9srWzJ17AjE94U9ydvBx4KG9TxyfiGW2uqmbBixbN0BYXVmc0QeyidaLVGelL71r+MnrFvAdi0iA5PZHhDtfnBEvI0VMGq2QVoGaDdh2sMNkdNsKWVJukhbOkB8oGrHJpjr1CogIhLBmtGansarDVbOeFEuacFWTjcm7AbW50b3yRQy4+pOSpDk+H2fEHlu+ZZG8wIxoVMF7zAjMn6KO/rccbAEz9IkGn3uYQwBB1a4SpoWK5BAW/An56fgv6rt1/hpJMntJJ3OC74EVuIZj6Wqle1iLmqmmoUb9q0ybF2sXERJ8MzSVGVCaIA==</ds:SignatureValue><ds:KeyInfo Id="KeyInfo-SIG-77e34c7b2cea4a58adf6fac0a6ca88dc"><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties Target="#SIG-77e34c7b2cea4a58adf6fac0a6ca88dc"><xades:SignedProperties Id="SignedProperties-SIG-77e34c7b2cea4a58adf6fac0a6ca88dc"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-15T13:01:56+00:00</xades:SigningTime><xades:SigningCertificateV2><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nvEZGC8DJQyidRUwIEkZj0wrjWl4/2xuC7AC5m6/JRg=</ds:DigestValue></xades:CertDigest></xades:Cert></xades:SigningCertificateV2></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#REF-DOC-SIG-77e34c7b2cea4a58adf6fac0a6ca88dc"><xades:MimeType>text/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></TEIF>

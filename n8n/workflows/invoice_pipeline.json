@@ -1,0 +1,174 @@
+{
+  "name": "Invoice Pipeline Fixed",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "upload-facture",
+        "method": "POST"
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "item.binary.file = item.binary.data;\ndelete item.binary.data;\nreturn item;"
+      },
+      "id": "prepare",
+      "name": "Prepare Binary",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://pdfservice:8000/analyze",
+        "method": "POST",
+        "sendBinaryData": true,
+        "binaryPropertyName": "file"
+      },
+      "id": "pdf",
+      "name": "PDF Analyze",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"source_type\"]}}",
+              "operation": "contains",
+              "value2": "scanned"
+            }
+          ]
+        }
+      },
+      "id": "ifscan",
+      "name": "Is Scanned?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://ocrservice:8002/ocr",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"image_paths\": $json[\"rendered_pages\"]}"
+      },
+      "id": "ocr",
+      "name": "OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://extractionservice:8001/extract",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"raw_text\": $json[\"full_text\"] || $json[\"extracted_text\"], \"page_count\": $json[\"page_count\"]}"
+      },
+      "id": "extract",
+      "name": "Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1000, 350]
+    },
+    {
+      "parameters": {
+        "url": "http://validationservice:8004/validate",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{$json}}"
+      },
+      "id": "validate",
+      "name": "Validation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1200, 350]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json[\"is_valid\"]}}",
+              "operation": "isFalse"
+            }
+          ]
+        }
+      },
+      "id": "ifvalid",
+      "name": "Is Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1400, 350]
+    },
+    {
+      "parameters": {
+        "url": "http://extractionservice:8001/repair",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{$json[\"data\"]}}"
+      },
+      "id": "repair",
+      "name": "Repair",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1600, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://validationservice:8004/validate",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{$json}}"
+      },
+      "id": "validate2",
+      "name": "Validation 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1800, 200]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Prepare Binary", "type": "main", "index": 0 }]]
+    },
+    "Prepare Binary": {
+      "main": [[{ "node": "PDF Analyze", "type": "main", "index": 0 }]]
+    },
+    "PDF Analyze": {
+      "main": [[{ "node": "Is Scanned?", "type": "main", "index": 0 }]]
+    },
+    "Is Scanned?": {
+      "main": [
+        [{ "node": "OCR", "type": "main", "index": 0 }],
+        [{ "node": "Extraction", "type": "main", "index": 0 }]
+      ]
+    },
+    "OCR": {
+      "main": [[{ "node": "Extraction", "type": "main", "index": 0 }]]
+    },
+    "Extraction": {
+      "main": [[{ "node": "Validation", "type": "main", "index": 0 }]]
+    },
+    "Validation": {
+      "main": [[{ "node": "Is Valid?", "type": "main", "index": 0 }]]
+    },
+    "Is Valid?": {
+      "main": [
+        [{ "node": "Repair", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Repair": {
+      "main": [[{ "node": "Validation 2", "type": "main", "index": 0 }]]
+    }
+  }
+}

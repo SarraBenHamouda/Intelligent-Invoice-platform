@@ -1,0 +1,1 @@
+{'transaction_id': 'TTN-20260710-A98677CB47', 'invoice_number': '', 'status': 'ERROR', 'error_type': 'EMPTY_SIGNED_XML', 'message': 'Le XML signé est vide ou invalide', 'date': '2026-07-10T18:17:09.955587Z'}

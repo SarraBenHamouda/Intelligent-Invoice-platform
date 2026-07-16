@@ -1,0 +1,1 @@
+{'transaction_id': 'TTN-20260709-67A6A388D4', 'invoice_number': '', 'status': 'REJECTED', 'message': 'Facture rejetée par TTN', 'http_status': 400, 'error_type': 'TTN_REJECTED_UNKNOWN_REASON', 'ttn_reason': 'Rejet TTN : motif inconnu dans le mock', 'suggested_action': 'Analyser manuellement la réponse TTN', 'date': '2026-07-09T11:04:19.461702Z'}

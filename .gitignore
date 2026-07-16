@@ -1,0 +1,45 @@
+# Local databases
+database.sqlite
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-wal
+*.db-shm
+
+# n8n runtime data
+n8n/database.sqlite
+n8n/database.sqlite-wal
+n8n/database.sqlite-shm
+n8n/database/
+n8n/binaryData/
+n8n/*.log
+n8n/crash.journal
+n8n/n8nEventLog*
+n8n/*.journal
+
+# Python generated files
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.p12
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+.cache/
+
+# Editor files
+.vscode/
+.idea/
