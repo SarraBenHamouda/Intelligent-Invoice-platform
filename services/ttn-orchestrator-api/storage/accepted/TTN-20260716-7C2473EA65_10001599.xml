@@ -6,7 +6,7 @@
   </InvoiceHeader>
   <InvoiceBody>
     <Bgm>
-      <DocumentIdentifier>10001293</DocumentIdentifier>
+      <DocumentIdentifier>10001599</DocumentIdentifier>
       <DocumentType code="I-11">Facture</DocumentType>
     </Bgm>
     <Dtm>
@@ -18,9 +18,9 @@
       <PartnerDetails functionCode="I-63">
         <Nad>
           <PartnerIdentifier type="I-04">FR552124568552</PartnerIdentifier>
-          <PartnerName nameType="Qualification">Papyrus (vX.13)</PartnerName>
+          <PartnerName nameType="Qualification">Papyrus</PartnerName>
           <PartnerAdresses lang="fr">
-            <AdressDescription></AdressDescription>
+            <AdressDescription>15, rue Icare, 67836, TANNERIES Cedex</AdressDescription>
             <Country codeList="ISO_3166-1">FR</Country>
           </PartnerAdresses>
         </Nad>
@@ -32,6 +32,10 @@
         </RffSection>
         <CtaSection>
           <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-101</ComMeansType>
+              <ComMeansValue>03 88 64 50 60</ComMeansValue>
+            </ComSection>
             <ComSection>
               <ComMeansType>I-103</ComMeansType>
               <ComMeansValue>info@papyrus.als</ComMeansValue>
@@ -48,7 +52,7 @@
           <PartnerIdentifier type="I-04">C0000001</PartnerIdentifier>
           <PartnerName nameType="Qualification">NEBOUT SA (Siège social)</PartnerName>
           <PartnerAdresses lang="fr">
-            <AdressDescription>55, bld Victor Hugo, 87000 LIMOGES, FR FRANCE</AdressDescription>
+            <AdressDescription>87000 LIMOGES, FR FRANCE</AdressDescription>
             <Country codeList="ISO_3166-1">FR</Country>
           </PartnerAdresses>
         </Nad>
@@ -64,7 +68,7 @@
       <PytSectionDetails>
         <Pyt>
           <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
-          <PaymentTearmsDescription>Chèque</PaymentTearmsDescription>
+          <PaymentTearmsDescription>LCR</PaymentTearmsDescription>
         </Pyt>
       </PytSectionDetails>
     </PytSection>
@@ -204,39 +208,6 @@
       <Lin>
         <ItemIdentifier>5</ItemIdentifier>
         <LinImd lang="fr">
-          <ItemCode>JR00010</ItemCode>
-          <ItemDescription>Savon spécial Jeune Artiste</ItemDescription>
-        </LinImd>
-        <LinQty>
-          <Quantity measurementUnit="UNIT">1</Quantity>
-        </LinQty>
-        <LinAlc>
-          <Alc allowanceOrChargeCode="I-151">
-            <AlcRate>2.0</AlcRate>
-          </Alc>
-        </LinAlc>
-        <LinTax>
-          <TaxTypeName code="I-1602">TVA</TaxTypeName>
-          <TaxDetails>
-            <TaxRate>20</TaxRate>
-          </TaxDetails>
-        </LinTax>
-        <LinMoa>
-          <MoaDetails>
-            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">11.1600</Amount>
-            </Moa>
-          </MoaDetails>
-          <MoaDetails>
-            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">10.940</Amount>
-            </Moa>
-          </MoaDetails>
-        </LinMoa>
-      </Lin>
-      <Lin>
-        <ItemIdentifier>6</ItemIdentifier>
-        <LinImd lang="fr">
           <ItemCode>JR00015</ItemCode>
           <ItemDescription>Gouache ART FORM tout support Enfant 10 couleurs</ItemDescription>
         </LinImd>
@@ -268,7 +239,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>7</ItemIdentifier>
+        <ItemIdentifier>6</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0052</ItemCode>
           <ItemDescription>Gouache tube - Toliev - majenta / cyan / jaune citron</ItemDescription>
@@ -301,7 +272,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>8</ItemIdentifier>
+        <ItemIdentifier>7</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0053</ItemCode>
           <ItemDescription>Gouache tube - Toliev - blanc et noir</ItemDescription>
@@ -334,7 +305,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>9</ItemIdentifier>
+        <ItemIdentifier>8</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0083</ItemCode>
           <ItemDescription>Pinceau Kolinsky Rond 1/8'</ItemDescription>
@@ -367,7 +338,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>10</ItemIdentifier>
+        <ItemIdentifier>9</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0082</ItemCode>
           <ItemDescription>Pinceau Kolinsky Plat 1/2'</ItemDescription>
@@ -400,7 +371,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>11</ItemIdentifier>
+        <ItemIdentifier>10</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0052</ItemCode>
           <ItemDescription>Gouache tube - Toliev - majenta / cyan / jaune citron</ItemDescription>
@@ -433,7 +404,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>12</ItemIdentifier>
+        <ItemIdentifier>11</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0094</ItemCode>
           <ItemDescription>Brosse Barentz Rond 3/16'</ItemDescription>
@@ -466,7 +437,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>13</ItemIdentifier>
+        <ItemIdentifier>12</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0050</ItemCode>
           <ItemDescription>Gouache - Minsk - 8 couleurs</ItemDescription>
@@ -499,7 +470,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>14</ItemIdentifier>
+        <ItemIdentifier>13</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0083</ItemCode>
           <ItemDescription>Pinceau Kolinsky Rond 1/8'</ItemDescription>
@@ -532,7 +503,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>15</ItemIdentifier>
+        <ItemIdentifier>14</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0095</ItemCode>
           <ItemDescription>Brosse Barentz Rond 1/4'</ItemDescription>
@@ -565,7 +536,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>16</ItemIdentifier>
+        <ItemIdentifier>15</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPS0045</ItemCode>
           <ItemDescription>Pastels Secs Mistral</ItemDescription>
@@ -598,40 +569,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>17</ItemIdentifier>
-        <LinImd lang="fr">
-          <ItemCode>FPN0082</ItemCode>
-          <ItemDescription>Pinceau Kolinsky Plat 1/2'</ItemDescription>
-        </LinImd>
-        <LinQty>
-          <Quantity measurementUnit="UNIT">1</Quantity>
-        </LinQty>
-        <LinAlc>
-          <Alc allowanceOrChargeCode="I-151">
-            <AlcRate>2.0</AlcRate>
-          </Alc>
-        </LinAlc>
-        <LinTax>
-          <TaxTypeName code="I-1602">TVA</TaxTypeName>
-          <TaxDetails>
-            <TaxRate>20</TaxRate>
-          </TaxDetails>
-        </LinTax>
-        <LinMoa>
-          <MoaDetails>
-            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">10.9000</Amount>
-            </Moa>
-          </MoaDetails>
-          <MoaDetails>
-            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">10.680</Amount>
-            </Moa>
-          </MoaDetails>
-        </LinMoa>
-      </Lin>
-      <Lin>
-        <ItemIdentifier>18</ItemIdentifier>
+        <ItemIdentifier>16</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPS0044</ItemCode>
           <ItemDescription>Pastels huile - modèle 'Katarina'</ItemDescription>
@@ -664,7 +602,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>19</ItemIdentifier>
+        <ItemIdentifier>17</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPS0045</ItemCode>
           <ItemDescription>Pastels Secs Mistral</ItemDescription>
@@ -697,40 +635,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>20</ItemIdentifier>
-        <LinImd lang="fr">
-          <ItemCode>FPN0095</ItemCode>
-          <ItemDescription>Brosse Barentz Rond 1/4'</ItemDescription>
-        </LinImd>
-        <LinQty>
-          <Quantity measurementUnit="UNIT">1</Quantity>
-        </LinQty>
-        <LinAlc>
-          <Alc allowanceOrChargeCode="I-151">
-            <AlcRate>2.0</AlcRate>
-          </Alc>
-        </LinAlc>
-        <LinTax>
-          <TaxTypeName code="I-1602">TVA</TaxTypeName>
-          <TaxDetails>
-            <TaxRate>20</TaxRate>
-          </TaxDetails>
-        </LinTax>
-        <LinMoa>
-          <MoaDetails>
-            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">5.1300</Amount>
-            </Moa>
-          </MoaDetails>
-          <MoaDetails>
-            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">5.030</Amount>
-            </Moa>
-          </MoaDetails>
-        </LinMoa>
-      </Lin>
-      <Lin>
-        <ItemIdentifier>21</ItemIdentifier>
+        <ItemIdentifier>18</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0053</ItemCode>
           <ItemDescription>Gouache tube - Toliev - blanc et noir</ItemDescription>
@@ -763,7 +668,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>22</ItemIdentifier>
+        <ItemIdentifier>19</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0021</ItemCode>
           <ItemDescription>Fusains - Krasnoïarsk - 20 pièces</ItemDescription>
@@ -796,7 +701,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>23</ItemIdentifier>
+        <ItemIdentifier>20</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0015</ItemCode>
           <ItemDescription>Sanguines - Krasnoïarsk - 20 pièces</ItemDescription>
@@ -829,7 +734,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>24</ItemIdentifier>
+        <ItemIdentifier>21</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0021</ItemCode>
           <ItemDescription>Fusains - Krasnoïarsk - 20 pièces</ItemDescription>
@@ -862,7 +767,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>25</ItemIdentifier>
+        <ItemIdentifier>22</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0023</ItemCode>
           <ItemDescription>Fusains -Lakoutsk - 100 pièces</ItemDescription>
@@ -895,7 +800,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>26</ItemIdentifier>
+        <ItemIdentifier>23</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0022</ItemCode>
           <ItemDescription>Sanguines -Llakoutsk - 50 pièces</ItemDescription>
@@ -928,7 +833,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>27</ItemIdentifier>
+        <ItemIdentifier>24</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0015</ItemCode>
           <ItemDescription>Sanguines - Krasnoïarsk - 20 pièces</ItemDescription>
@@ -961,7 +866,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>28</ItemIdentifier>
+        <ItemIdentifier>25</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FFS0019</ItemCode>
           <ItemDescription>Fusains - Krasnoïarsk sans boîte - 100 pièces</ItemDescription>
@@ -994,7 +899,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>29</ItemIdentifier>
+        <ItemIdentifier>26</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0076</ItemCode>
           <ItemDescription>Coffret Huiles - 'Adriatico' - 20 tubes</ItemDescription>
@@ -1027,7 +932,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>30</ItemIdentifier>
+        <ItemIdentifier>27</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0108</ItemCode>
           <ItemDescription>Pinceau acrylique - 'Elba' - 3/16'</ItemDescription>
@@ -1060,7 +965,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>31</ItemIdentifier>
+        <ItemIdentifier>28</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0075</ItemCode>
           <ItemDescription>Huile - Orkneys - Boite 'Viking' - 20 tubes</ItemDescription>
@@ -1093,7 +998,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>32</ItemIdentifier>
+        <ItemIdentifier>29</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0069</ItemCode>
           <ItemDescription>Huile - Orkneys - Blanc</ItemDescription>
@@ -1126,7 +1031,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>33</ItemIdentifier>
+        <ItemIdentifier>30</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0059</ItemCode>
           <ItemDescription>Gouache - Montrose - 32 couleurs</ItemDescription>
@@ -1159,7 +1064,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>34</ItemIdentifier>
+        <ItemIdentifier>31</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0071</ItemCode>
           <ItemDescription>Huile - Orkneys - Cyan, magenta, citron, ocre</ItemDescription>
@@ -1192,40 +1097,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>35</ItemIdentifier>
-        <LinImd lang="fr">
-          <ItemCode>FPT0076</ItemCode>
-          <ItemDescription>Coffret Huiles - 'Adriatico' - 20 tubes</ItemDescription>
-        </LinImd>
-        <LinQty>
-          <Quantity measurementUnit="UNIT">1</Quantity>
-        </LinQty>
-        <LinAlc>
-          <Alc allowanceOrChargeCode="I-151">
-            <AlcRate>2.0</AlcRate>
-          </Alc>
-        </LinAlc>
-        <LinTax>
-          <TaxTypeName code="I-1602">TVA</TaxTypeName>
-          <TaxDetails>
-            <TaxRate>20</TaxRate>
-          </TaxDetails>
-        </LinTax>
-        <LinMoa>
-          <MoaDetails>
-            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">59.3500</Amount>
-            </Moa>
-          </MoaDetails>
-          <MoaDetails>
-            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
-              <Amount currencyIdentifier="EUR">58.160</Amount>
-            </Moa>
-          </MoaDetails>
-        </LinMoa>
-      </Lin>
-      <Lin>
-        <ItemIdentifier>36</ItemIdentifier>
+        <ItemIdentifier>32</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0106</ItemCode>
           <ItemDescription>Pinceau aquarelle - 'Leonardo da Vinci' - 1/4'</ItemDescription>
@@ -1258,7 +1130,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>37</ItemIdentifier>
+        <ItemIdentifier>33</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPT0076</ItemCode>
           <ItemDescription>Coffret Huiles - 'Adriatico' - 20 tubes</ItemDescription>
@@ -1291,7 +1163,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>38</ItemIdentifier>
+        <ItemIdentifier>34</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0108</ItemCode>
           <ItemDescription>Pinceau acrylique - 'Elba' - 3/16'</ItemDescription>
@@ -1324,7 +1196,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>39</ItemIdentifier>
+        <ItemIdentifier>35</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPN0106</ItemCode>
           <ItemDescription>Pinceau aquarelle - 'Leonardo da Vinci' - 1/4'</ItemDescription>
@@ -1357,7 +1229,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>40</ItemIdentifier>
+        <ItemIdentifier>36</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FSV0112</ItemCode>
           <ItemDescription>Gel texture rugueuse - Acrylique</ItemDescription>
@@ -1390,7 +1262,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>41</ItemIdentifier>
+        <ItemIdentifier>37</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPP0041</ItemCode>
           <ItemDescription>Calque Margé - 25 pages</ItemDescription>
@@ -1423,7 +1295,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>42</ItemIdentifier>
+        <ItemIdentifier>38</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FSV0114</ItemCode>
           <ItemDescription>Huile de lin pression à froid - 75 ml</ItemDescription>
@@ -1456,7 +1328,7 @@
         </LinMoa>
       </Lin>
       <Lin>
-        <ItemIdentifier>43</ItemIdentifier>
+        <ItemIdentifier>39</ItemIdentifier>
         <LinImd lang="fr">
           <ItemCode>FPP0030</ItemCode>
           <ItemDescription>Bloc Ingres - 20 feuilles - 150 g</ItemDescription>
@@ -1492,7 +1364,7 @@
     <InvoiceMoa>
       <AmountDetails>
         <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
-          <Amount currencyIdentifier="EUR">5383.908</Amount>
+          <Amount currencyIdentifier="EUR">4878.580</Amount>
         </Moa>
       </AmountDetails>
       <AmountDetails>
@@ -1502,12 +1374,12 @@
       </AmountDetails>
       <AmountDetails>
         <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
-          <Amount currencyIdentifier="EUR">5383.908</Amount>
+          <Amount currencyIdentifier="EUR">5299.100</Amount>
         </Moa>
       </AmountDetails>
       <AmountDetails>
         <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
-          <Amount currencyIdentifier="EUR">1076.782</Amount>
+          <Amount currencyIdentifier="EUR">1161.590</Amount>
         </Moa>
       </AmountDetails>
     </InvoiceMoa>
@@ -1527,4 +1399,4 @@
       </InvoiceTaxDetails>
     </InvoiceTax>
   </InvoiceBody>
-</TEIF>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="SIG-c3cd9f802d3d433db959ebf534fe3435"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI="#SignedProperties-SIG-c3cd9f802d3d433db959ebf534fe3435" Type="http://uri.etsi.org/01903#SignedProperties"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>tX+TbYdNcTYUoKvuoQWfhWosNb6wWbMNbZyPkCGhvKQ=</ds:DigestValue></ds:Reference><ds:Reference Id="REF-DOC-SIG-c3cd9f802d3d433db959ebf534fe3435" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>mLJGXYC8ZEEloloN2dKK2z5NodL6YfhBVXr4OK12RDQ=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>K2TE+mrzpjYFVwdUtO1rfsKNPP9H1xeUjYv2MQURa3bPOEkM0wTkBvU+aHp6Mc50c9KJGlA9p1cBH8ZzZ4WXpHHJP2Qhsa9WXKGrVrduFg8q5xXJYfuHJqXMWzqnTRj0C/lATSuyV6K0eN+M1lue+TWranSArUKXiAn6wlAKArwU8irLJtXJD6H38OmKapMBKdmhunYQsJhgOvntWLwrbVc+g4y9qNzHAdrd59JtD2RMdjTIVsQaAZZhn1SUs7pUB2PiFLiYX1mzDra7LW5VIebOCl5IrK0QS+L3BjnR7a2hzPJHz5HaBhJCPgwI0OysPT5WSas5xrn/+DU9xjPsxA==</ds:SignatureValue><ds:KeyInfo Id="KeyInfo-SIG-c3cd9f802d3d433db959ebf534fe3435"><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties Target="#SIG-c3cd9f802d3d433db959ebf534fe3435"><xades:SignedProperties Id="SignedProperties-SIG-c3cd9f802d3d433db959ebf534fe3435"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-16T19:49:20+00:00</xades:SigningTime><xades:SigningCertificateV2><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nvEZGC8DJQyidRUwIEkZj0wrjWl4/2xuC7AC5m6/JRg=</ds:DigestValue></xades:CertDigest></xades:Cert></xades:SigningCertificateV2></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#REF-DOC-SIG-c3cd9f802d3d433db959ebf534fe3435"><xades:MimeType>text/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></TEIF>

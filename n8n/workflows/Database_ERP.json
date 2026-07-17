@@ -1,0 +1,617 @@
+{
+  "name": "Database_ERP",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "name": "ENV",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        -1456,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "7f72c4e8-878d-4917-b212-238d7f2edc9e"
+    },
+    {
+      "parameters": {
+        "filePath": "/shared/input/ENV.csv"
+      },
+      "name": "Read ENV File",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [
+        -1696,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "d1277e73-ced1-4ecb-b8a2-a9dc78007df7"
+    },
+    {
+      "parameters": {
+        "filePath": "/shared/input/universal_mapping.csv"
+      },
+      "name": "Read  MAPPING File",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "position": [
+        -1024,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "5aa7f8ea-ba10-4b36-992c-cce890b5dcc2"
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "name": "Mapping file",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "position": [
+        -800,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "eede4fce-176f-47ed-8a15-76878c6ede13"
+    },
+    {
+      "parameters": {
+        "formTitle": "Choose a bill ",
+        "formDescription": "we're choose a bill for testing it ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "invoice_id",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "client_code"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -1936,
+        48
+      ],
+      "id": "f55407a3-ae92-4ed3-b35a-a50c76eb44e4",
+      "name": "Select the bill",
+      "webhookId": "913501d8-ab87-4cc8-afe0-da9bdb0fa1b4"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.sql }}"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -336,
+        -160
+      ],
+      "id": "bbcf98ce-513f-44fa-b3e6-605994cb2523",
+      "name": "Microsoft SQL",
+      "alwaysOutputData": true,
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const mappings = $input.all();\n\nconst env = $('Read env').first().json;\n\nconst mainTable = env.main_table;\nconst invoiceField = env.invoice_field;\nconst customerField = env.customer_field;\n\nconst selectFields = [];\nconst joins = new Map();\n\nfor (const item of mappings) {\n\n  const row = item.json;\n\n  if (row.extract_sql !== 'YES') {\n    continue;\n  }\n\n  if (\n    !row.table_name ||\n    !row.field_name ||\n    !row.functional_name\n  ) {\n    continue;\n  }\n\n  selectFields.push(\n    `${row.table_name}.${row.field_name} AS ${row.functional_name}`\n  );\n\n  if (\n    row.join_table &&\n    row.join_condition &&\n    row.join_table !== ''\n  ) {\n    joins.set(\n      row.join_table,\n      row.join_condition\n    );\n  }\n}\n\nconst uniqueFields =\n  [...new Set(selectFields)];\n\nlet joinSql = '';\n\nfor (const [table, condition] of joins.entries()) {\n\n  if (table !== mainTable) {\n\n    joinSql += `\nLEFT JOIN ${table}\nON ${condition}\n`;\n  }\n}\n\nconst invoiceId =\n$('Select the bill').first().json.invoice_id;\n\nconst clientCode =\n$('Select the bill').first().json.client_code;\n\nconst sql = `\nSELECT\n${uniqueFields.join(',\\n')}\n\nFROM ${mainTable}\n\n${joinSql}\n\nWHERE\n${mainTable}.${invoiceField}='${invoiceId}'\nAND\n${mainTable}.${customerField}='${clientCode}'\n`;\n\nreturn [{\n  json: {\n    sql,\n    field_count: uniqueFields.length\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        -160
+      ],
+      "id": "3685567b-28db-4cf2-a0a3-9e45470f95b2",
+      "name": "Generate SQL From Mapping"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sqlRows = $('Microsoft SQL').all();\nconst mappingRows = $('Mapping file').all();\n\nconst first = sqlRows[0].json;\n\nconst result = {};\n\nfunction setValue(obj, path, value) {\n\n  const keys = path.split('.');\n\n  let current = obj;\n\n  for (let i = 0; i < keys.length - 1; i++) {\n\n    if (!current[keys[i]]) {\n      current[keys[i]] = {};\n    }\n\n    current = current[keys[i]];\n  }\n\n  current[keys[keys.length - 1]] = value;\n}\n\n\n// =========================\n// HEADER FIELDS\n// =========================\n\nfor (const m of mappingRows) {\n\n  const map = m.json;\n\n  if (map.source_type === 'LINE') {\n    continue;\n  }\n\n  if (map.table_name === 'CALC') {\n    continue;\n  }\n\n  const value = first[map.functional_name];\n\n  if (value !== undefined) {\n\n    setValue(\n      result,\n      map.json_path,\n      value\n    );\n\n  }\n\n}\n\n\n// =========================\n// CALCULATED HEADER FIELDS\n// =========================\n\nconst vat_amount =\n  Number(first.total_ttc || 0)\n  -\n  Number(first.taxable_amount || 0);\n\nconst net_amount =\n  Number(first.total_ht || 0)\n  +\n  vat_amount;\n\nconst gross_amount =\n  Number(first.taxable_amount || 0)\n  +\n  vat_amount;\n\nsetValue(\n  result,\n  'totals.vat_amount',\n  vat_amount\n);\n\nsetValue(\n  result,\n  'totals.net_amount',\n  net_amount\n);\n\nsetValue(\n  result,\n  'totals.gross_amount',\n  gross_amount\n);\n\n\n// =========================\n// LINES\n// =========================\n\nresult.lines = [];\n\nconst seen = new Set();\n\nfor (const row of sqlRows) {\n\n  const key =\n    `${row.json.reference}_${row.json.designation}`;\n\n  if (seen.has(key)) {\n    continue;\n  }\n\n  seen.add(key);\n\n  const quantity =\n    Number(row.json.quantity || 0);\n\n  const unit_price =\n    Number(row.json.unit_price || 0);\n\n  const line_total_ht =\n    Number(row.json.line_total_ht || 0);\n\n  result.lines.push({\n\n    reference:\n      row.json.reference,\n\n    designation:\n      row.json.designation,\n\n    quantity,\n\n    unit_price,\n\n    line_total_ht,\n\n    tax_rate:\n      row.json.tax_rate,\n\n    vat_code:\n      row.json.vat_code,\n\n    discount:\n      row.json.discount,\n\n    article_variant:\n      row.json.article_variant,\n\n    line_total_calculated:\n      quantity * unit_price,\n\n    discount_amount:\n      (quantity * unit_price)\n      - line_total_ht\n\n  });\n\n}\n\n\n// =========================\n// FULL ADDRESS\n// =========================\n\nif (result.customer) {\n\n  result.customer.full_address = [\n    result.customer.address,\n    result.customer.address2,\n    result.customer.city,\n    result.customer.postal_code\n  ]\n  .filter(Boolean)\n  .join(' ');\n}\n\nif (result.supplier) {\n\n  result.supplier.full_address = [\n    result.supplier.address,\n    result.supplier.address2,\n    result.supplier.city,\n    result.supplier.postal_code\n  ]\n  .filter(Boolean)\n  .join(' ');\n}\n\n\n// =========================\n// PAYMENT DESCRIPTION\n// =========================\n\nif (result.payment) {\n\n  result.payment.description = [\n    result.payment.type,\n    result.payment.code\n  ]\n  .filter(Boolean)\n  .join(' ');\n}\n\n\n// =========================\n// RETURN\n// =========================\n\nreturn [{\n  json: result\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        32
+      ],
+      "id": "49cdd31b-e6e5-4b6d-8197-75bf663bf446",
+      "name": "Node Build Universal JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\n\nconst env = {};\n\nfor (const row of rows) {\n\n  env[row.json.parameter] =\n  row.json.value;\n\n}\n\nreturn [{\n  json: env\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        48
+      ],
+      "id": "c533243a-1cd9-4459-a4d7-3ccefc93d6e7",
+      "name": "Read env"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -112,
+        32
+      ],
+      "id": "39e7fa2e-e7dc-4d03-8410-ff0ef150b672",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://teif-api:5000/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        544,
+        32
+      ],
+      "id": "90e9863b-9e12-4cba-b489-82a5876f2707",
+      "name": "TEIF Generator"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5001/sign",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ $json.xml_content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1472,
+        16
+      ],
+      "id": "ba41634c-739f-49da-83e9-90e000b32647",
+      "name": "Signature TTN"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Nœud contenant le XML généré\nconst XML_NODE_NAME = 'Code Restore Data1';\n\n// Nœud contenant les données ERP complètes,\n// notamment invoice.number = 10001403\nconst ERP_DATA_NODE_NAME = 'Microsoft SQL';\n\nfunction readNode(nodeName) {\n  try {\n    return $(nodeName).first().json || {};\n  } catch (error) {\n    return {};\n  }\n}\n\nfunction firstNonEmpty(values) {\n  for (const value of values) {\n    if (\n      value !== undefined &&\n      value !== null &&\n      String(value).trim() !== ''\n    ) {\n      return String(value).trim();\n    }\n  }\n\n  return '';\n}\n\nfunction sanitizeFileName(value) {\n  return String(value)\n    .trim()\n    .replace(/[\\\\/:*?\"<>|]/g, '_');\n}\n\nconst xmlNodeData = readNode(XML_NODE_NAME);\nconst erpData = readNode(ERP_DATA_NODE_NAME);\n\nreturn items.map((item) => {\n  // ============================================================\n  // XML\n  // ============================================================\n\n  const xml = firstNonEmpty([\n    item.json.xml_content,\n    item.json.xml,\n    item.json.signed_xml,\n\n    xmlNodeData.xml_content,\n    xmlNodeData.xml,\n    xmlNodeData.signed_xml,\n  ]);\n\n  if (!xml) {\n    throw new Error(\n      `XML introuvable dans le nœud \"${XML_NODE_NAME}\". ` +\n      `Clés trouvées : ${JSON.stringify(Object.keys(xmlNodeData))}`\n    );\n  }\n\n  // ============================================================\n  // NUMÉRO DE FACTURE\n  // ============================================================\n\n  const documentMatch = xml.match(\n    /<(?:[\\w.-]+:)?DocumentIdentifier\\b[^>]*>\\s*([^<]+?)\\s*<\\/(?:[\\w.-]+:)?DocumentIdentifier\\s*>/i\n  );\n\n  let invoiceNumber = firstNonEmpty([\n    documentMatch?.[1],\n\n    // Item courant\n    item.json.invoice_number,\n    item.json.invoice?.number,\n    item.json.data?.invoice?.number,\n\n    item.json.document?.numero,\n    item.json.facture?.numero,\n\n    // Données ERP\n    erpData.invoice_number,\n    erpData.invoice?.number,\n    erpData.data?.invoice?.number,\n\n    erpData.document?.numero,\n    erpData.facture?.numero,\n  ]);\n\n  let invoiceNumberSource = '';\n\n  if (documentMatch?.[1]?.trim()) {\n    invoiceNumberSource = 'DocumentIdentifier XML';\n  } else if (\n    item.json.invoice?.number ||\n    item.json.invoice_number\n  ) {\n    invoiceNumberSource = 'item courant';\n  } else if (\n    erpData.invoice?.number ||\n    erpData.data?.invoice?.number\n  ) {\n    invoiceNumberSource = ERP_DATA_NODE_NAME;\n  }\n\n  if (!invoiceNumber) {\n    throw new Error(\n      `Numéro de facture introuvable. ` +\n      `Le XML contient un DocumentIdentifier vide et le nœud ` +\n      `\"${ERP_DATA_NODE_NAME}\" ne contient pas invoice.number. ` +\n      `Clés ERP trouvées : ${JSON.stringify(Object.keys(erpData))}`\n    );\n  }\n\n  // ============================================================\n  // FICHIER XML\n  // ============================================================\n\n  const safeInvoiceNumber =\n    sanitizeFileName(invoiceNumber);\n\n  const fileName =\n    `${safeInvoiceNumber}_signed.xml`;\n\n  return {\n    json: {\n      ...item.json,\n      invoice_number: safeInvoiceNumber,\n      file_name: fileName,\n      invoice_number_source: invoiceNumberSource,\n    },\n\n    binary: {\n      ...(item.binary || {}),\n\n      data: {\n        data: Buffer\n          .from(xml, 'utf8')\n          .toString('base64'),\n\n        mimeType: 'application/xml',\n        fileExtension: 'xml',\n        fileName,\n      },\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2128,
+        0
+      ],
+      "id": "efe60bfc-5c12-40f9-8b7b-0c0e620f332e",
+      "name": "Write a XML file"
+    },
+    {
+      "parameters": {
+        "fileName": "=/shared/signed_bills/{{ $json.file_name }}",
+        "options": {}
+      },
+      "id": "98645453-5ebe-4e35-8c32-475f7b71b6d3",
+      "name": "Register the file",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "position": [
+        2320,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-teif",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ Object.values($json).find(v => typeof v === 'string' && v.includes('<TEIF')) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "be2ca3a8-5ba0-42c5-8347-6c5afc92643b",
+      "name": "Validation TEIF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        816,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1024,
+        32
+      ],
+      "id": "ef531cd4-edbb-402e-ada2-0d32959dbc91",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  return {\n    json: {\n      xml_content: item.json.xml\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        16
+      ],
+      "id": "128cda3b-cf80-4c2a-9520-e889a5c9ef40",
+      "name": "Code Restore Data1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-signed-xml",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "signed_xml",
+              "value": "={{ $json.signed_xml }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1680,
+        16
+      ],
+      "id": "df413d68-83cf-436a-a1e6-57b59ab9f6b9",
+      "name": "Validation Signed XML"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1888,
+        16
+      ],
+      "id": "7b8af451-6e21-482c-aaf9-9e2dfc212458",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ttn-orchestrator-api:8000/submit-signed-xml",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "invoice_number",
+              "value": "={{ $json.invoice_number }}"
+            },
+            {
+              "name": "signed_xml",
+              "value": "={{ $json.xml }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2512,
+        0
+      ],
+      "id": "9488a8bf-dbc1-47aa-95a2-e40c9b05b083",
+      "name": "TTN API"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "ENV": {
+      "main": [
+        [
+          {
+            "node": "Read env",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read ENV File": {
+      "main": [
+        [
+          {
+            "node": "ENV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read  MAPPING File": {
+      "main": [
+        [
+          {
+            "node": "Mapping file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapping file": {
+      "main": [
+        [
+          {
+            "node": "Generate SQL From Mapping",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Select the bill": {
+      "main": [
+        [
+          {
+            "node": "Read ENV File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SQL From Mapping": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Node Build Universal JSON": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read env": {
+      "main": [
+        [
+          {
+            "node": "Read  MAPPING File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Node Build Universal JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TEIF Generator": {
+      "main": [
+        [
+          {
+            "node": "Validation TEIF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature TTN": {
+      "main": [
+        [
+          {
+            "node": "Validation Signed XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write a XML file": {
+      "main": [
+        [
+          {
+            "node": "Register the file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register the file": {
+      "main": [
+        [
+          {
+            "node": "TTN API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation TEIF": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code Restore Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Restore Data1": {
+      "main": [
+        [
+          {
+            "node": "Signature TTN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Signed XML": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Write a XML file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "260b9829-7427-4175-9430-99c5a25600d0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
+  },
+  "id": "61lqLZULNQww3ool9WizE",
+  "tags": []
+}

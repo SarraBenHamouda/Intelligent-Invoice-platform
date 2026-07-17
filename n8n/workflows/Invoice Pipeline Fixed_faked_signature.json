@@ -1,0 +1,976 @@
+{
+  "name": "Invoice Pipeline Fixed_faked_signature",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "upload-facture",
+        "options": {}
+      },
+      "id": "5c54017a-1862-4f73-9903-7cd297931893",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        -224
+      ],
+      "webhookId": "3c7f9348-38bc-4017-a73c-ec0595b22427"
+    },
+    {
+      "parameters": {
+        "functionCode": "for (const item of items) {\n  if (item.binary && item.binary.data) {\n    item.binary.file = item.binary.data;\n    delete item.binary.data;\n  }\n}\nreturn items;"
+      },
+      "id": "b3549623-b683-4552-ba3b-003ac55c77b9",
+      "name": "Prepare Binary",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"source_type\"]}}",
+              "operation": "contains",
+              "value2": "scanned"
+            }
+          ]
+        }
+      },
+      "id": "43e8b6dd-d860-4827-b874-d156df7f2cb8",
+      "name": "Is Scanned?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionservice:8000/extract",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  {\n    raw_text: $json.extracted_text,\n    page_count: $json.page_count,\n    source_type: $json.source_type,\n    \"zones\": $json.zones\n  }\n}}",
+        "options": {}
+      },
+      "id": "062ccfc9-02a3-427f-833d-65bc783b87f7",
+      "name": "Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        144,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "991b0d9c-9dfe-46aa-af9f-cbede59b6404",
+      "name": "Validation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        448,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://pdfservice:8000/analyze",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "af0cb0e2-1777-458a-8d20-d8e31db757f0",
+      "name": "Analyze",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -416,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "fileName": "=/shared/fake_signed_bills/{{$json.fileName}}",
+        "options": {}
+      },
+      "id": "5c507442-b834-417c-83e7-0e0951aef78f",
+      "name": "Write Binary File",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "position": [
+        3408,
+        -208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://signature-api:5001/sign",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml_content",
+              "value": "={{ $('Prepare XML File').item.json.xml_content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3616,
+        -208
+      ],
+      "id": "bd73c0fe-5157-474e-ab73-8cf98a72ae8b",
+      "name": "Signature"
+    },
+    {
+      "parameters": {
+        "jsCode": "const signedXml =\n  $json.xml_signed ||\n  $json.signed_xml ||\n  $json.signedXml ||\n  $json.xml ||\n  $json.xml_content ||\n  $json.signed_document ||\n  \"\";\n\nif (!signedXml) {\n  throw new Error(\n    \"Aucun XML signé trouvé. Le node Signature doit retourner xml_signed.\"\n  );\n}\n\n// Extraire le numéro de facture depuis le XML signé\nconst match = signedXml.match(/<DocumentIdentifier>(.*?)<\\/DocumentIdentifier>/);\n\nconst invoiceNumberRaw =\n  $json.invoice_number && String($json.invoice_number).trim() !== \"\"\n    ? $json.invoice_number\n    : match\n      ? match[1]\n      : \"invoice\";\n\nconst invoiceNumber = String(invoiceNumberRaw)\n  .trim()\n  .replace(/[^\\w\\-]/g, \"_\");\n\nconst signedFileName = `${invoiceNumber}_signed.xml`;\nconst signedFilePath = `/shared/signed/${signedFileName}`;\n\nreturn [\n  {\n    json: {\n      invoice_number: invoiceNumber,\n      signed_file_name: signedFileName,\n      signed_file_path: signedFilePath,\n      signed_xml: signedXml,\n      signature_mode: $json.mode_used || \"\",\n      legal_validity: $json.legal_validity || \"\",\n      signature_type: $json.signature_type || \"\",\n      signing_time: $json.signing_time || \"\"\n    },\n    binary: {\n      data: await this.helpers.prepareBinaryData(\n        Buffer.from(signedXml, \"utf8\"),\n        signedFileName,\n        \"application/xml\"\n      )\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4048,
+        -208
+      ],
+      "id": "3b840552-7ec9-4aae-83f4-778acd3fe868",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const xml = $json.xml;\n\nif (!xml || typeof xml !== 'string') {\n  throw new Error(\n    `Le champ \"xml\" est vide ou introuvable. Champs reçus : ${Object.keys($json).join(', ')}`\n  );\n}\n\n// Récupération du numéro de facture\nconst match = xml.match(\n  /<DocumentIdentifier>\\s*([^<]+?)\\s*<\\/DocumentIdentifier>/\n);\n\nconst invoiceNumber = match\n  ? match[1].trim().replace(/[\\\\/:*?\"<>|]/g, '_')\n  : 'invoice';\n\n// Création du fichier XML binaire\nconst binaryData = await this.helpers.prepareBinaryData(\n  Buffer.from(xml, 'utf8'),\n  `${invoiceNumber}.xml`,\n  'application/xml'\n);\n\nreturn [\n  {\n    json: {\n      valid: $json.valid,\n      stage: $json.stage,\n      fileName: `${invoiceNumber}.xml`,\n      invoice_number: invoiceNumber,\n      xml_content: xml\n    },\n    binary: {\n      data: binaryData\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3184,
+        -208
+      ],
+      "id": "09d53de8-9bcd-493c-a74d-e59d148a2020",
+      "name": "Prepare XML File"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/shared/fake_signed_bills/{{ $binary.data.fileName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        4272,
+        -208
+      ],
+      "id": "b5944a4a-eb48-4ded-98ed-440f55483776",
+      "name": "Write Signed XML File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionserviceocr:8000/extract",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "full_text",
+              "value": "={{ $json.full_text }}"
+            },
+            {
+              "name": "reconstructed_text",
+              "value": "={{ $json.reconstructed_text }}"
+            },
+            {
+              "name": "words",
+              "value": "={{ $json.per_page[0].words }}"
+            },
+            {
+              "name": "confidence",
+              "value": "={{ $json.confidence }}"
+            },
+            {
+              "name": "=quality",
+              "value": "={{ $json.quality }}"
+            },
+            {
+              "name": "source_type",
+              "value": "={{ $json.source_type }}"
+            },
+            {
+              "name": "page_count",
+              "value": "={{ $json.pages }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        -416
+      ],
+      "id": "aba2540c-9112-4f1c-93aa-45447b2b88f9",
+      "name": "ExtractionOCR"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ocrservice:8000/ocr",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"image_paths\": {{JSON.stringify($json[\"rendered_pages\"])}},\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}",
+        "options": {}
+      },
+      "id": "1a80999e-a087-4b9a-83a7-f88f8e1ea016",
+      "name": "OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        16,
+        -416
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        -176
+      ],
+      "id": "d6d1f8f7-81e8-424a-9354-d0dd4ee891a0",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const restoredData =\n    item.json.data ??\n    item.json.corrected_data ??\n    item.json;\n\n  if (\n    !restoredData ||\n    typeof restoredData !== 'object' ||\n    Array.isArray(restoredData)\n  ) {\n    throw new Error(\n      'Données de facture introuvables. Champs disponibles : ' +\n      JSON.stringify(Object.keys(item.json))\n    );\n  }\n\n  return {\n    json: restoredData,\n    binary: item.binary,\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        -192
+      ],
+      "id": "59d706e9-576d-4b6b-a37f-1e3a256c383a",
+      "name": "Code Restore Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-teif",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "xml",
+              "value": "={{ Object.values($json).find(v => typeof v === 'string' && v.includes('<TEIF')) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "943923f7-26b8-4c7d-ad4d-804a908ced39",
+      "name": "Validation TEIF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        2752,
+        -192
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "242df213-a1ae-4b2b-b905-2123e7edfbf8",
+              "leftValue": "={{ $json.valid }} ",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2944,
+        -192
+      ],
+      "id": "1ed4fb1d-e595-42d5-b2ce-70ed93b3f06d",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5094bd86-4851-43c7-b338-bcf3e4df8fbe",
+              "leftValue": "={{\n  $json.valid === false\n  ||\n  $json.is_valid === false\n  ||\n  ($json.error_count || 0) > 0\n  ||\n  $json.data?.controle_validation?.peut_generer_teif === false\n  ||\n  ($json.data?.controle_validation?.erreurs_bloquantes || []).length > 0\n  ||\n  ($json.data?.controle_validation?.avertissements || []).length > 0\n}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        -384
+      ],
+      "id": "d11e899c-51b3-492e-bf16-c74f8ae75539",
+      "name": "Vérification humaine nécessaire ?"
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "Vérification humaine de la facture",
+        "formDescription": "={{\n`Facture : ${$json.invoice_number}\n\n${($json.validation_errors || [])\n  .map((error, index) => {\n    const currentValue = $json.current_error_values?.[error.field] ?? '';\n\n    return `${index + 1}. Champ : ${error.field}\nErreur : ${error.message}\nValeur actuelle : ${currentValue}`;\n  })\n  .join('\\n\\n')}\n\nSaisissez ci-dessous uniquement les corrections nécessaires`\n}}",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "APPROVED"
+                  },
+                  {
+                    "option": "REJECTED"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "reviewed_by"
+            },
+            {
+              "fieldLabel": "corrections",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1088,
+        -400
+      ],
+      "id": "eabf9e60-414a-4662-bde4-09ec6a2afc42",
+      "name": "Formulaire de correction humaine",
+      "webhookId": "47d7dc58-4193-48a6-ad4b-92f40ed9747f"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const prepared =\n  $('Préparer vérification humaine').first().json;\n\nconst submitted = $json.body ?? $json;\n\nconst originalData = prepared.original_data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'original_data est absent dans Préparer vérification humaine.'\n  );\n}\n\nconst corrected = JSON.parse(\n  JSON.stringify(originalData)\n);\n\nconst decision =\n  String(submitted.decision || 'REJECTED')\n    .trim()\n    .toUpperCase();\n\nconst correctionsText =\n  String(submitted.corrections || '').trim();\n\nconst allowedFields = Array.isArray(prepared.error_fields)\n  ? prepared.error_fields\n  : [];\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nfunction setNestedValue(object, path, value) {\n  const keys = String(path).split('.');\n  let cursor = object;\n\n  for (let index = 0; index < keys.length - 1; index++) {\n    const key = keys[index];\n\n    if (\n      cursor[key] === undefined ||\n      cursor[key] === null ||\n      typeof cursor[key] !== 'object'\n    ) {\n      cursor[key] = {};\n    }\n\n    cursor = cursor[key];\n  }\n\n  cursor[keys[keys.length - 1]] = value;\n}\n\nfunction resolveField(inputField) {\n  const normalizedInput = String(inputField).trim();\n\n  // Exemple : totaux.montant_tva\n  if (allowedFields.includes(normalizedInput)) {\n    return normalizedInput;\n  }\n\n  // Accepte aussi montant_tva\n  const matches = allowedFields.filter(\n    field =>\n      String(field).split('.').pop() === normalizedInput\n  );\n\n  if (matches.length === 1) {\n    return matches[0];\n  }\n\n  return null;\n}\n\nfunction parseValue(rawValue, originalValue) {\n  const value = String(rawValue ?? '').trim();\n\n  if (typeof originalValue === 'number') {\n    const parsed = Number(\n      value\n        .replace(/\\s/g, '')\n        .replace(',', '.')\n        .replace(/[^0-9.-]/g, '')\n    );\n\n    return Number.isFinite(parsed)\n      ? parsed\n      : originalValue;\n  }\n\n  return value;\n}\n\nconst appliedCorrections = [];\nconst ignoredCorrections = [];\n\nif (decision === 'APPROVED') {\n  const lines = correctionsText\n    .split(/\\r?\\n/)\n    .map(line => line.trim())\n    .filter(Boolean);\n\n  for (const line of lines) {\n    const separatorIndex = line.indexOf('=');\n\n    if (separatorIndex === -1) {\n      ignoredCorrections.push({\n        line,\n        reason: 'Format invalide. Utiliser champ=valeur',\n      });\n\n      continue;\n    }\n\n    const enteredField = line\n      .slice(0, separatorIndex)\n      .trim();\n\n    const rawValue = line\n      .slice(separatorIndex + 1)\n      .trim();\n\n    const resolvedField = resolveField(enteredField);\n\n    if (!resolvedField) {\n      ignoredCorrections.push({\n        field: enteredField,\n        reason:\n          'Ce champ ne figure pas dans les erreurs de validation',\n      });\n\n      continue;\n    }\n\n    const previousValue = getNestedValue(\n      originalData,\n      resolvedField\n    );\n\n    const newValue = parseValue(\n      rawValue,\n      previousValue\n    );\n\n    setNestedValue(\n      corrected,\n      resolvedField,\n      newValue\n    );\n\n    appliedCorrections.push({\n      field: resolvedField,\n      previous_value: previousValue,\n      new_value: newValue,\n    });\n  }\n}\n\ncorrected.verification_humaine = {\n  decision,\n  reviewed_by: submitted.reviewed_by || '',\n  commentaire: submitted.commentaire || '',\n  reviewed_at: new Date().toISOString(),\n  erreurs_initiales: prepared.validation_errors || [],\n  corrections_appliquees: appliedCorrections,\n  corrections_ignorees: ignoredCorrections,\n};\n\nreturn {\n  json: {\n    decision,\n    corrected_data: corrected,\n    applied_corrections: appliedCorrections,\n    ignored_corrections: ignoredCorrections,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        -400
+      ],
+      "id": "59f72b0a-c2b4-4ff6-8798-23241aae987d",
+      "name": "Appliquer les corrections"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e85bd173-1f4e-49d3-929f-1135f6c4a69c",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "APPROVED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1504,
+        -400
+      ],
+      "id": "5dd73ba8-ea26-4746-bcf1-2680f53e739e",
+      "name": "Facture approuvée ?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2016,
+        -416
+      ],
+      "id": "97ffd9bb-a557-41d2-a4e0-20b4c5f997a1",
+      "name": "Revalidation après correction"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5094bd86-4851-43c7-b338-bcf3e4df8fbe",
+              "leftValue": "={{\n  $json.valid === true\n  &&\n  $json.is_valid === true\n  &&\n  ($json.error_count || 0) === 0\n}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2272,
+        -416
+      ],
+      "id": "d0e7c36b-019c-47d9-b6b4-ef800dc770be",
+      "name": "Correction valide ?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Remplacez \"Validation\" par le nom exact de votre nœud de validation\nconst input = $('Validation').first().json;\n\nconst allErrors = Array.isArray(input.errors)\n  ? input.errors\n  : [];\n\nconst warnings = Array.isArray(input.warnings)\n  ? input.warnings\n  : [];\n\n// On conserve seulement les vrais champs modifiables.\n// Les champs controle_validation.* sont calculés automatiquement.\nconst errors = allErrors.filter(error => {\n  const field = String(error.field || '');\n\n  return (\n    field &&\n    !field.startsWith('controle_validation.')\n  );\n});\n\nconst originalData = input.data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'Le nœud Validation ne contient pas un objet data valide.'\n  );\n}\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nconst errorFields = errors\n  .map(error => error.field)\n  .filter(Boolean);\n\nconst currentErrorValues = {};\n\nfor (const field of errorFields) {\n  currentErrorValues[field] = getNestedValue(\n    originalData,\n    field\n  );\n}\n\nreturn {\n  json: {\n    review_status: 'PENDING_REVIEW',\n\n    invoice_number:\n      originalData.facture?.numero ||\n      originalData.document?.numero ||\n      '',\n\n    currency:\n      originalData.document?.devise || '',\n\n    validation_stage:\n      input.stage || 'json_extraction',\n\n    validation_errors: errors,\n\n    validation_warnings: warnings,\n\n    error_fields: errorFields,\n\n    current_error_values: currentErrorValues,\n\n    review_reason: errors\n      .map(error =>\n        `${error.field}: ${error.message}`\n      )\n      .join(' | '),\n\n    original_data: JSON.parse(\n      JSON.stringify(originalData)\n    ),\n\n    review_created_at:\n      new Date().toISOString(),\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -400
+      ],
+      "id": "5216fdee-18dc-447c-9b47-f98c64a68005",
+      "name": "Préparer vérification humaine"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://teif-api:5000/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2544,
+        -192
+      ],
+      "id": "552f280d-7b13-488d-9a58-33f81218e70f",
+      "name": "TEIF Generator1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://mock-signature-orchestrator-api:8000/submit",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "invoice_number",
+              "value": "={{ $json.invoice_number }}"
+            },
+            {
+              "name": "xml_content",
+              "value": "={{ $json.signed_xml }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4496,
+        -208
+      ],
+      "id": "eff7d705-a1d4-4df7-94d4-ea7abeebdfd7",
+      "name": "Orchestrateur"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://validationservice:8000/validate-signed-xml",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "signed_xml",
+              "value": "={{ $json.xml_signed }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3824,
+        -208
+      ],
+      "id": "23ad9055-fc11-424a-a131-628b1c5f3e06",
+      "name": "Validation Signed XML"
+    },
+    {
+      "parameters": {
+        "jsCode": "const source =\n  $json.data?.corrected_data ??\n  $json.corrected_data ??\n  $json;\n\n// Copie indépendante compatible avec n8n\nconst corrected = JSON.parse(JSON.stringify(source));\n\nif (\n  !corrected ||\n  typeof corrected !== 'object' ||\n  Array.isArray(corrected)\n) {\n  throw new Error(\n    `corrected_data absent ou invalide. Champs reçus : ${Object.keys($json).join(', ')}`\n  );\n}\n\n// ============================================================\n// DOCUMENT / FACTURE\n// ============================================================\n\ncorrected.document =\n  corrected.document &&\n  typeof corrected.document === 'object' &&\n  !Array.isArray(corrected.document)\n    ? corrected.document\n    : {};\n\ncorrected.facture =\n  corrected.facture &&\n  typeof corrected.facture === 'object' &&\n  !Array.isArray(corrected.facture)\n    ? corrected.facture\n    : {};\n\ncorrected.facture.numero =\n  corrected.facture.numero ||\n  corrected.document.numero ||\n  '';\n\ncorrected.facture.date_facture =\n  corrected.facture.date_facture ||\n  corrected.document.date ||\n  '';\n\ncorrected.facture.date_echeance =\n  corrected.facture.date_echeance ||\n  corrected.document.date_echeance ||\n  '';\n\ncorrected.facture.devise =\n  corrected.facture.devise ||\n  corrected.document.devise ||\n  '';\n\ncorrected.facture.type_document =\n  corrected.facture.type_document ||\n  corrected.document.type_document ||\n  '';\n\ncorrected.facture.code_type_document =\n  corrected.facture.code_type_document ||\n  corrected.document.code_type_document ||\n  '';\n\n// Synchroniser vers document\ncorrected.document.numero =\n  corrected.document.numero ||\n  corrected.facture.numero ||\n  '';\n\ncorrected.document.date =\n  corrected.document.date ||\n  corrected.facture.date_facture ||\n  '';\n\ncorrected.document.date_echeance =\n  corrected.document.date_echeance ||\n  corrected.facture.date_echeance ||\n  '';\n\n// ============================================================\n// FOURNISSEUR / CLIENT\n// ============================================================\n\ncorrected.fournisseur =\n  corrected.fournisseur &&\n  typeof corrected.fournisseur === 'object' &&\n  !Array.isArray(corrected.fournisseur)\n    ? corrected.fournisseur\n    : {};\n\ncorrected.client =\n  corrected.client &&\n  typeof corrected.client === 'object' &&\n  !Array.isArray(corrected.client)\n    ? corrected.client\n    : {};\n\nif (corrected.client.nom) {\n  corrected.client.nom = String(corrected.client.nom)\n    .replace(/^à\\s+/i, '')\n    .trim();\n}\n\n// ============================================================\n// APPLIQUER LES CORRECTIONS AVEC CHEMINS\n// Exemple : lignes_facture[2].montant_ht\n// ============================================================\n\nfunction parsePath(path) {\n  return String(path)\n    .replace(/\\[(\\d+)\\]/g, '.$1')\n    .split('.')\n    .filter(Boolean);\n}\n\nfunction setValueByPath(target, path, value) {\n  const parts = parsePath(path);\n\n  if (!parts.length) {\n    return;\n  }\n\n  let current = target;\n\n  for (let index = 0; index < parts.length - 1; index++) {\n    const key = parts[index];\n    const nextKey = parts[index + 1];\n    const nextIsIndex = /^\\d+$/.test(nextKey);\n\n    if (\n      current[key] === undefined ||\n      current[key] === null ||\n      typeof current[key] !== 'object'\n    ) {\n      current[key] = nextIsIndex ? [] : {};\n    }\n\n    current = current[key];\n  }\n\n  const finalKey = parts[parts.length - 1];\n\n  current[finalKey] = value;\n}\n\nconst corrections =\n  $json.applied_corrections ??\n  $json.data?.applied_corrections ??\n  corrected.verification_humaine?.corrections_appliquees ??\n  [];\n\nfor (const correction of corrections) {\n  if (\n    correction &&\n    correction.field &&\n    correction.new_value !== undefined\n  ) {\n    setValueByPath(\n      corrected,\n      correction.field,\n      correction.new_value\n    );\n  }\n}\n\n// ============================================================\n// SUPPRIMER LES FAUSSES CLÉS CRÉÉES COMME TEXTE\n// Exemple : \"lignes_facture[2]\"\n// ============================================================\n\nfor (const key of Object.keys(corrected)) {\n  if (\n    key.includes('[') &&\n    key.includes(']')\n  ) {\n    delete corrected[key];\n  }\n}\n\n// ============================================================\n// LIGNES\n// ============================================================\n\nfunction parseJsonIfPossible(value) {\n  if (typeof value !== 'string') {\n    return value;\n  }\n\n  const trimmed = value.trim();\n\n  if (!trimmed) {\n    return [];\n  }\n\n  try {\n    return JSON.parse(trimmed);\n  } catch {\n    return value;\n  }\n}\n\nfunction toNumber(value, fallback = 0) {\n  if (\n    value === null ||\n    value === undefined ||\n    value === ''\n  ) {\n    return fallback;\n  }\n\n  if (typeof value === 'number') {\n    return Number.isFinite(value)\n      ? value\n      : fallback;\n  }\n\n  const normalized = String(value)\n    .replace(/\\s/g, '')\n    .replace(',', '.')\n    .replace(/[^0-9.-]/g, '');\n\n  const parsed = Number(normalized);\n\n  return Number.isFinite(parsed)\n    ? parsed\n    : fallback;\n}\n\nfunction normalizeLines(value) {\n  value = parseJsonIfPossible(value);\n\n  if (!value) {\n    return [];\n  }\n\n  if (\n    typeof value === 'object' &&\n    !Array.isArray(value)\n  ) {\n    value = [value];\n  }\n\n  if (!Array.isArray(value)) {\n    return [];\n  }\n\n  return value\n    .map((line, index) => {\n      line = parseJsonIfPossible(line);\n\n      if (\n        !line ||\n        typeof line !== 'object' ||\n        Array.isArray(line)\n      ) {\n        return null;\n      }\n\n      return {\n        reference:\n          line.reference ??\n          line.ref ??\n          line.code_article ??\n          '',\n\n        designation:\n          line.designation ??\n          line.description ??\n          line.libelle ??\n          '',\n\n        quantite: toNumber(\n          line.quantite ??\n          line.quantity ??\n          line.qte,\n          0\n        ),\n\n        prix_unitaire: toNumber(\n          line.prix_unitaire ??\n          line.unit_price ??\n          line.prix,\n          0\n        ),\n\n        remise: toNumber(\n          line.remise ??\n          line.discount,\n          0\n        ),\n\n        taux_tva: toNumber(\n          line.taux_tva ??\n          line.tax_rate ??\n          line.tva,\n          0\n        ),\n\n        montant_ht: toNumber(\n          line.montant_ht ??\n          line.line_total_ht ??\n          line.total_ht,\n          0\n        ),\n\n        numero_ligne:\n          line.numero_ligne ??\n          line.line_number ??\n          index + 1\n      };\n    })\n    .filter(Boolean);\n}\n\nconst sourceLines =\n  Array.isArray(corrected.lignes_facture) &&\n  corrected.lignes_facture.length\n    ? corrected.lignes_facture\n    : corrected.lignes;\n\nconst normalizedLines = normalizeLines(sourceLines);\n\ncorrected.lignes = normalizedLines;\ncorrected.lignes_facture = normalizedLines;\n\n// ============================================================\n// TOTAUX\n// ============================================================\n\ncorrected.totaux =\n  corrected.totaux &&\n  typeof corrected.totaux === 'object' &&\n  !Array.isArray(corrected.totaux)\n    ? corrected.totaux\n    : {};\n\n// ============================================================\n// NETTOYAGE DES ENVELOPPES\n// ============================================================\n\ndelete corrected.decision;\ndelete corrected.corrected_data;\ndelete corrected.applied_corrections;\ndelete corrected.ignored_corrections;\n\n// ============================================================\n// RÉSULTAT\n// ============================================================\n\nreturn [\n  {\n    json: corrected\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        -416
+      ],
+      "id": "14a8b572-a031-4495-b326-f0e26685d5d4",
+      "name": "Préparer données corrigées"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Binary": {
+      "main": [
+        [
+          {
+            "node": "Analyze",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Scanned?": {
+      "main": [
+        [
+          {
+            "node": "OCR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction": {
+      "main": [
+        [
+          {
+            "node": "Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation": {
+      "main": [
+        [
+          {
+            "node": "Vérification humaine nécessaire ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze": {
+      "main": [
+        [
+          {
+            "node": "Is Scanned?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Binary File": {
+      "main": [
+        [
+          {
+            "node": "Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature": {
+      "main": [
+        [
+          {
+            "node": "Validation Signed XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Write Signed XML File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare XML File": {
+      "main": [
+        [
+          {
+            "node": "Write Binary File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Signed XML File": {
+      "main": [
+        [
+          {
+            "node": "Orchestrateur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR": {
+      "main": [
+        [
+          {
+            "node": "ExtractionOCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExtractionOCR": {
+      "main": [
+        [
+          {
+            "node": "Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code Restore Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Restore Data": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation TEIF": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Prepare XML File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vérification humaine nécessaire ?": {
+      "main": [
+        [
+          {
+            "node": "Préparer vérification humaine",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formulaire de correction humaine": {
+      "main": [
+        [
+          {
+            "node": "Appliquer les corrections",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appliquer les corrections": {
+      "main": [
+        [
+          {
+            "node": "Facture approuvée ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facture approuvée ?": {
+      "main": [
+        [
+          {
+            "node": "Préparer données corrigées",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revalidation après correction": {
+      "main": [
+        [
+          {
+            "node": "Correction valide ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correction valide ?": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Vérification humaine nécessaire ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer vérification humaine": {
+      "main": [
+        [
+          {
+            "node": "Formulaire de correction humaine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TEIF Generator1": {
+      "main": [
+        [
+          {
+            "node": "Validation TEIF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Signed XML": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer données corrigées": {
+      "main": [
+        [
+          {
+            "node": "Revalidation après correction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0379e293-1ad9-4d0a-8fac-5fe324465dee",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
+  },
+  "id": "ht5fqGl16u-ELyRHGGYf6",
+  "tags": []
+}
