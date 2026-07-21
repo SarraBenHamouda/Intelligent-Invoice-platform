@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEIF controlingAgency="TTN" version="3.0">
+  <InvoiceHeader>
+    <MessageSenderIdentifier type="I-01">1338455HAM000</MessageSenderIdentifier>
+    <MessageRecieverIdentifier type="I-01">0620551DAM000</MessageRecieverIdentifier>
+  </InvoiceHeader>
+  <InvoiceBody>
+    <Bgm>
+      <DocumentIdentifier/>
+      <DocumentType code="I-11">Facture</DocumentType>
+    </Bgm>
+    <Dtm>
+      <DateText format="ddMMyy" functionCode="I-31"/>
+      <DateText format="ddMMyy" functionCode="I-32"/>
+    </Dtm>
+    <PartnerSection>
+      <PartnerDetails functionCode="I-63">
+        <Nad>
+          <PartnerIdentifier type="I-01">1338455HAM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">Tenor Afrique</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>Résidence ARCHE, 2046 TUNIS, 30/06/2026 FA 260091 coooo0001 RENEW</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-815">1338455H</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-816">SA</Reference>
+        </RffSection>
+        <CtaSection>
+          <Contact functionCode="I-94">
+            <ComSection>
+              <ComMeansType>I-101</ComMeansType>
+              <ComMeansValue>+216 29 96 55 38</ComMeansValue>
+            </ComSection>
+            <ComSection>
+              <ComMeansType>I-103</ComMeansType>
+              <ComMeansValue>conctact@tenorafrique.com</ComMeansValue>
+            </ComSection>
+          </Contact>
+        </CtaSection>
+      </PartnerDetails>
+      <PartnerDetails functionCode="I-64">
+        <Nad>
+          <PartnerIdentifier type="I-01">0620551DAM000</PartnerIdentifier>
+          <PartnerName nameType="Qualification">ASSISTANCE PLUS</PartnerName>
+          <PartnerAdresses lang="fr">
+            <AdressDescription>Livré 4 Imm EL FELL Bloc À, 2ème étage Bur N°3, ROUTE DE TUNIS. Km 2., Sfax</AdressDescription>
+            <Country codeList="ISO_3166-1">TN</Country>
+          </PartnerAdresses>
+        </Nad>
+        <RffSection>
+          <Reference refID="I-81">0620551DAM000</Reference>
+        </RffSection>
+        <RffSection>
+          <Reference refID="I-812">B</Reference>
+        </RffSection>
+      </PartnerDetails>
+    </PartnerSection>
+    <PytSection>
+      <PytSectionDetails>
+        <Pyt>
+          <PaymentTearmsTypeCode>I-114</PaymentTearmsTypeCode>
+          <PaymentTearmsDescription>Chèque</PaymentTearmsDescription>
+        </Pyt>
+      </PytSectionDetails>
+    </PytSection>
+    <LinSection>
+      <Lin>
+        <ItemIdentifier>1</ItemIdentifier>
+        <LinImd lang="fr">
+          <ItemCode>IOP300ABO</ItemCode>
+          <ItemDescription>Désignation RENOUVELLEMENT DIVALTO PAIE RH 300BS DU 18/06/2026 AU 17/06/2027 Paie RH 300 TENO 2046 Les Tél</ItemDescription>
+        </LinImd>
+        <LinQty>
+          <Quantity measurementUnit="UNIT">1</Quantity>
+        </LinQty>
+        <LinTax>
+          <TaxTypeName code="I-1602">TVA</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>19</TaxRate>
+          </TaxDetails>
+        </LinTax>
+        <LinMoa>
+          <MoaDetails>
+            <Moa amountTypeCode="I-183" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">1881.4500</Amount>
+            </Moa>
+          </MoaDetails>
+          <MoaDetails>
+            <Moa amountTypeCode="I-171" currencyCodeList="ISO_4217">
+              <Amount currencyIdentifier="TND">1222.940</Amount>
+            </Moa>
+          </MoaDetails>
+        </LinMoa>
+      </Lin>
+    </LinSection>
+    <InvoiceMoa>
+      <AmountDetails>
+        <Moa amountTypeCode="I-176" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1222.940</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-180" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1456.300</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-182" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">1222.940</Amount>
+        </Moa>
+      </AmountDetails>
+      <AmountDetails>
+        <Moa amountTypeCode="I-181" currencyCodeList="ISO_4217">
+          <Amount currencyIdentifier="TND">232.360</Amount>
+        </Moa>
+      </AmountDetails>
+    </InvoiceMoa>
+    <InvoiceTax>
+      <InvoiceTaxDetails>
+        <Tax>
+          <TaxTypeName code="I-1601">droit de timbre</TaxTypeName>
+          <TaxDetails>
+            <TaxRate>0</TaxRate>
+          </TaxDetails>
+        </Tax>
+        <AmountDetails>
+          <Moa amountTypeCode="I-178" currencyCodeList="ISO_4217">
+            <Amount currencyIdentifier="TND">0.000</Amount>
+          </Moa>
+        </AmountDetails>
+      </InvoiceTaxDetails>
+    </InvoiceTax>
+  </InvoiceBody>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="SIG-8cf14b22586c4679a38e56cd3c3c27d4"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI="#SignedProperties-SIG-8cf14b22586c4679a38e56cd3c3c27d4" Type="http://uri.etsi.org/01903#SignedProperties"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>78/rnOos7UMI9Dq7qjMQ77pWQXdDN8gJaAiUn7PpliQ=</ds:DigestValue></ds:Reference><ds:Reference Id="REF-DOC-SIG-8cf14b22586c4679a38e56cd3c3c27d4" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>/AjymcIklDk1qzMnvFB6PpTDxCuQDEEZfvYLk71KLr0=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>oiaLV3VJkHvOM+XbdwW6lUTS0Tt+JVK+eBSwpcO51mxfmMetbbLRI9fRwZ93O7G8MlAtkkpjmvKjxShgPuMKKl4lV7utnbGno+lqBbe/VK9KgjjT1QEVkV+BWOq5fhHPZjtXoFV63jao/eZD3YynV6FMQf/ekDRTDuDoL4daaKFzFekfog17KUkfINl0nei29ANa1L5BzPzSF39g8MZU4P+oaTcY7+Ie9rgyDsfMZxEXPm9VS6dQpHvaHEYrWmVsn6KVQaDTc0dQ8C36gP9Y7HStIMN8u+ZqXSOgBDSEhtlqyHpMRG6g5PJ36LKwAWN9IT4meajtd6XimsJeVi3fpQ==</ds:SignatureValue><ds:KeyInfo Id="KeyInfo-SIG-8cf14b22586c4679a38e56cd3c3c27d4"><ds:X509Data><ds:X509Certificate>MIIHGDCCBQCgAwIBAgIURYSXVRzMuDPCqkBNt5hTnd3cSSMwDQYJKoZIhvcNAQELBQAwZDEcMBoGA1UEAwwTVG5UcnVzdCBDQSAtIFFTaWduMTE3MDUGA1UECgwuQUdFTkNFIE5BVElPTkFMRSBERSBDRVJUSUZJQ0FUSU9OIEVMRUNUUk9OSVFVRTELMAkGA1UEBhMCVE4wHhcNMjQxMDIyMTM1MDA2WhcNMjYxMDIyMTM1MDA1WjCCAQcxKTAnBgkqhkiG9w0BCQEWGm0ubWVrbmFzc2lAZ3JvdXBldGVub3IuY29tMVAwTgYKCZImiZPyLGQBAQxAZmQxOWZhNTJlNjQ1M2I4OWI1ZGNlMGI2ZDJlYWEzNzM2YjgxY2QxMWVjMDFmYjIyZDAzOTY5MGJhYWVjMTM4NTEfMB0GA1UEAwwWTU9IQU1FRCBNQUhESSBNRUtOQVNTSTEWMBQGA1UEKgwNTU9IQU1FRCBNQUhESTERMA8GA1UEBAwITUVLTkFTU0kxFzAVBgNVBAsMDlZBVFROLTEzMzg0NTVIMRYwFAYDVQQKDA1URU5PUiBBRlJJUVVFMQswCQYDVQQGEwJUTjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOg7FPicU9q5T0LcVj3qxZiNx6XFRd4hodjKfELLUkEwvbEeOwP6vmZKkRphWMfVyR2n/Cot8PKjzIBBbaRAEVeB9pgwqEXopOKR9GQKCN6mJKW6voQrtFl8qPd1B0wdLP2lJIT8NIBsTIIQM8mc2GdXAPA0znN7ZLvrsLWadOXeGzqBz9q1N3CyYMe6P1z5qKTJWGcO2SFEuv/+IAXFD0VGfs3oPwcTwV7w05aromjhxKFN9iOl0xgAVljbmoqksscuPOkavv6Q2SBFdbHrLlRycGQYayCKiJlvBbsNBOaG3vWu1HNavgZXp5TlaLX1/XXqyZsmDo0WbO+0YTTpBbsCAwEAAaOCAhswggIXMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUSMDBtbaLEjYUNmYJqMslXbohaXgwbQYIKwYBBQUHAQEEYTBfMDoGCCsGAQUFBzAChi5odHRwOi8vd3d3LnR1bnRydXN0LnRuL3B1Yi9UblRydXN0Q0FRU2lnbjEuY3J0MCEGCCsGAQUFBzABhhVodHRwOi8vdmEudHVudHJ1c3QudG4wJQYDVR0RBB4wHIEabS5tZWtuYXNzaUBncm91cGV0ZW5vci5jb20wLAYDVR0gBCUwIzAIBgYEAI96AQIwCQYHBACL7EABAjAMBgpghhQBAgcBAgEBMDUGA1UdJQQuMCwGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNwoDDAYKKwYBBAGCNxQCAjB+BggrBgEFBQcBAwRyMHAwCAYGBACORgEBMAgGBgQAjkYBBDATBgYEAI5GAQYwCQYHBACORgEGATBFBgYEAI5GAQUwOzA5FjNodHRwczovL3d3dy50dW50cnVzdC50bi9wdWIvcGRzLXRudHJ1c3RjYXFzaWduMS5wZGYTAmVuMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHBzOi8vY3JsLnR1bnRydXN0LnRuL3RudHJ1c3RjYXFzaWduMS5jcmwwHQYDVR0OBBYEFHvZK4j7oohW2hGs4LiB2aRgi6feMA4GA1UdDwEB/wQEAwIGwDANBgkqhkiG9w0BAQsFAAOCAgEAUBxge2yUPdwNcxWksdGTqEDlh6myCA5CuqwCDKhmacwgWf/sK1RnTTXyIlHbpTAn9ucbDWB7R5TXWiiWW3zdlIzhxiB19hfrvwpC/Qa9WcC5qqQoEvv68FaUmV1lgPnNenrpS79H0mmm2hlYEeByarLLqung82Qhj1ZADj/DFXbWiMV/UVZb5TRjqg3JR39ej7W00P0J5SOANFw3Qo0NotAr/fw7JbVZgZ9FbW6UR6VSOlxqcoUPjJuzW7vLhbbywKn4BEyAwxuVXhogdGkgpNflsESAQQiSKMk+fhGh8eIfuGBc+yfaOTEd56YpxjeDrZTiPpRldhICNIjb7VktqIumTt0Hp826IZs7jMQPxzeH/j7lU9e8J+YZ6bVeSyaVTUwNAYaNImQyV211MZvSVFxxeb+FtFtd9qiQcy5nmM8UAN1ajkuFjk6SQZ/tfPMwv45dSztMVMTgus3EuWqHoza06kNudehlyOj1FEWx3eu5mVKkicKXDvLSe4Z0PFjG+RPojuaEM0LdEjjHi9eeY09iD2fL7B40OhAUX/7TUBkSEBPcq4dtiakGhmM958VdjOuS4NmuV7Fi3R5Br/0imjT0E7d6DDg9SpGiSrrnvqgm9wLWqvsgImJwUl5YbcsZ6gT0QWjZRZd950appvar1kp7KXQl76zoEhTHAy+AS3w=</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties Target="#SIG-8cf14b22586c4679a38e56cd3c3c27d4"><xades:SignedProperties Id="SignedProperties-SIG-8cf14b22586c4679a38e56cd3c3c27d4"><xades:SignedSignatureProperties><xades:SigningTime>2026-07-21T09:36:02+00:00</xades:SigningTime><xades:SigningCertificateV2><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nvEZGC8DJQyidRUwIEkZj0wrjWl4/2xuC7AC5m6/JRg=</ds:DigestValue></xades:CertDigest></xades:Cert></xades:SigningCertificateV2></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#REF-DOC-SIG-8cf14b22586c4679a38e56cd3c3c27d4"><xades:MimeType>text/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></TEIF>

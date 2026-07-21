@@ -1,5 +1,5 @@
 {
-  "name": "My workflow 3",
+  "name": "Pipeline_TTN signature",
   "nodes": [
     {
       "parameters": {
@@ -57,14 +57,16 @@
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"image_paths\": {{JSON.stringify($json[\"rendered_pages\"])}},\n  \"lang\": \"fra+eng\",\n  \"psm\": 6\n}",
-        "options": {}
+        "options": {
+          "timeout": 30000000
+        }
       },
       "id": "59aa56aa-b23f-47b3-8c88-9b12b5356f15",
       "name": "OCR",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        -320,
+        -288,
         208
       ]
     },
@@ -126,8 +128,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2016,
-        160
+        2656,
+        656
       ],
       "id": "bbbaef99-8e1f-4e26-969f-4adf42167475",
       "name": "TEIF Generator"
@@ -150,8 +152,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2896,
-        144
+        3584,
+        640
       ],
       "id": "b11a2b09-02c2-4c8e-a967-abb5171290c3",
       "name": "Signature TTN"
@@ -163,8 +165,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3568,
-        128
+        4256,
+        624
       ],
       "id": "c91d2257-1137-4af7-a612-bdbfbb7576de",
       "name": "Write a XML file"
@@ -178,8 +180,8 @@
       "name": "Register the file",
       "type": "n8n-nodes-base.writeBinaryFile",
       "position": [
-        3776,
-        128
+        4448,
+        624
       ],
       "typeVersion": 1
     },
@@ -201,7 +203,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        -112,
+        176,
         480
       ],
       "id": "a42c51bb-e126-40f7-bde4-614164209060",
@@ -236,8 +238,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        448,
-        176
+        816,
+        688
       ],
       "id": "20d9d41a-7e10-4e69-a70d-54dd60fbd274",
       "name": "If"
@@ -249,8 +251,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        704,
-        160
+        1312,
+        672
       ],
       "id": "5bdad466-e9d4-4d6a-b35f-1009548775cd",
       "name": "Code Restore Data"
@@ -275,8 +277,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        2240,
-        160
+        2928,
+        656
       ]
     },
     {
@@ -308,8 +310,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2448,
-        160
+        3136,
+        656
       ],
       "id": "2ad885fc-d64b-4f74-b4bc-8a309315fd12",
       "name": "If1"
@@ -321,8 +323,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2688,
-        144
+        3392,
+        640
       ],
       "id": "cc3216d0-4363-4c7f-a8ec-ff3b509e45c4",
       "name": "Code Restore Data1"
@@ -345,8 +347,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        3104,
-        144
+        3792,
+        640
       ],
       "id": "e9253bea-9f0b-4763-8d31-a8e8291f8ccf",
       "name": "Validation Signed XML"
@@ -380,8 +382,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        3312,
-        144
+        4000,
+        640
       ],
       "id": "b91da412-7d77-460a-8b03-be7979f6c8ce",
       "name": "If2"
@@ -428,8 +430,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        -112,
-        208
+        80,
+        -128
       ],
       "id": "0729b1fa-0f6f-4067-8b85-53be7295e309",
       "name": "ExtractionOCR"
@@ -456,8 +458,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        4000,
-        128
+        4640,
+        624
       ],
       "id": "49fc00d1-08da-413b-bb60-d3f93c9a4144",
       "name": "TTN API"
@@ -490,8 +492,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        144,
-        480
+        528,
+        304
       ],
       "id": "d822b118-d5e0-4a3a-bc12-8c4c4c73f969",
       "name": "Vérification humaine nécessaire ?"
@@ -499,32 +501,15 @@
     {
       "parameters": {
         "resume": "form",
-        "formTitle": "Vérification humaine de la facture",
-        "formDescription": "={{\n`Facture : ${$json.invoice_number}\n\n${($json.validation_errors || [])\n  .map((error, index) => {\n    const currentValue = $json.current_error_values?.[error.field] ?? '';\n\n    return `${index + 1}. Champ : ${error.field}\nErreur : ${error.message}\nValeur actuelle : ${currentValue}`;\n  })\n  .join('\\n\\n')}\n\nSaisissez ci-dessous uniquement les corrections nécessaires`\n}}",
+        "formTitle": "={{ 'Correction de la facture ' + ($json.invoice_number || '') }}",
+        "formDescription": "={{\n  'Les anomalies suivantes ont été détectées :\\n\\n'\n  + ($json.form_description || '')\n  + '\\n\\n'\n  + 'Modifiez les valeurs dans la zone JSON ci-dessous, '\n  + 'puis validez le formulaire.'\n}}",
         "formFields": {
           "values": [
             {
-              "fieldLabel": "decision",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "APPROVED"
-                  },
-                  {
-                    "option": "REJECTED"
-                  }
-                ]
-              },
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "reviewed_by"
-            },
-            {
-              "fieldLabel": "corrections",
+              "fieldLabel": "corrections_json",
               "fieldType": "textarea",
-              "requiredField": true
+              "placeholder": "=Modifiez les valeurs de correction",
+              "defaultValue": "={{ $json.corrections_json }}"
             }
           ]
         },
@@ -533,26 +518,12 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        672,
-        464
+        1216,
+        288
       ],
       "id": "50b37167-1175-43a0-8ccb-949f465a4784",
       "name": "Formulaire de correction humaine",
       "webhookId": "47d7dc58-4193-48a6-ad4b-92f40ed9747f"
-    },
-    {
-      "parameters": {
-        "mode": "runOnceForEachItem",
-        "jsCode": "const prepared =\n  $('Préparer vérification humaine').first().json;\n\nconst submitted = $json.body ?? $json;\n\nconst originalData = prepared.original_data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'original_data est absent dans Préparer vérification humaine.'\n  );\n}\n\nconst corrected = JSON.parse(\n  JSON.stringify(originalData)\n);\n\nconst decision =\n  String(submitted.decision || 'REJECTED')\n    .trim()\n    .toUpperCase();\n\nconst correctionsText =\n  String(submitted.corrections || '').trim();\n\nconst allowedFields = Array.isArray(prepared.error_fields)\n  ? prepared.error_fields\n  : [];\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nfunction setNestedValue(object, path, value) {\n  const keys = String(path).split('.');\n  let cursor = object;\n\n  for (let index = 0; index < keys.length - 1; index++) {\n    const key = keys[index];\n\n    if (\n      cursor[key] === undefined ||\n      cursor[key] === null ||\n      typeof cursor[key] !== 'object'\n    ) {\n      cursor[key] = {};\n    }\n\n    cursor = cursor[key];\n  }\n\n  cursor[keys[keys.length - 1]] = value;\n}\n\nfunction resolveField(inputField) {\n  const normalizedInput = String(inputField).trim();\n\n  // Exemple : totaux.montant_tva\n  if (allowedFields.includes(normalizedInput)) {\n    return normalizedInput;\n  }\n\n  // Accepte aussi montant_tva\n  const matches = allowedFields.filter(\n    field =>\n      String(field).split('.').pop() === normalizedInput\n  );\n\n  if (matches.length === 1) {\n    return matches[0];\n  }\n\n  return null;\n}\n\nfunction parseValue(rawValue, originalValue) {\n  const value = String(rawValue ?? '').trim();\n\n  if (typeof originalValue === 'number') {\n    const parsed = Number(\n      value\n        .replace(/\\s/g, '')\n        .replace(',', '.')\n        .replace(/[^0-9.-]/g, '')\n    );\n\n    return Number.isFinite(parsed)\n      ? parsed\n      : originalValue;\n  }\n\n  return value;\n}\n\nconst appliedCorrections = [];\nconst ignoredCorrections = [];\n\nif (decision === 'APPROVED') {\n  const lines = correctionsText\n    .split(/\\r?\\n/)\n    .map(line => line.trim())\n    .filter(Boolean);\n\n  for (const line of lines) {\n    const separatorIndex = line.indexOf('=');\n\n    if (separatorIndex === -1) {\n      ignoredCorrections.push({\n        line,\n        reason: 'Format invalide. Utiliser champ=valeur',\n      });\n\n      continue;\n    }\n\n    const enteredField = line\n      .slice(0, separatorIndex)\n      .trim();\n\n    const rawValue = line\n      .slice(separatorIndex + 1)\n      .trim();\n\n    const resolvedField = resolveField(enteredField);\n\n    if (!resolvedField) {\n      ignoredCorrections.push({\n        field: enteredField,\n        reason:\n          'Ce champ ne figure pas dans les erreurs de validation',\n      });\n\n      continue;\n    }\n\n    const previousValue = getNestedValue(\n      originalData,\n      resolvedField\n    );\n\n    const newValue = parseValue(\n      rawValue,\n      previousValue\n    );\n\n    setNestedValue(\n      corrected,\n      resolvedField,\n      newValue\n    );\n\n    appliedCorrections.push({\n      field: resolvedField,\n      previous_value: previousValue,\n      new_value: newValue,\n    });\n  }\n}\n\ncorrected.verification_humaine = {\n  decision,\n  reviewed_by: submitted.reviewed_by || '',\n  commentaire: submitted.commentaire || '',\n  reviewed_at: new Date().toISOString(),\n  erreurs_initiales: prepared.validation_errors || [],\n  corrections_appliquees: appliedCorrections,\n  corrections_ignorees: ignoredCorrections,\n};\n\nreturn {\n  json: {\n    decision,\n    corrected_data: corrected,\n    applied_corrections: appliedCorrections,\n    ignored_corrections: ignoredCorrections,\n  },\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        880,
-        464
-      ],
-      "id": "092c1e79-da3c-4a5e-b8f4-0c3b30965c41",
-      "name": "Appliquer les corrections"
     },
     {
       "parameters": {
@@ -566,60 +537,8 @@
           "conditions": [
             {
               "id": "e85bd173-1f4e-49d3-929f-1135f6c4a69c",
-              "leftValue": "={{ $json.decision }}",
-              "rightValue": "APPROVED",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        1072,
-        464
-      ],
-      "id": "392e7610-158c-4c1c-aa42-d471b53fc717",
-      "name": "Facture approuvée ?"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://validationservice:8000/validate",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json.corrected_data }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        1664,
-        448
-      ],
-      "id": "c0e70f87-bb23-4b4d-b578-cc41826cf3b1",
-      "name": "Revalidation après correction"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "5094bd86-4851-43c7-b338-bcf3e4df8fbe",
-              "leftValue": "={{\n  $json.valid === true\n  &&\n  $json.is_valid === true\n  &&\n  ($json.error_count || 0) === 0\n}}",
-              "rightValue": "",
+              "leftValue": "={{ $json.fully_valid }}",
+              "rightValue": "TRUE",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
@@ -634,24 +553,88 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1856,
-        448
+        1888,
+        288
       ],
-      "id": "25539f5d-ac07-47d8-8aa3-e246baaeedf6",
-      "name": "Correction valide ?"
+      "id": "392e7610-158c-4c1c-aa42-d471b53fc717",
+      "name": "Facture approuvée ?"
     },
     {
       "parameters": {
-        "jsCode": "// Remplacez \"Validation\" par le nom exact de votre nœud de validation\nconst validationResult = $('Validation1').first().json;\n\nconst errors = Array.isArray(validationResult.errors)\n  ? validationResult.errors\n  : [];\n\nconst warnings = Array.isArray(validationResult.warnings)\n  ? validationResult.warnings\n  : [];\n\nconst originalData = validationResult.data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'Le nœud Validation ne contient pas de propriété data valide.'\n  );\n}\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nconst errorFields = errors\n  .map(error => error.field)\n  .filter(Boolean);\n\nconst currentErrorValues = {};\n\nfor (const field of errorFields) {\n  currentErrorValues[field] = getNestedValue(\n    originalData,\n    field\n  );\n}\n\nreturn {\n  json: {\n    review_status: 'PENDING_REVIEW',\n\n    invoice_number:\n      originalData.facture?.numero || '',\n\n    currency:\n      originalData.document?.devise || '',\n\n    validation_stage:\n      validationResult.stage || 'json_extraction',\n\n    validation_errors: errors,\n\n    validation_warnings: warnings,\n\n    error_fields: errorFields,\n\n    current_error_values: currentErrorValues,\n\n    review_reason: errors\n      .map(error =>\n        `${error.field}: ${error.message}`\n      )\n      .join(' | '),\n\n    original_data: JSON.parse(\n      JSON.stringify(originalData)\n    ),\n\n    review_created_at:\n      new Date().toISOString(),\n  },\n};"
+        "method": "POST",
+        "url": "http://validationservice:8000/validate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1648,
+        288
+      ],
+      "id": "c0e70f87-bb23-4b4d-b578-cc41826cf3b1",
+      "name": "Revalidation après correction"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Remplacez \"Validation\" par le nom exact de votre nœud de validation\nconst input = $('Validation1').first().json;\n\nconst allErrors = Array.isArray(input.errors)\n  ? input.errors\n  : [];\n\nconst warnings = Array.isArray(input.warnings)\n  ? input.warnings\n  : [];\n\n// On conserve seulement les vrais champs modifiables.\n// Les champs controle_validation.* sont calculés automatiquement.\nconst errors = allErrors.filter(error => {\n  const field = String(error.field || '');\n\n  return (\n    field &&\n    !field.startsWith('controle_validation.')\n  );\n});\n\nconst originalData = input.data;\n\nif (\n  !originalData ||\n  typeof originalData !== 'object' ||\n  Array.isArray(originalData)\n) {\n  throw new Error(\n    'Le nœud Validation ne contient pas un objet data valide.'\n  );\n}\n\nfunction getNestedValue(object, path) {\n  return String(path)\n    .split('.')\n    .reduce(\n      (current, key) => current?.[key],\n      object\n    );\n}\n\nconst errorFields = errors\n  .map(error => error.field)\n  .filter(Boolean);\n\nconst currentErrorValues = {};\n\nfor (const field of errorFields) {\n  currentErrorValues[field] = getNestedValue(\n    originalData,\n    field\n  );\n}\n\nreturn {\n  json: {\n    review_status: 'PENDING_REVIEW',\n\n    invoice_number:\n      originalData.facture?.numero ||\n      originalData.document?.numero ||\n      '',\n\n    currency:\n      originalData.document?.devise || '',\n\n    validation_stage:\n      input.stage || 'json_extraction',\n\n    validation_errors: errors,\n\n    validation_warnings: warnings,\n\n    error_fields: errorFields,\n\n    current_error_values: currentErrorValues,\n\n    review_reason: errors\n      .map(error =>\n        `${error.field}: ${error.message}`\n      )\n      .join(' | '),\n\n    original_data: JSON.parse(\n      JSON.stringify(originalData)\n    ),\n\n    review_created_at:\n      new Date().toISOString(),\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
-        464
+        752,
+        288
       ],
       "id": "b455af06-98fe-457d-a3f6-9718c6815426",
       "name": "Préparer vérification humaine"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// ============================================================\n// PRÉPARER UN FORMULAIRE UNIVERSEL DE CORRECTION\n// Mode : Run Once for Each Item\n// ============================================================\n\nfunction deepClone(value) {\n  if (value === undefined) {\n    return undefined;\n  }\n\n  return JSON.parse(JSON.stringify(value));\n}\n\nfunction getByPath(target, path) {\n  if (!target || !path) {\n    return undefined;\n  }\n\n  const parts = String(path)\n    .replace(/\\[(\\d+)\\]/g, '.$1')\n    .split('.')\n    .filter(Boolean);\n\n  let current = target;\n\n  for (const part of parts) {\n    if (\n      current === null ||\n      current === undefined\n    ) {\n      return undefined;\n    }\n\n    current = current[part];\n  }\n\n  return current;\n}\n\nfunction inferType(field, value) {\n  if (typeof value === 'number') {\n    return 'number';\n  }\n\n  if (typeof value === 'boolean') {\n    return 'boolean';\n  }\n\n  const normalizedField =\n    String(field || '').toLowerCase();\n\n  if (normalizedField.includes('date')) {\n    return 'date';\n  }\n\n  if (\n    normalizedField.includes('quantite') ||\n    normalizedField.includes('prix') ||\n    normalizedField.includes('remise') ||\n    normalizedField.includes('tva') ||\n    normalizedField.includes('montant') ||\n    normalizedField.includes('total') ||\n    normalizedField.includes('frais') ||\n    normalizedField.includes('tax') ||\n    normalizedField.includes('timbre')\n  ) {\n    return 'number';\n  }\n\n  return 'text';\n}\n\nfunction humanLabel(field) {\n  const labels = {\n    'document.type_document':\n      'Type de document',\n\n    'document.code_type_document':\n      'Code du type de document',\n\n    'document.numero':\n      'Numéro de facture',\n\n    'document.date':\n      'Date de facture',\n\n    'document.date_echeance':\n      'Date d’échéance',\n\n    'document.devise':\n      'Devise',\n\n    'fournisseur.nom':\n      'Nom du fournisseur',\n\n    'fournisseur.identifiant':\n      'Identifiant du fournisseur',\n\n    'fournisseur.type_identifiant':\n      'Type d’identifiant du fournisseur',\n\n    'fournisseur.pays':\n      'Pays du fournisseur',\n\n    'client.nom':\n      'Nom du client',\n\n    'client.identifiant':\n      'Identifiant du client',\n\n    'client.code_client':\n      'Code client',\n\n    'client.type_identifiant':\n      'Type d’identifiant du client',\n\n    'client.pays':\n      'Pays du client',\n\n    'totaux.total_ht':\n      'Total HT',\n\n    'totaux.base_tva':\n      'Base TVA',\n\n    'totaux.montant_tva':\n      'Montant TVA',\n\n    'totaux.total_ttc':\n      'Total TTC',\n\n    'totaux.net_a_payer':\n      'Net à payer',\n\n    'totaux.tax_rate':\n      'Taux de TVA',\n\n    'totaux.timbre_fiscal':\n      'Timbre fiscal',\n\n    'totaux.frais_port_non_soumis':\n      'Frais de port non soumis',\n\n    'totaux.frais_port_soumis':\n      'Frais de port soumis',\n\n    'totaux.taxes_cpl':\n      'Taxes complémentaires',\n  };\n\n  if (labels[field]) {\n    return labels[field];\n  }\n\n  const lineMatch = String(field).match(\n    /^lignes\\[(\\d+)\\]\\.(.+)$/\n  );\n\n  if (lineMatch) {\n    const lineNumber =\n      Number(lineMatch[1]) + 1;\n\n    const property =\n      lineMatch[2];\n\n    const lineLabels = {\n      reference: 'Référence',\n      designation: 'Désignation',\n      quantite: 'Quantité',\n      prix_unitaire: 'Prix unitaire',\n      remise: 'Remise',\n      taux_tva: 'Taux de TVA',\n      montant_ht: 'Montant HT',\n    };\n\n    return (\n      (lineLabels[property] || property) +\n      ' de l’article ' +\n      lineNumber\n    );\n  }\n\n  return String(field);\n}\n\nconst state = deepClone($json);\n\nconst workingData = deepClone(\n  state.working_data ||\n  state.original_data ||\n  state.data ||\n  {}\n);\n\nconst errors = Array.isArray(\n  state.validation_errors\n)\n  ? state.validation_errors\n  : Array.isArray(state.errors)\n    ? state.errors\n    : [];\n\nconst warnings = Array.isArray(\n  state.validation_warnings\n)\n  ? state.validation_warnings\n  : Array.isArray(state.warnings)\n    ? state.warnings\n    : [];\n\nconst issues = [\n  ...errors.map(issue => ({\n    ...issue,\n    severity: 'ERROR',\n  })),\n\n  ...warnings.map(issue => ({\n    ...issue,\n    severity: 'WARNING',\n  })),\n];\n\nconst correctionSchema = [];\nconst correctionValues = {};\nconst descriptionLines = [];\n\nfor (\n  let index = 0;\n  index < issues.length;\n  index++\n) {\n  const issue = issues[index];\n\n  if (!issue || !issue.field) {\n    continue;\n  }\n\n  const field = String(issue.field);\n\n  const currentValue =\n    issue.actual !== undefined\n      ? issue.actual\n      : getByPath(\n          workingData,\n          field\n        );\n\n  let suggestedValue;\n\n  if (\n    issue.suggested_value !== undefined &&\n    issue.suggested_value !== null\n  ) {\n    suggestedValue =\n      issue.suggested_value;\n  } else if (\n    issue.expected !== undefined &&\n    issue.expected !== null\n  ) {\n    suggestedValue =\n      issue.expected;\n  } else {\n    suggestedValue =\n      currentValue ?? '';\n  }\n\n  const label =\n    issue.label ||\n    humanLabel(field);\n\n  const valueType =\n    issue.value_type ||\n    inferType(field, currentValue);\n\n  correctionSchema.push({\n    index,\n    severity:\n      issue.severity || 'WARNING',\n\n    code:\n      issue.code || 'VALIDATION_ISSUE',\n\n    field,\n\n    label,\n\n    message:\n      issue.message ||\n      'Champ à vérifier',\n\n    current_value:\n      currentValue ?? '',\n\n    suggested_value:\n      suggestedValue ?? '',\n\n    value_type:\n      valueType,\n\n    required:\n      issue.required === true ||\n      issue.severity === 'ERROR',\n  });\n\n  /*\n   * Le JSON affiché dans le formulaire contient :\n   *\n   * {\n   *   \"totaux.base_tva\": 338.24,\n   *   \"totaux.montant_tva\": 67.65\n   * }\n   */\n  correctionValues[field] =\n    suggestedValue ?? '';\n\n  descriptionLines.push(\n    `${index + 1}. ${label}\\n` +\n    `Problème : ${issue.message || ''}\\n` +\n    `Valeur actuelle : ${JSON.stringify(currentValue ?? '')}\\n` +\n    `Valeur proposée : ${JSON.stringify(suggestedValue ?? '')}`\n  );\n}\n\nconst correctionsJson = JSON.stringify(\n  correctionValues,\n  null,\n  2\n);\n\nreturn {\n  json: {\n    ...state,\n\n    working_data:\n      workingData,\n\n    correction_schema:\n      correctionSchema,\n\n    correction_count:\n      correctionSchema.length,\n\n    corrections_json:\n      correctionsJson,\n\n    form_description:\n      descriptionLines.length > 0\n        ? descriptionLines.join(\n            '\\n\\n'\n          )\n        : 'Aucune correction nécessaire.',\n\n    has_corrections:\n      correctionSchema.length > 0,\n\n    universal_form_prepared_at:\n      new Date().toISOString(),\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        288
+      ],
+      "id": "750d70b7-94af-4945-9d40-2b60317659e2",
+      "name": "Préparer formulaire universel"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// ============================================================\n// APPLIQUER LES CORRECTIONS UNIVERSELLES\n// Mode : Run Once for Each Item\n// ============================================================\n\nfunction deepClone(value) {\n  if (value === undefined) {\n    return undefined;\n  }\n\n  return JSON.parse(JSON.stringify(value));\n}\n\nfunction setByPath(target, path, value) {\n  const parts = String(path)\n    .replace(/\\[(\\d+)\\]/g, '.$1')\n    .split('.')\n    .filter(Boolean);\n\n  if (parts.length === 0) {\n    throw new Error(\n      'Chemin de correction vide.'\n    );\n  }\n\n  let current = target;\n\n  for (\n    let index = 0;\n    index < parts.length - 1;\n    index++\n  ) {\n    const part = parts[index];\n    const nextPart = parts[index + 1];\n\n    const nextIsArrayIndex =\n      /^\\d+$/.test(nextPart);\n\n    if (\n      current[part] === undefined ||\n      current[part] === null\n    ) {\n      current[part] =\n        nextIsArrayIndex\n          ? []\n          : {};\n    }\n\n    current = current[part];\n  }\n\n  const finalPart =\n    parts[parts.length - 1];\n\n  current[finalPart] = value;\n}\n\nfunction getByPath(target, path) {\n  const parts = String(path)\n    .replace(/\\[(\\d+)\\]/g, '.$1')\n    .split('.')\n    .filter(Boolean);\n\n  let current = target;\n\n  for (const part of parts) {\n    if (\n      current === undefined ||\n      current === null\n    ) {\n      return undefined;\n    }\n\n    current = current[part];\n  }\n\n  return current;\n}\n\nfunction convertValue(value, valueType) {\n  if (\n    value === undefined ||\n    value === null\n  ) {\n    return value;\n  }\n\n  if (valueType === 'number') {\n    const parsed = Number(\n      String(value)\n        .trim()\n        .replace(/\\s/g, '')\n        .replace(',', '.')\n    );\n\n    if (!Number.isFinite(parsed)) {\n      throw new Error(\n        `\"${value}\" n'est pas un nombre valide.`\n      );\n    }\n\n    return parsed;\n  }\n\n  if (valueType === 'boolean') {\n    return [\n      'true',\n      '1',\n      'oui',\n      'yes',\n      'vrai',\n    ].includes(\n      String(value)\n        .trim()\n        .toLowerCase()\n    );\n  }\n\n  return String(value).trim();\n}\n\nconst formResult =\n  deepClone($json);\n\nconst previousState =\n  deepClone(\n    $('Préparer formulaire universel')\n      .item\n      .json\n  );\n\nconst workingData =\n  deepClone(\n    previousState.working_data ||\n    previousState.original_data ||\n    previousState.data ||\n    {}\n  );\n\nconst correctionSchema =\n  Array.isArray(\n    previousState.correction_schema\n  )\n    ? previousState.correction_schema\n    : [];\n\nconst rawCorrections =\n  formResult.corrections_json;\n\nif (\n  rawCorrections === undefined ||\n  rawCorrections === null ||\n  String(rawCorrections).trim() === ''\n) {\n  throw new Error(\n    'Le champ corrections_json est vide.'\n  );\n}\n\nlet submittedCorrections;\n\ntry {\n  submittedCorrections =\n    typeof rawCorrections === 'object'\n      ? rawCorrections\n      : JSON.parse(\n          String(rawCorrections)\n        );\n} catch (error) {\n  throw new Error(\n    'Le JSON des corrections est invalide. ' +\n    'Vérifiez les guillemets, les virgules et les accolades.'\n  );\n}\n\nif (\n  !submittedCorrections ||\n  Array.isArray(submittedCorrections) ||\n  typeof submittedCorrections !== 'object'\n) {\n  throw new Error(\n    'corrections_json doit contenir un objet JSON.'\n  );\n}\n\nconst schemaByField = {};\n\nfor (const definition of correctionSchema) {\n  if (\n    definition &&\n    definition.field\n  ) {\n    schemaByField[\n      definition.field\n    ] = definition;\n  }\n}\n\nconst correctionHistory =\n  Array.isArray(\n    previousState.correction_history\n  )\n    ? deepClone(\n        previousState.correction_history\n      )\n    : [];\n\nconst appliedCorrections = [];\n\nfor (\n  const [field, submittedValue]\n  of Object.entries(\n    submittedCorrections\n  )\n) {\n  const definition =\n    schemaByField[field];\n\n  if (!definition) {\n    throw new Error(\n      `Le champ \"${field}\" ne fait pas partie des corrections autorisées.`\n    );\n  }\n\n  if (\n    definition.required === true &&\n    (\n      submittedValue === undefined ||\n      submittedValue === null ||\n      String(submittedValue).trim() === ''\n    )\n  ) {\n    throw new Error(\n      `Une valeur est obligatoire pour \"${definition.label}\".`\n    );\n  }\n\n  const previousValue =\n    getByPath(\n      workingData,\n      field\n    );\n\n  const convertedValue =\n    convertValue(\n      submittedValue,\n      definition.value_type ||\n      'text'\n    );\n\n  setByPath(\n    workingData,\n    field,\n    convertedValue\n  );\n\n  const historyEntry = {\n    code:\n      definition.code,\n\n    field,\n\n    label:\n      definition.label,\n\n    severity:\n      definition.severity,\n\n    previous_value:\n      previousValue,\n\n    new_value:\n      convertedValue,\n\n    value_type:\n      definition.value_type,\n\n    corrected_at:\n      new Date().toISOString(),\n  };\n\n  appliedCorrections.push(\n    historyEntry\n  );\n\n  correctionHistory.push(\n    historyEntry\n  );\n}\n\n// Vérifier que toutes les erreurs obligatoires\n// sont présentes dans le JSON envoyé.\nconst missingRequiredFields =\n  correctionSchema.filter(\n    definition =>\n      definition.required === true &&\n      !Object.prototype.hasOwnProperty.call(\n        submittedCorrections,\n        definition.field\n      )\n  );\n\nif (missingRequiredFields.length > 0) {\n  throw new Error(\n    'Corrections obligatoires absentes : ' +\n    missingRequiredFields\n      .map(item => item.label)\n      .join(', ')\n  );\n}\n\nreturn {\n  json: {\n    ...previousState,\n\n    invoice_number:\n      workingData.document?.numero ||\n      previousState.invoice_number ||\n      '',\n\n    working_data:\n      deepClone(workingData),\n\n    original_data:\n      deepClone(workingData),\n\n    correction_history:\n      correctionHistory,\n\n    applied_corrections:\n      appliedCorrections,\n\n    applied_correction_count:\n      appliedCorrections.length,\n\n    review_status:\n      'CORRECTED_PENDING_REVALIDATION',\n\n    human_review_completed:\n      true,\n\n    needs_revalidation:\n      true,\n\n    human_reviewed_at:\n      new Date().toISOString(),\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        288
+      ],
+      "id": "092c1e79-da3c-4a5e-b8f4-0c3b30965c41",
+      "name": "Appliquer corrections universelles"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://extractionserviceocr:8000/extract",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -80,
+        208
+      ],
+      "id": "4af151ec-45bb-48d3-86ed-bef3b7761ede",
+      "name": "OCR_EXTRACTION"
     }
   ],
   "pinData": {},
@@ -700,7 +683,7 @@
       "main": [
         [
           {
-            "node": "ExtractionOCR",
+            "node": "OCR_EXTRACTION",
             "type": "main",
             "index": 0
           }
@@ -883,18 +866,7 @@
       "main": [
         [
           {
-            "node": "Appliquer les corrections",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Appliquer les corrections": {
-      "main": [
-        [
-          {
-            "node": "Facture approuvée ?",
+            "node": "Appliquer corrections universelles",
             "type": "main",
             "index": 0
           }
@@ -902,28 +874,6 @@
       ]
     },
     "Facture approuvée ?": {
-      "main": [
-        [
-          {
-            "node": "Revalidation après correction",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Revalidation après correction": {
-      "main": [
-        [
-          {
-            "node": "Correction valide ?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Correction valide ?": {
       "main": [
         [
           {
@@ -941,11 +891,22 @@
         ]
       ]
     },
+    "Revalidation après correction": {
+      "main": [
+        [
+          {
+            "node": "Facture approuvée ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Préparer vérification humaine": {
       "main": [
         [
           {
-            "node": "Formulaire de correction humaine",
+            "node": "Préparer formulaire universel",
             "type": "main",
             "index": 0
           }
@@ -956,7 +917,40 @@
       "main": [
         [
           {
-            "node": "Vérification humaine nécessaire ?",
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer formulaire universel": {
+      "main": [
+        [
+          {
+            "node": "Formulaire de correction humaine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appliquer corrections universelles": {
+      "main": [
+        [
+          {
+            "node": "Revalidation après correction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR_EXTRACTION": {
+      "main": [
+        [
+          {
+            "node": "Validation1",
             "type": "main",
             "index": 0
           }
@@ -970,7 +964,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "41a17f65-c11f-48ea-a493-98bbba35d080",
+  "versionId": "63e9883d-b15e-4506-873b-09e47923c941",
   "meta": {
     "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
   },
