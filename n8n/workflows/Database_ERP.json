@@ -86,27 +86,6 @@
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "{{ $json.sql }}"
-      },
-      "type": "n8n-nodes-base.microsoftSql",
-      "typeVersion": 1.1,
-      "position": [
-        -336,
-        -160
-      ],
-      "id": "bbcf98ce-513f-44fa-b3e6-605994cb2523",
-      "name": "Microsoft SQL",
-      "alwaysOutputData": true,
-      "credentials": {
-        "microsoftSql": {
-          "id": "LxGNeUdh6pVTGKkD",
-          "name": "Microsoft SQL account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "jsCode": "const mappings = $input.all();\n\nconst env = $('Read env').first().json;\n\nconst mainTable = env.main_table;\nconst invoiceField = env.invoice_field;\nconst customerField = env.customer_field;\n\nconst selectFields = [];\nconst joins = new Map();\n\nfor (const item of mappings) {\n\n  const row = item.json;\n\n  if (row.extract_sql !== 'YES') {\n    continue;\n  }\n\n  if (\n    !row.table_name ||\n    !row.field_name ||\n    !row.functional_name\n  ) {\n    continue;\n  }\n\n  selectFields.push(\n    `${row.table_name}.${row.field_name} AS ${row.functional_name}`\n  );\n\n  if (\n    row.join_table &&\n    row.join_condition &&\n    row.join_table !== ''\n  ) {\n    joins.set(\n      row.join_table,\n      row.join_condition\n    );\n  }\n}\n\nconst uniqueFields =\n  [...new Set(selectFields)];\n\nlet joinSql = '';\n\nfor (const [table, condition] of joins.entries()) {\n\n  if (table !== mainTable) {\n\n    joinSql += `\nLEFT JOIN ${table}\nON ${condition}\n`;\n  }\n}\n\nconst invoiceId =\n$('Select the bill').first().json.invoice_id;\n\nconst clientCode =\n$('Select the bill').first().json.client_code;\n\nconst sql = `\nSELECT\n${uniqueFields.join(',\\n')}\n\nFROM ${mainTable}\n\n${joinSql}\n\nWHERE\n${mainTable}.${invoiceField}='${invoiceId}'\nAND\n${mainTable}.${customerField}='${clientCode}'\n`;\n\nreturn [{\n  json: {\n    sql,\n    field_count: uniqueFields.length\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
@@ -125,7 +104,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        304,
+        512,
         32
       ],
       "id": "49cdd31b-e6e5-4b6d-8197-75bf663bf446",
@@ -149,7 +128,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -112,
+        96,
         32
       ],
       "id": "39e7fa2e-e7dc-4d03-8410-ff0ef150b672",
@@ -167,7 +146,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        544,
+        960,
         32
       ],
       "id": "90e9863b-9e12-4cba-b489-82a5876f2707",
@@ -191,7 +170,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1472,
+        1888,
         16
       ],
       "id": "ba41634c-739f-49da-83e9-90e000b32647",
@@ -204,7 +183,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2128,
+        2544,
         0
       ],
       "id": "efe60bfc-5c12-40f9-8b7b-0c0e620f332e",
@@ -219,7 +198,7 @@
       "name": "Register the file",
       "type": "n8n-nodes-base.writeBinaryFile",
       "position": [
-        2320,
+        2736,
         0
       ],
       "typeVersion": 1
@@ -244,7 +223,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        816,
+        1232,
         32
       ]
     },
@@ -277,7 +256,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1024,
+        1440,
         32
       ],
       "id": "ef531cd4-edbb-402e-ada2-0d32959dbc91",
@@ -290,7 +269,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1280,
+        1696,
         16
       ],
       "id": "128cda3b-cf80-4c2a-9520-e889a5c9ef40",
@@ -314,7 +293,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1680,
+        2096,
         16
       ],
       "id": "df413d68-83cf-436a-a1e6-57b59ab9f6b9",
@@ -349,7 +328,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1888,
+        2304,
         16
       ],
       "id": "7b8af451-6e21-482c-aaf9-9e2dfc212458",
@@ -377,11 +356,57 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2512,
+        2928,
         0
       ],
       "id": "9488a8bf-dbc1-47aa-95a2-e40c9b05b083",
       "name": "TTN API"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.sql }}"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        -160
+      ],
+      "id": "3a684b84-2bf9-407b-8dd9-ae0009f8ec97",
+      "name": "Microsoft SQL",
+      "credentials": {
+        "microsoftSql": {
+          "id": "LxGNeUdh6pVTGKkD",
+          "name": "Microsoft SQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawSql = String($json.sql ?? '').trim();\n\nif (!rawSql) {\n  throw new Error('The generated SQL query is empty.');\n}\n\nif (!/^\\s*SELECT\\b/i.test(rawSql)) {\n  throw new Error(\n    `Only SELECT queries are allowed. Query starts with: ${rawSql.slice(0, 100)}`\n  );\n}\n\nif (/\\bRETURN\\b/i.test(rawSql)) {\n  throw new Error('The generated SQL contains an invalid RETURN statement.');\n}\n\nif (!/\\bWHERE\\b/i.test(rawSql)) {\n  throw new Error(\n    'Unsafe generated SQL: the WHERE clause is missing. Execution stopped before Microsoft SQL.'\n  );\n}\n\nif (!/\\bENT\\.PINO\\b/i.test(rawSql)) {\n  throw new Error(\n    'Unsafe generated SQL: the invoice filter ENT.PINO is missing.'\n  );\n}\n\nif (!/\\bENT\\.TIERS\\b/i.test(rawSql)) {\n  throw new Error(\n    'Unsafe generated SQL: the customer filter ENT.TIERS is missing.'\n  );\n}\n\nlet safeSql = rawSql;\n\n// Add TOP (100) immediately after SELECT during testing.\nif (!/^\\s*SELECT\\s+TOP\\s*(?:\\(\\s*\\d+\\s*\\)|\\d+)/i.test(safeSql)) {\n  safeSql = safeSql.replace(\n    /^\\s*SELECT\\s+/i,\n    'SELECT TOP (100) '\n  );\n}\n\nreturn [\n  {\n    json: {\n      ...$json,\n      sql_original: rawSql,\n      sql: safeSql,\n      protection: {\n        top_limit: 100,\n        has_where: true,\n        has_invoice_filter: true,\n        has_customer_filter: true\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        -160
+      ],
+      "id": "01c36b42-d3ab-4b92-a4ec-e51201f137e7",
+      "name": "Protect Generated SQL"
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $json;\n\n/**\n * Nettoie les espaces ajoutés par les colonnes CHAR/NCHAR\n * de Microsoft SQL Server.\n */\nfunction clean(value) {\n  if (value === null || value === undefined) {\n    return \"\";\n  }\n\n  return String(value).trim();\n}\n\n/**\n * Convertit une valeur vers un nombre valide.\n */\nfunction number(value, defaultValue = 0) {\n  const parsed = Number(value);\n\n  return Number.isFinite(parsed)\n    ? parsed\n    : defaultValue;\n}\n\n/**\n * Arrondit les montants à 3 décimales.\n */\nfunction money(value) {\n  return Number(number(value).toFixed(3));\n}\n\n/**\n * Convertit :\n * 2026-06-29T00:00:00.000Z\n *\n * vers :\n * 29/06/2026\n */\nfunction formatDate(value) {\n  if (!value) {\n    return \"\";\n  }\n\n  const text = String(value).trim();\n\n  const isoMatch = text.match(/^(\\d{4})-(\\d{2})-(\\d{2})/);\n\n  if (isoMatch) {\n    const [, year, month, day] = isoMatch;\n    return `${day}/${month}/${year}`;\n  }\n\n  const frenchMatch = text.match(\n    /^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})$/\n  );\n\n  if (frenchMatch) {\n    const [, day, month, year] = frenchMatch;\n\n    return [\n      day.padStart(2, \"0\"),\n      month.padStart(2, \"0\"),\n      year\n    ].join(\"/\");\n  }\n\n  return text;\n}\n\n/**\n * Construit une adresse sans espaces inutiles.\n */\nfunction buildAddress(...parts) {\n  return parts\n    .map(clean)\n    .filter(Boolean)\n    .join(\", \");\n}\n\nconst supplier = source.supplier || {};\nconst customer = source.customer || {};\nconst invoice = source.invoice || {};\nconst totals = source.totals || {};\nconst payment = source.payment || {};\n\nconst currency = clean(invoice.currency) || \"EUR\";\n\nconst supplierCountry = clean(supplier.country) || \"FR\";\nconst customerCountry = clean(customer.country) || \"FR\";\n\nconst supplierIdentifier =\n  clean(supplier.vat_number) ||\n  clean(supplier.siret);\n\nconst customerIdentifier =\n  clean(customer.code) ||\n  clean(customer.siret);\n\nconst lines = Array.isArray(source.lines)\n  ? source.lines\n  : [];\n\nconst mappedLines = lines.map((line, index) => {\n  const quantity = number(line.quantity);\n  const unitPrice = money(line.unit_price);\n  const discount = money(line.discount);\n  const lineTotalHt = money(line.line_total_ht);\n  const taxRate = money(line.tax_rate);\n\n  return {\n    numero_ligne: index + 1,\n\n    reference: clean(line.reference),\n\n    designation:\n      clean(line.designation) ||\n      `Article ${index + 1}`,\n\n    quantite: quantity,\n\n    unite: \"UNIT\",\n\n    prix_unitaire: unitPrice,\n\n    remise: discount,\n\n    taux_tva: taxRate,\n\n    montant_ht: lineTotalHt,\n\n    montant_tva: money(\n      lineTotalHt * taxRate / 100\n    ),\n\n    montant_ttc: money(\n      lineTotalHt +\n      lineTotalHt * taxRate / 100\n    ),\n\n    code_tva: clean(line.vat_code),\n\n    variante_article: clean(\n      line.article_variant\n    ),\n\n    montant_brut: money(\n      line.line_total_calculated ??\n      quantity * unitPrice\n    ),\n\n    montant_remise: money(\n      line.discount_amount\n    )\n  };\n});\n\nconst sumLinesHt = money(\n  mappedLines.reduce(\n    (sum, line) => sum + number(line.montant_ht),\n    0\n  )\n);\n\nconst sumLinesVat = money(\n  mappedLines.reduce(\n    (sum, line) => sum + number(line.montant_tva),\n    0\n  )\n);\n\nconst totalHt = money(\n  totals.total_ht ?? sumLinesHt\n);\n\nconst totalTva = money(\n  totals.vat_amount ?? sumLinesVat\n);\n\nconst totalTtc = money(\n  totals.total_ttc ??\n  totalHt + totalTva\n);\n\nconst taxableAmount = money(\n  totals.taxable_amount ?? totalHt\n);\n\nconst invoiceNumber = clean(invoice.number);\n\nreturn {\n  json: {\n    document: {\n      type_document: \"Facture\",\n      code_type_document: \"I-11\",\n\n      profil_pays:\n        supplierCountry === \"TN\"\n          ? \"Tunisie\"\n          : \"France\",\n\n      devise: currency,\n\n      source: \"erp_divalto\",\n\n      nombre_pages: 1,\n\n      numero: invoiceNumber,\n\n      date: formatDate(invoice.date),\n\n      date_echeance: formatDate(\n        invoice.due_date\n      )\n    },\n\n    fournisseur: {\n      nom: clean(supplier.name),\n\n      identifiant: supplierIdentifier,\n\n      type_identifiant:\n        supplierCountry === \"FR\"\n          ? \"I-04\"\n          : \"I-01\",\n\n      matricule_fiscal_ou_tva:\n        clean(supplier.vat_number),\n\n      siret: clean(supplier.siret),\n\n      adresse:\n        clean(supplier.full_address) ||\n        buildAddress(\n          supplier.address,\n          supplier.address2,\n          supplier.postal_code,\n          supplier.city\n        ),\n\n      pays: supplierCountry,\n\n      telephone: clean(supplier.phone),\n\n      fax: clean(supplier.fax),\n\n      email: clean(supplier.email),\n\n      site_web: clean(supplier.website)\n    },\n\n    client: {\n      code: clean(customer.code),\n\n      nom: clean(customer.name),\n\n      identifiant: customerIdentifier,\n\n      type_identifiant:\n        customerCountry === \"FR\"\n          ? \"I-04\"\n          : \"I-01\",\n\n      matricule_fiscal_ou_tva: \"\",\n\n      siret: clean(customer.siret),\n\n      adresse:\n        clean(customer.full_address) ||\n        buildAddress(\n          customer.address,\n          customer.address2,\n          customer.postal_code,\n          customer.city\n        ),\n\n      pays: customerCountry,\n\n      ville: clean(customer.city),\n\n      code_postal: clean(\n        customer.postal_code\n      ),\n\n      telephone: clean(customer.phone),\n\n      fax: clean(customer.fax),\n\n      email: clean(customer.email)\n    },\n\n    facture: {\n      numero: invoiceNumber,\n\n      date: formatDate(invoice.date),\n\n      date_echeance: formatDate(\n        invoice.due_date\n      ),\n\n      devise: currency,\n\n      mode_paiement:\n        clean(payment.description) ||\n        clean(payment.code),\n\n      code_paiement: clean(payment.code),\n\n      iban: clean(payment.iban),\n\n      bic: clean(payment.bic)\n    },\n\n    lignes_facture: mappedLines,\n\n    totaux: {\n      base_tva: taxableAmount,\n\n      montant_imposable: taxableAmount,\n\n      total_ht: totalHt,\n\n      total_tva: totalTva,\n\n      montant_tva: totalTva,\n\n      total_ttc: totalTtc,\n\n      net_a_payer: money(\n        totals.net_amount ?? totalTtc\n      ),\n\n      montant_brut: money(\n        totals.gross_amount ?? totalTtc\n      ),\n\n      frais_port_non_soumis: money(\n        totals.shipping_not_taxed\n      ),\n\n      frais_port_soumis: money(\n        totals.shipping_taxed\n      ),\n\n      frais_emballage: money(\n        totals.packaging_cost\n      ),\n\n      droit_timbre: 0\n    },\n\n    paiement: {\n      code_banque: clean(\n        payment.bank_code\n      ),\n\n      type: number(payment.type),\n\n      code: clean(payment.code),\n\n      description: clean(\n        payment.description\n      ),\n\n      iban: clean(payment.iban),\n\n      bic: clean(payment.bic)\n    },\n\n    entreprise: {\n      code: clean(\n        source.company?.code\n      )\n    },\n\n    controle_validation: {\n      peut_generer_teif:\n        Boolean(invoiceNumber) &&\n        Boolean(clean(supplier.name)) &&\n        Boolean(clean(customer.name)) &&\n        mappedLines.length > 0,\n\n      nombre_lignes: mappedLines.length,\n\n      somme_lignes_ht: sumLinesHt,\n\n      ecart_lignes_total_ht: money(\n        totalHt - sumLinesHt\n      ),\n\n      source: \"erp_divalto\"\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        32
+      ],
+      "id": "31763cfe-a02c-461f-9679-e9d7e07963b5",
+      "name": "ERP → format TEIF"
     }
   ],
   "pinData": {},
@@ -446,22 +471,11 @@
         ]
       ]
     },
-    "Microsoft SQL": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Generate SQL From Mapping": {
       "main": [
         [
           {
-            "node": "Microsoft SQL",
+            "node": "Protect Generated SQL",
             "type": "main",
             "index": 0
           }
@@ -472,7 +486,7 @@
       "main": [
         [
           {
-            "node": "TEIF Generator",
+            "node": "ERP → format TEIF",
             "type": "main",
             "index": 0
           }
@@ -569,13 +583,7 @@
     },
     "Code Restore Data1": {
       "main": [
-        [
-          {
-            "node": "Signature TTN",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Validation Signed XML": {
@@ -599,6 +607,39 @@
           }
         ]
       ]
+    },
+    "Microsoft SQL": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Protect Generated SQL": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ERP → format TEIF": {
+      "main": [
+        [
+          {
+            "node": "TEIF Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -607,7 +648,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "260b9829-7427-4175-9430-99c5a25600d0",
+  "versionId": "6c55622b-816a-466b-b9e8-9d556d5fa723",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "7e1555217e38f20ea4864f1c15c8f40597b0aec9692e19a223df126e3036c0af"
