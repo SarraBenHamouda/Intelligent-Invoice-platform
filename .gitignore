@@ -100,3 +100,5 @@ shared/fake_signed_bills/*
 
 services/mock-signature-orchestrator-api/storage/*
 !services/mock-signature-orchestrator-api/storage/.gitkeep
+backend/debug-user.js
+backend/test-bcrypt.js
