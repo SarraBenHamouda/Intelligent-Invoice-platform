@@ -1,44 +1,113 @@
-import { API_URL } from '../config/api';
+﻿import { API_BASE_URL } from '../config/api';
+
+const TOKEN_STORAGE_KEY = 'auth_token';
+const USER_STORAGE_KEY = 'auth_user';
 
 async function parseResponse(response) {
-  let data;
+  const contentType =
+    response.headers.get('content-type') || '';
 
-  try {
+  let data = null;
+
+  if (contentType.includes('application/json')) {
     data = await response.json();
-  } catch {
-    throw new Error(
-      'Réponse invalide reçue depuis le serveur.'
-    );
+  } else {
+    const text = await response.text();
+
+    data = {
+      success: response.ok,
+      message: text,
+    };
   }
 
   if (!response.ok) {
-    throw new Error(
-      data.message ||
-        'Une erreur est survenue.'
+    const error = new Error(
+      data?.message ||
+        `Erreur HTTP ${response.status}`,
     );
+
+    error.status = response.status;
+    error.data = data;
+
+    throw error;
   }
 
   return data;
 }
 
-function saveSession(data) {
-  localStorage.setItem(
-    'accessToken',
-    data.accessToken
-  );
+function saveAuthentication(result) {
+  const accessToken =
+    result?.accessToken ||
+    result?.token;
 
-  localStorage.setItem(
-    'user',
-    JSON.stringify(data.user)
+  if (accessToken) {
+    localStorage.setItem(
+      TOKEN_STORAGE_KEY,
+      accessToken,
+    );
+  }
+
+  if (result?.user) {
+    localStorage.setItem(
+      USER_STORAGE_KEY,
+      JSON.stringify(result.user),
+    );
+  }
+
+  return result;
+}
+
+export function getAccessToken() {
+  return localStorage.getItem(
+    TOKEN_STORAGE_KEY,
   );
 }
 
-export async function loginUser(
-  email,
-  password
+export function getStoredUser() {
+  const storedUser =
+    localStorage.getItem(
+      USER_STORAGE_KEY,
+    );
+
+  if (!storedUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedUser);
+  } catch (error) {
+    console.error(
+      'Impossible de lire l’utilisateur enregistré :',
+      error,
+    );
+
+    localStorage.removeItem(
+      USER_STORAGE_KEY,
+    );
+
+    return null;
+  }
+}
+
+export function isAuthenticated() {
+  return Boolean(getAccessToken());
+}
+
+export function clearAuthentication() {
+  localStorage.removeItem(
+    TOKEN_STORAGE_KEY,
+  );
+
+  localStorage.removeItem(
+    USER_STORAGE_KEY,
+  );
+}
+
+export async function register(
+  registrationData,
 ) {
   const response = await fetch(
-    `${API_URL}/auth/login`,
+    `${API_BASE_URL}/auth/register`,
     {
       method: 'POST',
 
@@ -47,31 +116,23 @@ export async function loginUser(
           'application/json',
       },
 
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    }
+      body: JSON.stringify(
+        registrationData,
+      ),
+    },
   );
 
-  const data =
+  const result =
     await parseResponse(response);
 
-  saveSession(data);
-
-  return data;
+  return saveAuthentication(result);
 }
 
-export async function registerUser({
-  organizationName,
-  countryCode,
-  firstName,
-  lastName,
-  email,
-  password,
-}) {
+export async function login(
+  credentials,
+) {
   const response = await fetch(
-    `${API_URL}/auth/register`,
+    `${API_BASE_URL}/auth/login`,
     {
       method: 'POST',
 
@@ -80,30 +141,23 @@ export async function registerUser({
           'application/json',
       },
 
-      body: JSON.stringify({
-        organizationName,
-        countryCode,
-        firstName,
-        lastName,
-        email,
-        password,
-      }),
-    }
+      body: JSON.stringify(
+        credentials,
+      ),
+    },
   );
 
-  const data =
+  const result =
     await parseResponse(response);
 
-  saveSession(data);
-
-  return data;
+  return saveAuthentication(result);
 }
 
 export async function loginWithGoogle(
-  credential
+  credential,
 ) {
   const response = await fetch(
-    `${API_URL}/auth/google`,
+    `${API_BASE_URL}/auth/google`,
     {
       method: 'POST',
 
@@ -115,73 +169,102 @@ export async function loginWithGoogle(
       body: JSON.stringify({
         credential,
       }),
-    }
+    },
   );
 
-  const data =
+  const result =
     await parseResponse(response);
 
-  saveSession(data);
+  return saveAuthentication(result);
+}
 
-  return data;
+export function startGitHubLogin(
+  mode = 'login',
+) {
+  const normalizedMode =
+    mode === 'register'
+      ? 'register'
+      : 'login';
+
+  window.location.assign(
+    `${API_BASE_URL}/auth/github?mode=${normalizedMode}`,
+  );
+}
+
+export function completeGitHubLogin({
+  accessToken,
+  user,
+}) {
+  if (!accessToken) {
+    throw new Error(
+      'Jeton GitHub manquant.',
+    );
+  }
+
+  const result = {
+    success: true,
+    accessToken,
+    user,
+  };
+
+  return saveAuthentication(result);
 }
 
 export async function getCurrentUser() {
-  const token =
-    localStorage.getItem(
-      'accessToken'
-    );
+  const accessToken =
+    getAccessToken();
 
-  if (!token) {
+  if (!accessToken) {
     throw new Error(
-      'Aucun utilisateur connecté.'
+      'Utilisateur non authentifié.',
     );
   }
 
   const response = await fetch(
-    `${API_URL}/auth/me`,
+    `${API_BASE_URL}/auth/me`,
     {
       method: 'GET',
 
       headers: {
         Authorization:
-          `Bearer ${token}`,
+          `Bearer ${accessToken}`,
       },
-    }
+    },
   );
 
-  const data =
+  const result =
     await parseResponse(response);
 
-  localStorage.setItem(
-    'user',
-    JSON.stringify(data.user)
-  );
+  if (result?.user) {
+    localStorage.setItem(
+      USER_STORAGE_KEY,
+      JSON.stringify(result.user),
+    );
+  }
 
-  return data.user;
+  return result;
 }
 
-export function getStoredUser() {
-  const storedUser =
-    localStorage.getItem('user');
-
-  if (!storedUser) {
-    return null;
-  }
+export async function logout() {
+  const accessToken =
+    getAccessToken();
 
   try {
-    return JSON.parse(storedUser);
-  } catch {
-    return null;
+    if (accessToken) {
+      await fetch(
+        `${API_BASE_URL}/auth/logout`,
+        {
+          method: 'POST',
+
+          headers: {
+            Authorization:
+              `Bearer ${accessToken}`,
+          },
+        },
+      );
+    }
+  } finally {
+    clearAuthentication();
   }
 }
 
-export function logoutUser() {
-  localStorage.removeItem(
-    'accessToken'
-  );
-
-  localStorage.removeItem(
-    'user'
-  );
-}

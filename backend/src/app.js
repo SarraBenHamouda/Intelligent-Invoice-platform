@@ -25,16 +25,23 @@ console.log('=== NOUVEAU APP.JS CHARGE ===');
 
 app.disable('x-powered-by');
 
-app.use(helmet());
+// Use Helmet but disable Cross-Origin-Opener-Policy for local development
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: false,
+  }),
+);
 
 app.use(
   cors({
     origin: [
       'http://localhost:5173',
       'http://127.0.0.1:5173',
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
     ],
     credentials: true,
-  })
+  }),
 );
 
 app.use(morgan('dev'));

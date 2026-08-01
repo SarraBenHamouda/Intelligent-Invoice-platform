@@ -5,7 +5,7 @@ import ThemeToggle from '../components/navigation/ThemeToggle/ThemeToggle';
 
 import {
   getStoredUser,
-  logoutUser,
+  logout as logoutUser,
 } from '../services/authService';
 
 function AdminDashboard() {

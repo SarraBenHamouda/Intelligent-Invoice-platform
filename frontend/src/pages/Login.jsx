@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  loginUser,
+  login as loginUser,
 } from '../services/authService';
 
 function Login() {

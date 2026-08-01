@@ -21,8 +21,8 @@ import Logo from "../components/navigation/Logo/Logo";
 import ThemeToggle from "../components/navigation/ThemeToggle/ThemeToggle";
 
 import {
-  loginUser,
-  registerUser,
+  login as loginUser,
+  register as registerUser,
   loginWithGoogle,
   startGitHubLogin,
 } from "../services/authService";
