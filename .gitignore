@@ -43,3 +43,60 @@ temp/
 # Editor files
 .vscode/
 .idea/
+
+backend/node_modules/
+backend/.env
+backend/uploads/
+frontend/node_modules/
+frontend/.env
+
+
+.env
+.env.*
+!.env.example
+
+# ------------------------------------------------------------------
+# Backend / frontend
+# ------------------------------------------------------------------
+
+backend/node_modules/
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/uploads/
+
+frontend/node_modules/
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+frontend/dist/
+
+# ------------------------------------------------------------------
+# Runtime invoice files
+# ------------------------------------------------------------------
+
+# Factures et fichiers temporaires générés
+shared/input/*
+!shared/input/.gitkeep
+
+# Fichiers de configuration ERP à conserver dans Git
+!shared/input/ENV.csv
+!shared/input/mapping.csv
+!shared/input/universal_mapping.csv
+!shared/input/universal_mapping_sage.csv
+
+shared/rendered/*
+!shared/rendered/.gitkeep
+
+shared/uploads/*
+!shared/uploads/.gitkeep
+
+shared/fake_signed_bills/*
+!shared/fake_signed_bills/.gitkeep
+
+# ------------------------------------------------------------------
+# Mock signature orchestrator runtime storage
+# ------------------------------------------------------------------
+
+services/mock-signature-orchestrator-api/storage/*
+!services/mock-signature-orchestrator-api/storage/.gitkeep

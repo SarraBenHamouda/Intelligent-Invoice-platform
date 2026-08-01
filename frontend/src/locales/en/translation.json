@@ -1,0 +1,223 @@
+{
+  "common": {
+    "login": "Sign in",
+    "register": "Create an account",
+    "startFree": "Get started for free",
+    "discover": "Discover the platform",
+    "learnMore": "Learn more"
+  },
+
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "about": "About",
+    "contact": "Contact"
+  },
+
+  "language": {
+    "french": "French",
+    "english": "English",
+    "changeLanguage": "Change language"
+  },
+
+  "hero": {
+    "eyebrow": "Intelligent digital invoicing",
+    "title": "Automate the management of your electronic invoices",
+    "description": "An intelligent platform to extract, validate, sign and track your invoices through their submission to TTN.",
+    "pdfOcr": "PDF and OCR import",
+    "erp": "ERP connection",
+    "signature": "XAdES signature"
+  },
+
+  "pipeline": {
+    "title": "Invoice processing pipeline",
+    "active": "Active",
+    "pdfErp": "PDF or ERP",
+    "invoiceImport": "Invoice import",
+    "extraction": "Intelligent extraction",
+    "structuredData": "Structured data",
+    "validation": "Validation",
+    "dataControl": "Data verification",
+    "signature": "XAdES signature",
+    "electronicSignature": "Electronic signature",
+    "ttn": "TTN submission",
+    "sendAndTrack": "Submission and status tracking"
+  },
+
+  "trust": {
+    "title": "A platform designed for Tunisian and French companies",
+    "pdf": "PDF invoices",
+    "scanned": "Scanned invoices",
+    "erp": "ERP data",
+    "xades": "XAdES signature",
+    "ttn": "TTN submission",
+    "realtime": "Real-time tracking"
+  },
+
+  "features": {
+    "label": "Features",
+    "title": "The complete invoicing lifecycle in one platform",
+    "description": "A centralized solution designed to reduce manual tasks and improve traceability.",
+
+    "extraction": {
+      "title": "Intelligent extraction",
+      "description": "Import a PDF or scanned invoice. The platform automatically extracts suppliers, customers, invoice lines, taxes and totals."
+    },
+
+    "erp": {
+      "title": "ERP connection",
+      "description": "Import invoices directly from your ERP without manually entering the data again."
+    },
+
+    "validation": {
+      "title": "Automatic validation",
+      "description": "Verify required fields, amounts, taxes and data inconsistencies."
+    },
+
+    "signature": {
+      "title": "Electronic signature",
+      "description": "Sign invoices using a secure XAdES electronic signature."
+    },
+
+    "ttn": {
+      "title": "TTN submission",
+      "description": "Submit signed invoices to TTN and retrieve their processing status."
+    },
+
+    "tracking": {
+      "title": "Status tracking",
+      "description": "View accepted, rejected, pending invoices and invoices requiring resubmission."
+    }
+  },
+
+  "workflow": {
+    "label": "How it works",
+    "title": "From invoice import to TTN submission in a few steps",
+    "description": "A simple, centralized and fully traceable process.",
+
+    "import": {
+      "title": "Import",
+      "description": "Upload a PDF, a scanned invoice or select an invoice from your ERP."
+    },
+
+    "extract": {
+      "title": "Extract",
+      "description": "The platform automatically converts invoice information into structured data."
+    },
+
+    "verify": {
+      "title": "Verify",
+      "description": "Required fields, amounts, taxes and invoice lines are checked."
+    },
+
+    "sign": {
+      "title": "Sign",
+      "description": "The invoice is electronically signed using an XAdES signature."
+    },
+
+    "send": {
+      "title": "Submit",
+      "description": "The signed document is submitted to the TTN platform."
+    },
+
+    "track": {
+      "title": "Track",
+      "description": "Accepted, rejected or pending statuses are displayed in the dashboard."
+    }
+  },
+
+  "solutions": {
+    "label": "Solutions",
+    "title": "A solution adapted to every need",
+    "description": "The platform supports small organizations as well as companies already using an ERP.",
+
+    "small": {
+      "title": "Small businesses",
+      "item1": "Manual invoice import",
+      "item2": "Simple status tracking",
+      "item3": "Centralized history"
+    },
+
+    "erp": {
+      "title": "Companies using an ERP",
+      "item1": "ERP database connection",
+      "item2": "Automated import",
+      "item3": "Reduced manual data entry"
+    },
+
+    "admin": {
+      "title": "Administrators",
+      "item1": "Global customer overview",
+      "item2": "Invoice statistics",
+      "item3": "Error and user management"
+    }
+  },
+
+  "benefits": {
+    "label": "Benefits",
+    "title": "Why choose our platform?",
+    "description": "Increase productivity while maintaining complete invoice traceability.",
+
+    "speed": {
+      "title": "Faster processing",
+      "description": "Reduce the time spent entering and verifying invoice data."
+    },
+
+    "security": {
+      "title": "Secure data",
+      "description": "Protect access, user accounts and electronically signed documents."
+    },
+
+    "tracking": {
+      "title": "Real-time tracking",
+      "description": "View the status and history of every invoice at any time."
+    },
+
+    "errors": {
+      "title": "Fewer errors",
+      "description": "Detect inconsistencies before invoice generation and submission."
+    }
+  },
+
+  "security": {
+    "label": "Security",
+    "title": "Security at the core of your invoicing process",
+    "description": "Accounts, documents and operations are protected throughout every processing step.",
+    "authentication": "Secure authentication",
+    "roles": "Administrator and customer roles",
+    "passwords": "Encrypted passwords",
+    "jwt": "JWT-protected access",
+    "signature": "XAdES electronic signature",
+    "history": "Operation history",
+    "secureAccess": "Secure access",
+    "jwtActive": "JWT active",
+    "verifiedSignature": "Verified XAdES signature"
+  },
+
+  "statistics": {
+    "traceability": "Invoice traceability",
+    "sources": "Supported input sources",
+    "access": "Platform availability",
+    "steps": "Automated steps"
+  },
+
+  "cta": {
+    "label": "Get started now",
+    "title": "Ready to simplify your invoice management?",
+    "description": "Create your account and centralize your invoices, signatures and TTN status tracking."
+  },
+
+  "footer": {
+    "description": "An intelligent platform to centralize, validate, sign and track electronic invoices.",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "security": "Security",
+    "help": "Help center",
+    "report": "Report a problem",
+    "privacy": "Privacy",
+    "terms": "Terms of use",
+    "copyright": "© 2026 Tenor Afrique. All rights reserved."
+  }
+}
