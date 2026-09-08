@@ -1,0 +1,654 @@
+/*
+|--------------------------------------------------------------------------
+| QUICK ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.quick-actions-section {
+  display: grid;
+
+  gap: 16px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SECTION TITLE
+|--------------------------------------------------------------------------
+*/
+
+.quick-actions-section header h2 {
+  margin:
+    5px
+    0
+    0;
+
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  font-size:
+    21px;
+
+  font-weight:
+    800;
+
+  line-height:
+    1.2;
+
+  letter-spacing:
+    -0.025em;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GRID
+|--------------------------------------------------------------------------
+*/
+
+.quick-actions-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    16px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card {
+  --action-color:
+    var(--dashboard-primary);
+
+  --action-soft:
+    var(--dashboard-primary-soft);
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items:
+    center;
+
+  gap:
+    13px;
+
+  min-height:
+    96px;
+
+  padding:
+    16px;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      color-mix(
+        in srgb,
+        var(--action-color) 3.5%,
+        #ffffff
+      ) 100%
+    );
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  box-shadow:
+    0 8px 22px
+    rgba(
+      15,
+      23,
+      42,
+      0.045
+    );
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TOP ACCENT
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card::before {
+  content: "";
+
+  position:
+    absolute;
+
+  top:
+    0;
+
+  left:
+    0;
+
+  width:
+    100%;
+
+  height:
+    3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--action-color) 0%,
+      color-mix(
+        in srgb,
+        var(--action-color) 65%,
+        #ffffff
+      ) 100%
+    );
+
+  opacity:
+    0.85;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DECORATIVE GLOW
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card::after {
+  content: "";
+
+  position:
+    absolute;
+
+  top:
+    -45px;
+
+  right:
+    -45px;
+
+  width:
+    110px;
+
+  height:
+    110px;
+
+  border-radius:
+    50%;
+
+  background:
+    radial-gradient(
+      circle,
+      color-mix(
+        in srgb,
+        var(--action-color) 12%,
+        transparent
+      ) 0%,
+      transparent 70%
+    );
+
+  pointer-events:
+    none;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DANGER CARD
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card--danger {
+  --action-color:
+    var(--dashboard-danger);
+
+  --action-soft:
+    var(--dashboard-danger-soft);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HOVER
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card:hover {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--action-color) 42%,
+      var(--dashboard-border)
+    );
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      color-mix(
+        in srgb,
+        var(--action-color) 6%,
+        #ffffff
+      ) 100%
+    );
+
+  box-shadow:
+    0 14px 32px
+    color-mix(
+      in srgb,
+      var(--action-color) 9%,
+      rgba(
+        15,
+        23,
+        42,
+        0.08
+      )
+    );
+
+  transform:
+    translateY(-3px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SYMBOL
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-symbol {
+  position:
+    relative;
+
+  z-index:
+    1;
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--action-color) 18%,
+      transparent
+    );
+
+  border-radius:
+    12px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--action-color) 11%,
+      #ffffff
+    );
+
+  color:
+    var(--action-color);
+
+  font-family:
+    var(--font-mono);
+
+  font-size:
+    16px;
+
+  font-weight:
+    700;
+
+  box-shadow:
+    0 6px 14px
+    color-mix(
+      in srgb,
+      var(--action-color) 9%,
+      transparent
+    );
+
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+
+.quick-action-card:hover
+.quick-action-symbol {
+  transform:
+    scale(1.05);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--action-color) 15%,
+      #ffffff
+    );
+
+  box-shadow:
+    0 9px 18px
+    color-mix(
+      in srgb,
+      var(--action-color) 12%,
+      transparent
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card > div {
+  position:
+    relative;
+
+  z-index:
+    1;
+
+  display:
+    grid;
+
+  gap:
+    4px;
+
+  min-width:
+    0;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TITLE
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card strong {
+  color:
+    var(--dashboard-text);
+
+  font-size:
+    11.5px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1.35;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-card > div span {
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    500;
+
+  line-height:
+    1.45;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ARROW
+|--------------------------------------------------------------------------
+*/
+
+.quick-action-arrow {
+  position:
+    relative;
+
+  z-index:
+    1;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  width:
+    28px;
+
+  height:
+    28px;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    9px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.7
+    );
+
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    14px;
+
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+
+.quick-action-card:hover
+.quick-action-arrow {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--action-color) 30%,
+      var(--dashboard-border)
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(--action-color) 8%,
+      #ffffff
+    );
+
+  color:
+    var(--action-color);
+
+  transform:
+    translateX(3px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.quick-action-card {
+  background:
+    linear-gradient(
+      135deg,
+      var(--dashboard-surface) 0%,
+      color-mix(
+        in srgb,
+        var(--action-color) 4%,
+        var(--dashboard-surface)
+      ) 100%
+    );
+
+  box-shadow:
+    0 10px 26px
+    rgba(
+      0,
+      0,
+      0,
+      0.2
+    );
+}
+
+
+html[data-theme="dark"]
+.quick-action-symbol {
+  background:
+    color-mix(
+      in srgb,
+      var(--action-color) 12%,
+      var(--dashboard-surface)
+    );
+}
+
+
+html[data-theme="dark"]
+.quick-action-arrow {
+  background:
+    rgba(
+      17,
+      24,
+      39,
+      0.75
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE — TABLET
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    1080px
+) {
+
+  .quick-actions-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE — MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    560px
+) {
+
+  .quick-actions-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .quick-action-card {
+    min-height:
+      88px;
+
+    padding:
+      14px;
+  }
+
+
+  .quick-action-symbol {
+    width:
+      40px;
+
+    height:
+      40px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+
+  .quick-action-card,
+  .quick-action-symbol,
+  .quick-action-arrow {
+    transition-duration:
+      0.01ms !important;
+  }
+}

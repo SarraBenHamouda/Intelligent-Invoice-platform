@@ -1,0 +1,1492 @@
+.notification-bell {
+  position: relative;
+
+  display: inline-flex;
+
+  font-family:
+    'IBM Plex Sans',
+    sans-serif;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TRIGGER
+|--------------------------------------------------------------------------
+*/
+
+.notification-bell-trigger {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  border: 1px solid
+    rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  color: #263148;
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.notification-bell-trigger:hover {
+  transform:
+    translateY(-1px);
+
+  border-color:
+    rgba(37, 99, 235, 0.2);
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0 10px 24px
+      rgba(
+        15,
+        23,
+        42,
+        0.08
+      );
+}
+
+.notification-bell-trigger--active {
+  border-color:
+    rgba(37, 99, 235, 0.24);
+
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.07
+    );
+
+  color: #2563eb;
+}
+
+.notification-bell-icon {
+  width: 21px;
+  height: 21px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| BADGE
+|--------------------------------------------------------------------------
+*/
+
+.notification-bell-badge {
+  position: absolute;
+
+  top: -5px;
+  right: -5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 19px;
+  height: 19px;
+
+  padding:
+    0
+    5px;
+
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+
+  background: #ef4444;
+
+  color: #ffffff;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.59rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/*
+|--------------------------------------------------------------------------
+| PANEL
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel {
+  position: absolute;
+  z-index: 1000;
+
+  top: calc(100% + 14px);
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  width:
+    min(
+      430px,
+      calc(100vw - 32px)
+    );
+
+  max-height:
+    min(
+      660px,
+      calc(100vh - 110px)
+    );
+
+  overflow: hidden;
+
+  border: 1px solid
+    rgba(15, 23, 42, 0.1);
+  border-radius: 22px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.97
+    );
+
+  box-shadow:
+    0 26px 70px
+      rgba(
+        15,
+        23,
+        42,
+        0.16
+      );
+
+  backdrop-filter:
+    blur(22px);
+
+  animation:
+    notificationPanelIn
+    180ms
+    ease;
+}
+
+@keyframes notificationPanelIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-6px)
+      scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADER
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+
+  padding:
+    21px
+    22px
+    16px;
+
+  border-bottom: 1px solid
+    rgba(15, 23, 42, 0.07);
+}
+
+.notification-panel-eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.6rem;
+  font-weight: 600;
+
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.notification-panel-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+}
+
+.notification-panel-title-row h2 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-family:
+    'Fraunces',
+    serif;
+
+  font-size: 1.45rem;
+  font-weight: 600;
+
+  letter-spacing:
+    -0.025em;
+}
+
+.notification-panel-unread-label {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 23px;
+
+  padding:
+    3px
+    8px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.09
+    );
+
+  color: #2563eb;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.59rem;
+  font-weight: 600;
+}
+
+.notification-panel-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 10px;
+
+  background:
+    transparent;
+
+  color: #64748b;
+
+  cursor: pointer;
+}
+
+.notification-panel-close:hover {
+  background:
+    rgba(
+      15,
+      23,
+      42,
+      0.055
+    );
+
+  color: #0f172a;
+}
+
+.notification-panel-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TOOLBAR
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding:
+    10px
+    16px;
+
+  border-bottom: 1px solid
+    rgba(15, 23, 42, 0.06);
+
+  background:
+    rgba(
+      248,
+      250,
+      252,
+      0.72
+    );
+}
+
+.notification-panel-read-all,
+.notification-panel-refresh {
+  padding:
+    7px
+    9px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background:
+    transparent;
+
+  color: #526078;
+
+  font-family:
+    'IBM Plex Sans',
+    sans-serif;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.notification-panel-read-all:hover:not(:disabled),
+.notification-panel-refresh:hover {
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.07
+    );
+
+  color: #2563eb;
+}
+
+.notification-panel-read-all:disabled {
+  opacity: 0.42;
+
+  cursor: not-allowed;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ERROR
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-error {
+  margin:
+    12px
+    16px
+    0;
+
+  padding:
+    10px
+    12px;
+
+  border: 1px solid
+    rgba(220, 38, 38, 0.13);
+  border-radius: 11px;
+
+  background:
+    rgba(
+      254,
+      226,
+      226,
+      0.68
+    );
+
+  color: #b91c1c;
+
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-content {
+  min-height: 150px;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOADING
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  min-height: 190px;
+
+  color: #64748b;
+
+  font-size: 0.78rem;
+}
+
+.notification-panel-spinner {
+  width: 25px;
+  height: 25px;
+
+  border: 2px solid
+    rgba(
+      37,
+      99,
+      235,
+      0.14
+    );
+
+  border-top-color:
+    #2563eb;
+
+  border-radius: 50%;
+
+  animation:
+    notificationSpinner
+    700ms
+    linear
+    infinite;
+}
+
+@keyframes notificationSpinner {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| EMPTY
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding:
+    45px
+    30px;
+
+  text-align: center;
+}
+
+.notification-panel-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 52px;
+  height: 52px;
+
+  margin-bottom: 14px;
+
+  border-radius: 17px;
+
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.07
+    );
+
+  color: #2563eb;
+}
+
+.notification-panel-empty-icon
+  svg {
+  width: 23px;
+  height: 23px;
+}
+
+.notification-panel-empty
+  strong {
+  color: #162033;
+
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.notification-panel-empty
+  p {
+  max-width: 270px;
+
+  margin:
+    8px
+    0
+    0;
+
+  color: #7a879a;
+
+  font-size: 0.77rem;
+  line-height: 1.55;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LIST
+|--------------------------------------------------------------------------
+*/
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ITEM
+|--------------------------------------------------------------------------
+*/
+
+.notification-item {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    40px
+    minmax(
+      0,
+      1fr
+    )
+    28px;
+
+  gap: 11px;
+
+  padding:
+    16px
+    14px
+    16px
+    17px;
+
+  border-bottom: 1px solid
+    rgba(
+      15,
+      23,
+      42,
+      0.06
+    );
+
+  cursor: pointer;
+
+  transition:
+    background
+      140ms
+      ease,
+    opacity
+      140ms
+      ease;
+}
+
+.notification-item:last-child {
+  border-bottom: 0;
+}
+
+.notification-item:hover {
+  background:
+    rgba(
+      248,
+      250,
+      252,
+      0.92
+    );
+}
+
+.notification-item--unread {
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.025
+    );
+}
+
+.notification-item--busy {
+  opacity: 0.56;
+
+  pointer-events: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ITEM ICON
+|--------------------------------------------------------------------------
+*/
+
+.notification-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 12px;
+}
+
+.notification-item-icon
+  svg {
+  width: 18px;
+  height: 18px;
+}
+
+.notification-item-icon--success {
+  background:
+    rgba(
+      22,
+      163,
+      74,
+      0.09
+    );
+
+  color: #15803d;
+}
+
+.notification-item-icon--warning {
+  background:
+    rgba(
+      245,
+      158,
+      11,
+      0.1
+    );
+
+  color: #b45309;
+}
+
+.notification-item-icon--error {
+  background:
+    rgba(
+      220,
+      38,
+      38,
+      0.08
+    );
+
+  color: #b91c1c;
+}
+
+.notification-item-icon--info {
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.08
+    );
+
+  color: #2563eb;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ITEM CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.notification-item-content {
+  min-width: 0;
+}
+
+.notification-item-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.notification-item-title {
+  overflow: hidden;
+
+  color: #172033;
+
+  font-size: 0.8rem;
+  font-weight: 650;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notification-item--read
+  .notification-item-title {
+  color: #526078;
+
+  font-weight: 600;
+}
+
+.notification-item-unread-dot {
+  flex:
+    0
+    0
+    auto;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+
+  box-shadow:
+    0
+    0
+    0
+    4px
+    rgba(
+      37,
+      99,
+      235,
+      0.08
+    );
+}
+
+.notification-item-message {
+  display:
+    -webkit-box;
+
+  overflow:
+    hidden;
+
+  margin:
+    5px
+    0
+    0;
+
+  color: #66758a;
+
+  font-size: 0.73rem;
+  line-height: 1.5;
+
+  -webkit-box-orient:
+    vertical;
+
+  -webkit-line-clamp:
+    2;
+}
+
+.notification-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+
+  margin-top: 7px;
+
+  color: #98a2b3;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.58rem;
+}
+
+.notification-item-stage {
+  color: #69768a;
+
+  text-transform:
+    uppercase;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DELETE BUTTON
+|--------------------------------------------------------------------------
+*/
+
+.notification-item-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  margin-top: -2px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 8px;
+
+  background:
+    transparent;
+
+  color: #a0a9b7;
+
+  cursor: pointer;
+
+  opacity: 0;
+
+  transition:
+    opacity
+      140ms
+      ease,
+    color
+      140ms
+      ease,
+    background
+      140ms
+      ease;
+}
+
+.notification-item:hover
+  .notification-item-delete {
+  opacity: 1;
+}
+
+.notification-item-delete:hover {
+  background:
+    rgba(
+      220,
+      38,
+      38,
+      0.07
+    );
+
+  color: #dc2626;
+}
+
+.notification-item-delete
+  svg {
+  width: 15px;
+  height: 15px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER
+|--------------------------------------------------------------------------
+*/
+
+.notification-panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding:
+    11px
+    16px;
+
+  border-top: 1px solid
+    rgba(15, 23, 42, 0.06);
+
+  background:
+    rgba(
+      248,
+      250,
+      252,
+      0.72
+    );
+
+  color: #8994a5;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.57rem;
+}
+
+.notification-panel-live-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0
+    0
+    0
+    4px
+    rgba(
+      34,
+      197,
+      94,
+      0.08
+    );
+
+  animation:
+    notificationLivePulse
+    1.8s
+    ease
+    infinite;
+}
+
+@keyframes notificationLivePulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+[data-theme='dark']
+  .notification-bell-trigger,
+.dark
+  .notification-bell-trigger {
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.09
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.045
+    );
+
+  color: #e5e7eb;
+}
+
+[data-theme='dark']
+  .notification-bell-trigger:hover,
+.dark
+  .notification-bell-trigger:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.075
+    );
+}
+
+[data-theme='dark']
+  .notification-bell-badge,
+.dark
+  .notification-bell-badge {
+  border-color: #10141d;
+}
+
+[data-theme='dark']
+  .notification-panel,
+.dark
+  .notification-panel {
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+
+  background:
+    rgba(
+      15,
+      19,
+      28,
+      0.97
+    );
+
+  box-shadow:
+    0
+    30px
+    80px
+    rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
+}
+
+[data-theme='dark']
+  .notification-panel-title-row
+  h2,
+[data-theme='dark']
+  .notification-item-title,
+[data-theme='dark']
+  .notification-panel-empty
+  strong,
+.dark
+  .notification-panel-title-row
+  h2,
+.dark
+  .notification-item-title,
+.dark
+  .notification-panel-empty
+  strong {
+  color: #f8fafc;
+}
+
+[data-theme='dark']
+  .notification-panel-header,
+[data-theme='dark']
+  .notification-panel-toolbar,
+[data-theme='dark']
+  .notification-panel-footer,
+[data-theme='dark']
+  .notification-item,
+.dark
+  .notification-panel-header,
+.dark
+  .notification-panel-toolbar,
+.dark
+  .notification-panel-footer,
+.dark
+  .notification-item {
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.065
+    );
+}
+
+[data-theme='dark']
+  .notification-panel-toolbar,
+[data-theme='dark']
+  .notification-panel-footer,
+.dark
+  .notification-panel-toolbar,
+.dark
+  .notification-panel-footer {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.025
+    );
+}
+
+[data-theme='dark']
+  .notification-item:hover,
+.dark
+  .notification-item:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.035
+    );
+}
+
+[data-theme='dark']
+  .notification-item--unread,
+.dark
+  .notification-item--unread {
+  background:
+    rgba(
+      37,
+      99,
+      235,
+      0.055
+    );
+}
+
+[data-theme='dark']
+  .notification-item-message,
+[data-theme='dark']
+  .notification-panel-empty
+  p,
+.dark
+  .notification-item-message,
+.dark
+  .notification-panel-empty
+  p {
+  color: #a8b2c2;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 640px
+) {
+  .notification-panel {
+    position: fixed;
+
+    top: 76px;
+    right: 12px;
+    left: 12px;
+
+    width: auto;
+
+    max-height:
+      calc(
+        100vh -
+        96px
+      );
+
+    border-radius: 18px;
+  }
+
+  .notification-panel-header {
+    padding:
+      18px;
+  }
+}
+/*
+|--------------------------------------------------------------------------
+| PROCESSING ETA
+|--------------------------------------------------------------------------
+*/
+
+.notification-process {
+  display: grid;
+  gap: 10px;
+
+  margin-top: 12px;
+  padding: 12px;
+
+  border: 1px solid
+    rgba(15, 23, 42, 0.07);
+  border-radius: 12px;
+
+  background:
+    rgba(248, 250, 252, 0.72);
+}
+
+.notification-process-stage-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.notification-process-stage {
+  color: #4f5e73;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.61rem;
+  font-weight: 600;
+
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.notification-process-delayed {
+  padding:
+    3px
+    7px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(245, 158, 11, 0.1);
+
+  color: #b45309;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.55rem;
+  font-weight: 600;
+}
+
+/*
+|--------------------------------------------------------------------------
+| PROGRESS
+|--------------------------------------------------------------------------
+*/
+
+.notification-progress {
+  display: grid;
+  gap: 6px;
+}
+
+.notification-progress-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  color: #7b8798;
+
+  font-size: 0.64rem;
+}
+
+.notification-progress-heading strong {
+  color: #334155;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.62rem;
+}
+
+.notification-progress-track {
+  position: relative;
+
+  width: 100%;
+  height: 6px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(148, 163, 184, 0.16);
+}
+
+.notification-progress-fill {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6366f1,
+      #2563eb
+    );
+
+  transition:
+    width 500ms ease;
+}
+
+.notification-progress-fill--delayed {
+  background:
+    linear-gradient(
+      90deg,
+      #f59e0b,
+      #f97316
+    );
+}
+
+.notification-progress-fill--complete {
+  background:
+    linear-gradient(
+      90deg,
+      #22c55e,
+      #16a34a
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| ETA
+|--------------------------------------------------------------------------
+*/
+
+.notification-eta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.notification-eta-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  flex:
+    0
+    0
+    auto;
+
+  border-radius: 9px;
+
+  background:
+    rgba(37, 99, 235, 0.08);
+
+  color: #2563eb;
+}
+
+.notification-eta-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.notification-eta-label {
+  display: block;
+
+  color: #8a96a8;
+
+  font-size: 0.59rem;
+}
+
+.notification-eta-value {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #263248;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/*
+|--------------------------------------------------------------------------
+| COMPLETE
+|--------------------------------------------------------------------------
+*/
+
+.notification-process-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #15803d;
+
+  font-size: 0.67rem;
+  font-weight: 600;
+}
+
+.notification-process-complete svg {
+  width: 15px;
+  height: 15px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| AI BADGE
+|--------------------------------------------------------------------------
+*/
+
+.notification-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+
+  padding:
+    2px
+    6px;
+
+  border: 1px solid
+    rgba(99, 102, 241, 0.13);
+  border-radius: 999px;
+
+  background:
+    rgba(99, 102, 241, 0.07);
+
+  color: #4f46e5;
+
+  font-family:
+    'IBM Plex Mono',
+    monospace;
+
+  font-size: 0.5rem;
+  font-weight: 700;
+}
+
+.notification-ai-badge svg {
+  width: 10px;
+  height: 10px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE - PROCESS
+|--------------------------------------------------------------------------
+*/
+
+[data-theme='dark']
+  .notification-process,
+.dark
+  .notification-process {
+  border-color:
+    rgba(255, 255, 255, 0.065);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+}
+
+[data-theme='dark']
+  .notification-progress-heading
+  strong,
+[data-theme='dark']
+  .notification-eta-value,
+.dark
+  .notification-progress-heading
+  strong,
+.dark
+  .notification-eta-value {
+  color: #e5e7eb;
+}
+
+[data-theme='dark']
+  .notification-process-stage,
+.dark
+  .notification-process-stage {
+  color: #a7b2c2;
+}

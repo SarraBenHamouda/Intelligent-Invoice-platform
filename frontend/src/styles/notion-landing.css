@@ -720,10 +720,10 @@ html[data-theme='dark'] .notion-hero-description {
   line-height: 1.6;
 }
 
-/* Footer */
+/* Footer — compact version */
 
 .notion-footer {
-  padding: 70px 0 0;
+  padding: 0;
   border-top: 1px solid #e6e3dd;
   background: #ffffff;
 }
@@ -731,24 +731,25 @@ html[data-theme='dark'] .notion-hero-description {
 .notion-footer-grid {
   display: grid;
   grid-template-columns: 1.5fr repeat(3, 1fr);
-  gap: 60px;
-  padding-bottom: 56px;
+  gap: 44px;
+  padding: 30px 0 24px;
 }
 
 .notion-footer-logo {
-  width: 140px;
+  width: 118px;
 }
 
 .notion-footer-brand p {
-  max-width: 340px;
+  max-width: 320px;
+  margin: 0;
   color: #777;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .notion-footer-grid > div:not(.notion-footer-brand) {
   display: grid;
   align-content: start;
-  gap: 12px;
+  gap: 9px;
 }
 
 .notion-footer-grid strong {
@@ -761,7 +762,7 @@ html[data-theme='dark'] .notion-hero-description {
 }
 
 .notion-footer-bottom {
-  padding: 20px;
+  padding: 12px 0;
   border-top: 1px solid #ece9e3;
   color: #8a8a8a;
   text-align: center;
@@ -892,6 +893,8 @@ html[data-theme='dark'] .notion-hero-description {
 
   .notion-footer-grid {
     grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 26px 0 20px;
   }
 }
 
@@ -2103,19 +2106,20 @@ html[data-theme='dark']
 .moving-partners-section {
   position: relative;
 
-  padding: 40px 0 24px;
+  padding: 18px 0 20px;
 
   overflow: hidden;
 
-  border-top: 1px solid #e8e5df;
-  border-bottom: 1px solid #e8e5df;
+  border-top: 0;
+  border-bottom: 0;
 
   background: #ffffff;
 }
 
 html[data-theme='dark']
 .moving-partners-section {
-  border-color: var(--border-color);
+  border-top: 0;
+  border-bottom: 0;
   background: var(--card-background);
 }
 
@@ -2126,14 +2130,8 @@ html[data-theme='dark']
 */
 
 .moving-partners-heading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 13px;
-
-  margin-bottom: 28px;
-
-  text-align: left;
+  display: none !important;
+  margin: 0 !important;
 }
 
 .moving-partners-check {
@@ -2378,18 +2376,19 @@ html[data-theme='dark']
 
 /*
 |--------------------------------------------------------------------------
-| OPTIONAL TOP AND BOTTOM LINES
+| PARTNERS — NO TOP / BOTTOM BANDS
 |--------------------------------------------------------------------------
 */
 
 .moving-partners-marquee {
-  border-top: 1px solid #efede8;
-  border-bottom: 1px solid #efede8;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
 }
 
 html[data-theme='dark']
 .moving-partners-marquee {
-  border-color: var(--border-color);
+  border-top: 0 !important;
+  border-bottom: 0 !important;
 }
 
 /*
@@ -2486,13 +2485,19 @@ html[data-theme='dark']
 |--------------------------------------------------------------------------
 */
 
-.promotional-demo-section {
-  position: relative;
-  overflow: hidden;
+/*
+|--------------------------------------------------------------------------
+| DEMO HEADING — MORE SPACE BEFORE DEMO
+|--------------------------------------------------------------------------
+*/
 
-  padding: 120px 0 130px;
+.promotional-demo-heading {
+  max-width: 940px;
 
-  background: #ffffff;
+  margin:
+    0 auto 135px;
+
+  text-align: center;
 }
 
 html[data-theme='dark']
@@ -2578,7 +2583,7 @@ html[data-theme='dark']
   max-width: 940px;
 
   margin:
-    0 auto 64px;
+    0 auto 135px;
 
   text-align: center;
 }
@@ -3772,7 +3777,7 @@ html[data-theme='dark']
   }
 
   .promotional-demo-heading {
-    margin-bottom: 44px;
+    margin-bottom: 70px;
   }
 
   .promotional-demo-heading h2 {
@@ -4717,4 +4722,1454 @@ html[data-theme='dark'] .stripe-animated-background .stripe-bg-grid {
   .stripe-animated-background::after {
     animation: none;
   }
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO — SEMANTIC WORKFLOW COLORS
+|--------------------------------------------------------------------------
+| Palette métier utilisée partout dans l'interface :
+| Importée    = bleu       -> action d'entrée
+| Vérifiée    = ambre      -> contrôle / attention
+| Validée     = vert       -> succès
+| Signée      = violet     -> sécurité / officialisation
+| Transmise   = bleu-vert  -> envoi / transmission
+|--------------------------------------------------------------------------
+*/
+
+:root {
+  --invoice-import: #2563eb;
+  --invoice-import-soft: #dbeafe;
+  --invoice-import-text: #1d4ed8;
+
+  --invoice-verify: #d97706;
+  --invoice-verify-soft: #fef3c7;
+  --invoice-verify-text: #b45309;
+
+  --invoice-valid: #16a34a;
+  --invoice-valid-soft: #dcfce7;
+  --invoice-valid-text: #15803d;
+
+  --invoice-sign: #1e40af;
+  --invoice-sign-soft: #dbeafe;
+  --invoice-sign-text: #1e40af;
+
+  --invoice-send: #0284c7;
+  --invoice-send-soft: #e0f2fe;
+  --invoice-send-text: #0369a1;
+
+  --status-pending: #f59e0b;
+  --status-success: #16a34a;
+  --status-error: #dc2626;
+}
+
+.stripe-changing-word-blue {
+  background: var(--invoice-import-soft);
+  color: var(--invoice-import-text);
+}
+
+.stripe-changing-word-orange {
+  background: var(--invoice-verify-soft);
+  color: var(--invoice-verify-text);
+}
+
+.stripe-changing-word-green {
+  background: var(--invoice-valid-soft);
+  color: var(--invoice-valid-text);
+}
+
+.stripe-changing-word-purple {
+  background: var(--invoice-sign-soft);
+  color: var(--invoice-sign-text);
+}
+
+.stripe-changing-word-teal {
+  background: var(--invoice-send-soft);
+  color: var(--invoice-send-text);
+}
+
+.stripe-changing-dot {
+  background: currentColor;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO — REMOVE ONLY THE OLD FLOATING INVOICE CARDS
+|--------------------------------------------------------------------------
+*/
+
+.stripe-floating-card,
+.stripe-floating-card-left,
+.stripe-floating-card-right {
+  display: none !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO — NO EYEBROW BADGE / NO LONG TECHNICAL DESCRIPTION / NO PROOF BAR
+|--------------------------------------------------------------------------
+*/
+
+.stripe-hero-badge,
+.stripe-hero-description,
+.stripe-hero-proof {
+  display: none !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO — KEEP THE ORIGINAL ANIMATION, WITH A LITTLE MORE BREATHING ROOM
+|--------------------------------------------------------------------------
+*/
+
+.stripe-hero-title {
+  margin-top: 0;
+}
+
+.stripe-hero-actions {
+  margin-top: 34px;
+}
+
+@media (max-width: 560px) {
+  .stripe-hero-actions {
+    margin-top: 28px;
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| TYPOGRAPHY — IMPROVED READABILITY
+|--------------------------------------------------------------------------
+| Increase small texts across the landing page while preserving the layout.
+|--------------------------------------------------------------------------
+*/
+
+/* Hero */
+.stripe-hero-description {
+  font-size: 20px;
+}
+
+.stripe-primary-button,
+.stripe-secondary-button {
+  font-size: 15px;
+}
+
+/* Moving partners */
+.moving-partners-heading strong {
+  font-size: 17px;
+}
+
+.moving-partners-heading p {
+  font-size: 14px;
+}
+
+.moving-partners-note {
+  font-size: 12px;
+}
+
+/* Generic section headings */
+.notion-section-label,
+.promotional-demo-heading .public-section-label,
+#security .public-section-label {
+  font-size: 13px;
+}
+
+.notion-section-heading p,
+.promotional-demo-heading p {
+  font-size: 18px;
+}
+
+/* Feature cards */
+.notion-feature-card h3 {
+  font-size: 18px;
+}
+
+.notion-feature-card p {
+  font-size: 15px;
+}
+
+/* Demo */
+.demo-player-title {
+  font-size: 15px;
+}
+
+.demo-player-live {
+  font-size: 12px;
+}
+
+.demo-section-label {
+  font-size: 12px;
+}
+
+.demo-file-selector strong {
+  font-size: 15px;
+}
+
+.demo-file-selector small,
+.demo-progress-header {
+  font-size: 12px;
+}
+
+.demo-document-header strong {
+  font-size: 16px;
+}
+
+.demo-document-header small,
+.demo-document-client,
+.demo-document-total {
+  font-size: 12px;
+}
+
+.demo-main-status strong {
+  font-size: 15px;
+}
+
+.demo-main-status span {
+  font-size: 12px;
+}
+
+.demo-process-step strong {
+  font-size: 15px;
+}
+
+.demo-process-step div span {
+  font-size: 12px;
+}
+
+.demo-extracted-data-header strong {
+  font-size: 14px;
+}
+
+.demo-extracted-data-header span {
+  font-size: 12px;
+}
+
+.demo-data-field span {
+  font-size: 10px;
+}
+
+.demo-data-field strong {
+  font-size: 12px;
+}
+
+.demo-accepted-result strong {
+  font-size: 14px;
+}
+
+.demo-accepted-result span {
+  font-size: 11px;
+}
+
+.demo-control-button {
+  font-size: 12px;
+}
+
+.demo-auto-replay {
+  font-size: 11px;
+}
+
+/* Footer */
+.notion-footer-brand p,
+.notion-footer-grid a {
+  font-size: 15px;
+}
+
+.notion-footer-grid strong {
+  font-size: 16px;
+}
+
+.notion-footer-bottom {
+  font-size: 13px;
+}
+
+/* Security section */
+#security .security-description {
+  font-size: 20px;
+}
+
+#security .security-item-text {
+  font-size: 18px;
+}
+
+#security .security-floating-card strong {
+  font-size: 21px;
+}
+
+#security .security-floating-card > span {
+  font-size: 16px;
+}
+
+/* Responsive readability */
+@media (max-width: 760px) {
+  .stripe-hero-description {
+    font-size: 17px;
+  }
+
+  .notion-section-heading p,
+  .promotional-demo-heading p {
+    font-size: 16px;
+  }
+
+  .notion-feature-card p {
+    font-size: 14px;
+  }
+
+  #security .security-description {
+    font-size: 17px;
+  }
+
+  #security .security-item-text {
+    font-size: 16px;
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| PARTNERS — LOGO VISIBILITY FIX FOR DARK MODE
+|--------------------------------------------------------------------------
+| Some partner logos (especially Divalto) are dark assets and become nearly
+| invisible on the dark background. Keep the original brand colors and place
+| every logo on the same neutral surface instead of applying CSS filters.
+|--------------------------------------------------------------------------
+*/
+
+.moving-partner-item {
+  border: 1px solid transparent;
+  border-radius: 18px;
+}
+
+/* Dark mode: neutral light tile behind every partner logo */
+html[data-theme='dark'] .moving-partner-item {
+  padding: 14px 22px;
+
+  border-color: rgba(255, 255, 255, 0.08);
+
+  background: #ffffff;
+
+  opacity: 0.96;
+
+  box-shadow:
+    0 10px 28px
+    rgba(0, 0, 0, 0.18);
+}
+
+/* Keep original logo colors */
+html[data-theme='dark'] .moving-partner-item img {
+  filter: none !important;
+  opacity: 1;
+}
+
+/* Slightly smaller tiles on mobile */
+@media (max-width: 560px) {
+  html[data-theme='dark'] .moving-partner-item {
+    padding: 10px 16px;
+    border-radius: 14px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BENEFITS SECTION — FINAL
+|--------------------------------------------------------------------------
+*/
+
+.benefits-section {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 105px 0 110px;
+
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(14, 165, 233, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 82%,
+      rgba(79, 70, 229, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #071426 0%,
+      #0d1b3d 55%,
+      #1d2864 100%
+    );
+
+  color: #ffffff;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HEADING
+|--------------------------------------------------------------------------
+*/
+
+.benefits-section .public-section-heading {
+  max-width: 980px;
+
+  margin: 0 auto 60px;
+
+  text-align: center;
+}
+
+
+.benefits-section .public-section-label {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 24px;
+
+  padding: 8px 15px;
+
+  border:
+    1px solid
+    rgba(96, 165, 250, 0.28);
+
+  border-radius: 999px;
+
+  background:
+    rgba(37, 99, 235, 0.13);
+
+  color: #60a5fa;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+.benefits-section
+.public-section-heading h2 {
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  color: #ffffff;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size:
+    clamp(
+      44px,
+      5vw,
+      68px
+    );
+
+  font-weight: 800;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.045em;
+
+  text-wrap: balance;
+}
+
+
+.benefits-section
+.public-section-heading p {
+  max-width: 760px;
+
+  margin:
+    22px auto 0;
+
+  color: #cbd5e1;
+
+  font-size: 18px;
+
+  line-height: 1.7;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GRID
+|--------------------------------------------------------------------------
+*/
+
+.benefits-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 22px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD
+|--------------------------------------------------------------------------
+*/
+
+.benefit-card {
+  position: relative;
+
+  min-height: 285px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 30px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius: 22px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+
+  box-shadow:
+    0 16px 40px
+    rgba(0, 0, 0, 0.13);
+
+  backdrop-filter:
+    blur(10px);
+
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    background-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+
+.benefit-card:hover {
+  transform:
+    translateY(-6px);
+
+  border-color:
+    rgba(96, 165, 250, 0.32);
+
+  background:
+    rgba(255, 255, 255, 0.095);
+
+  box-shadow:
+    0 24px 52px
+    rgba(0, 0, 0, 0.18);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ICON
+|--------------------------------------------------------------------------
+*/
+
+.benefit-icon {
+  width: 52px;
+  height: 52px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 28px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  font-size: 27px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD TITLE
+|--------------------------------------------------------------------------
+*/
+
+.benefit-card h3 {
+  margin:
+    0 0 14px;
+
+  color: #ffffff;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+  line-height: 1.25;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+.benefit-card p {
+  margin: 0;
+
+  color: #cbd5e1;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+|
+| Même rendu que le light mode.
+|
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section {
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(14, 165, 233, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 82%,
+      rgba(79, 70, 229, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #071426 0%,
+      #0d1b3d 55%,
+      #1d2864 100%
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TABLET
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 1100px
+) {
+
+  .benefits-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 650px
+) {
+
+  .benefits-section {
+    padding:
+      78px 0 82px;
+  }
+
+
+  .benefits-section
+  .public-section-heading {
+    margin-bottom: 42px;
+  }
+
+
+  .benefits-section
+  .public-section-heading h2 {
+    font-size:
+      clamp(
+        36px,
+        10vw,
+        48px
+      );
+  }
+
+
+  .benefits-section
+  .public-section-heading p {
+    font-size: 16px;
+  }
+
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+
+  .benefit-card {
+    min-height: auto;
+
+    padding: 24px;
+  }
+
+
+  .benefit-icon {
+    margin-bottom: 20px;
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| BENEFITS SECTION — FINAL
+|--------------------------------------------------------------------------
+*/
+
+.benefits-section {
+  position: relative;
+  overflow: hidden;
+
+  padding: 105px 0 110px;
+
+  /* LIGHT MODE */
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(59, 130, 246, 0.10),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 82%,
+      rgba(99, 102, 241, 0.08),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f6f9ff 48%,
+      #edf3ff 100%
+    );
+
+  color: #0f172a;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HEADING
+|--------------------------------------------------------------------------
+*/
+
+.benefits-section .public-section-heading {
+  max-width: 980px;
+
+  margin: 0 auto 60px;
+
+  text-align: center;
+}
+
+
+.benefits-section
+.public-section-heading h2 {
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  color: #0f172a;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size:
+    clamp(
+      44px,
+      5vw,
+      68px
+    );
+
+  font-weight: 800;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.045em;
+
+  text-wrap: balance;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GRID
+|--------------------------------------------------------------------------
+*/
+
+.benefits-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 22px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD
+|--------------------------------------------------------------------------
+*/
+
+.benefit-card {
+  position: relative;
+
+  min-height: 285px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 30px;
+
+  border:
+    1px solid
+    #dce5f2;
+
+  border-radius: 22px;
+
+  background:
+    rgba(255, 255, 255, 0.82);
+
+  box-shadow:
+    0 16px 40px
+    rgba(15, 23, 42, 0.07);
+
+  backdrop-filter:
+    blur(10px);
+
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    background-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+
+.benefit-card:hover {
+  transform:
+    translateY(-6px);
+
+  border-color:
+    rgba(37, 99, 235, 0.25);
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0 24px 52px
+    rgba(15, 23, 42, 0.11);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ICON
+|--------------------------------------------------------------------------
+*/
+
+.benefit-icon {
+  width: 52px;
+  height: 52px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 28px;
+
+  border-radius: 14px;
+
+  background:
+    #edf4ff;
+
+  font-size: 27px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD TITLE
+|--------------------------------------------------------------------------
+*/
+
+.benefit-card h3 {
+  margin:
+    0 0 14px;
+
+  color: #0f172a;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+  line-height: 1.25;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+.benefit-card p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section {
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(14, 165, 233, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 82%,
+      rgba(79, 70, 229, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #071426 0%,
+      #0d1b3d 55%,
+      #1d2864 100%
+    );
+
+  color: #ffffff;
+}
+
+
+html[data-theme="dark"]
+.benefits-section
+.public-section-heading h2 {
+  color: #ffffff;
+}
+
+
+html[data-theme="dark"]
+.benefit-card {
+  border-color:
+    rgba(255, 255, 255, 0.14);
+
+  background:
+    rgba(255, 255, 255, 0.07);
+
+  box-shadow:
+    0 16px 40px
+    rgba(0, 0, 0, 0.13);
+}
+
+
+html[data-theme="dark"]
+.benefit-card:hover {
+  border-color:
+    rgba(96, 165, 250, 0.32);
+
+  background:
+    rgba(255, 255, 255, 0.095);
+
+  box-shadow:
+    0 24px 52px
+    rgba(0, 0, 0, 0.18);
+}
+
+
+html[data-theme="dark"]
+.benefit-icon {
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+
+html[data-theme="dark"]
+.benefit-card h3 {
+  color: #ffffff;
+}
+
+
+html[data-theme="dark"]
+.benefit-card p {
+  color: #cbd5e1;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TABLET
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 1100px) {
+  .benefits-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 650px) {
+  .benefits-section {
+    padding:
+      78px 0 82px;
+  }
+
+  .benefits-section
+  .public-section-heading {
+    margin-bottom: 42px;
+  }
+
+  .benefits-section
+  .public-section-heading h2 {
+    font-size:
+      clamp(
+        36px,
+        10vw,
+        48px
+      );
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .benefit-card {
+    min-height: auto;
+
+    padding: 24px;
+  }
+
+  .benefit-icon {
+    margin-bottom: 20px;
+  }
+}/*
+|--------------------------------------------------------------------------
+| BENEFITS — FINAL LIGHT / DARK OVERRIDE
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT MODE
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"]) .benefits-section,
+html[data-theme="light"] .benefits-section {
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(37, 99, 235, 0.08),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(99, 102, 241, 0.07),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f7f9fd 50%,
+      #eef4ff 100%
+    ) !important;
+
+  color: #0f172a !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT — TITLE
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"])
+.benefits-section
+.public-section-heading h2,
+
+html[data-theme="light"]
+.benefits-section
+.public-section-heading h2 {
+  color: #0f172a !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT — CARDS
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"])
+.benefits-section
+.benefit-card,
+
+html[data-theme="light"]
+.benefits-section
+.benefit-card {
+  border-color: #dce4ef !important;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.88
+    ) !important;
+
+  box-shadow:
+    0 16px 40px
+    rgba(
+      15,
+      23,
+      42,
+      0.07
+    ) !important;
+
+  backdrop-filter:
+    blur(12px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT — CARD TITLE
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"])
+.benefits-section
+.benefit-card h3,
+
+html[data-theme="light"]
+.benefits-section
+.benefit-card h3 {
+  color: #0f172a !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT — CARD DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"])
+.benefits-section
+.benefit-card p,
+
+html[data-theme="light"]
+.benefits-section
+.benefit-card p {
+  color: #64748b !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT — ICON
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"])
+.benefits-section
+.benefit-icon,
+
+html[data-theme="light"]
+.benefits-section
+.benefit-icon {
+  background:
+    #edf4ff !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT — HOVER
+|--------------------------------------------------------------------------
+*/
+
+html:not([data-theme="dark"])
+.benefits-section
+.benefit-card:hover,
+
+html[data-theme="light"]
+.benefits-section
+.benefit-card:hover {
+  border-color:
+    rgba(
+      37,
+      99,
+      235,
+      0.25
+    ) !important;
+
+  background:
+    #ffffff !important;
+
+  box-shadow:
+    0 24px 52px
+    rgba(
+      15,
+      23,
+      42,
+      0.11
+    ) !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE — KEEP YOUR CURRENT DESIGN
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section {
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(14, 165, 233, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 82%,
+      rgba(79, 70, 229, 0.18),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #071426 0%,
+      #0d1b3d 55%,
+      #1d2864 100%
+    ) !important;
+
+  color:
+    #ffffff !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK — TITLE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section
+.public-section-heading h2 {
+  color:
+    #ffffff !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK — CARDS
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section
+.benefit-card {
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    ) !important;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.07
+    ) !important;
+
+  box-shadow:
+    0 16px 40px
+    rgba(
+      0,
+      0,
+      0,
+      0.13
+    ) !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK — CARD TITLES
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section
+.benefit-card h3 {
+  color:
+    #ffffff !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK — CARD DESCRIPTIONS
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section
+.benefit-card p {
+  color:
+    #cbd5e1 !important;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK — ICON
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section
+.benefit-icon {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    ) !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| GLOBAL TYPOGRAPHY SCALE
+|--------------------------------------------------------------------------
+*/
+
+:root {
+  /* Fonts */
+  --font-body:
+    "Inter",
+    "IBM Plex Sans",
+    Arial,
+    sans-serif;
+
+  --font-title:
+    "Inter",
+    "IBM Plex Sans",
+    Arial,
+    sans-serif;
+
+  --font-mono:
+    "IBM Plex Mono",
+    monospace;
+
+  /* Font sizes */
+  --font-hero:
+    clamp(52px, 5.5vw, 72px);
+
+  --font-section-title:
+    clamp(42px, 4.5vw, 56px);
+
+  --font-block-title:
+    clamp(26px, 2.5vw, 32px);
+
+  --font-card-title:
+    21px;
+
+  --font-body-size:
+    16px;
+
+  --font-small:
+    14px;
+
+  --font-label:
+    12px;
+
+  /* Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+
+  /* Line heights */
+  --line-hero: 0.98;
+  --line-title: 1.08;
+  --line-body: 1.65;
 }

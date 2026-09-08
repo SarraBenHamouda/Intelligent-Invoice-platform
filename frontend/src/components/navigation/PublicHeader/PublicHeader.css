@@ -1,15 +1,65 @@
+/**
+|--------------------------------------------------------------------------
+| PUBLIC HEADER — TENOR CLIENT PORTAL
+|--------------------------------------------------------------------------
+*/
+
 .public-header {
+  --header-bg: #ffffff;
+  --header-border: #e2e8f0;
+  --header-text-primary: #0f172a;
+  --header-text-secondary: #64748b;
+  --header-card-bg: #ffffff;
+  --header-card-border: #dbe3ef;
+  --header-primary: #2563eb;
+  --header-primary-hover: #1d4ed8;
+
   position: sticky;
   top: 0;
   z-index: 50;
 
-  background: var(--header-background, #ffffff);
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  width: 100%;
+
+  background: #ffffff;
+  border-bottom: 1px solid var(--header-border);
+
+  box-shadow: 0 1px 0 rgb(15 23 42 / 4%);
+
+  font-family: var(--font-body);
 
   transition:
     background-color 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+/* Explicit light mode */
+html[data-theme="light"] .public-header {
+  background: #ffffff;
+  border-bottom-color: #e2e8f0;
+}
+
+/* Dark mode only when the document is really in dark mode */
+html[data-theme="dark"] .public-header {
+  --header-bg: #0f172a;
+  --header-border: #25324a;
+  --header-text-primary: #f8fafc;
+  --header-text-secondary: #94a3b8;
+  --header-card-bg: #172033;
+  --header-card-border: #334155;
+  --header-primary: #60a5fa;
+  --header-primary-hover: #93c5fd;
+
+  background: #0f172a;
+
+  box-shadow: 0 1px 0 rgb(255 255 255 / 5%);
+}
+
+/**
+|--------------------------------------------------------------------------
+| CONTAINER
+|--------------------------------------------------------------------------
+*/
 
 .public-header__container {
   width: min(1320px, calc(100% - 48px));
@@ -19,59 +69,103 @@
   align-items: center;
 
   gap: 30px;
+
   margin: 0 auto;
 }
 
-/*
+/**
 |--------------------------------------------------------------------------
-| LOGO
+| BRAND
 |--------------------------------------------------------------------------
 */
 
-.public-header__logo {
+.public-header__brand {
   display: inline-flex;
   align-items: center;
+
+  gap: 14px;
+
   flex-shrink: 0;
 
   color: inherit;
   text-decoration: none;
 }
 
+.public-header__logo {
+  display: inline-flex;
+  align-items: center;
+}
+
 .public-header__logo-container {
   display: inline-flex;
   align-items: center;
+
   width: 145px;
+
   line-height: 0;
 }
 
 .public-header__logo-image {
   display: block;
+
   width: 100%;
   height: auto;
+
   object-fit: contain;
 }
 
-/* Le logo sombre est affiché sur le fond clair */
 .public-header__logo-dark {
   display: block;
 }
 
-/* Le logo clair est caché en mode clair */
 .public-header__logo-light {
   display: none;
 }
 
-/* En mode sombre, on cache le logo sombre */
-html[data-theme="dark"] .public-header__logo-dark {
+html[data-theme="dark"]
+.public-header__logo-dark {
   display: none;
 }
 
-/* En mode sombre, on affiche le logo clair */
-html[data-theme="dark"] .public-header__logo-light {
+html[data-theme="dark"]
+.public-header__logo-light {
   display: block;
 }
 
-/*
+/* No vertical divider: portal text sits naturally beside the logo */
+.public-header__brand-copy {
+  display: grid;
+
+  gap: 3px;
+
+  line-height: 1.15;
+}
+
+.public-header__brand-copy strong {
+  color: #1e293b;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.public-header__brand-copy small {
+  color: #64748b;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+html[data-theme="dark"]
+.public-header__brand-copy strong {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"]
+.public-header__brand-copy small {
+  color: #94a3b8;
+}
+
+/**
 |--------------------------------------------------------------------------
 | NAVIGATION
 |--------------------------------------------------------------------------
@@ -80,6 +174,7 @@ html[data-theme="dark"] .public-header__logo-light {
 .public-header__navigation {
   display: flex;
   align-items: center;
+
   gap: 30px;
 
   margin-left: auto;
@@ -90,18 +185,21 @@ html[data-theme="dark"] .public-header__logo-light {
 
   padding: 29px 0 25px;
 
-  color: var(--text-secondary, #64748b);
+  color: var(--header-text-secondary);
+
   text-decoration: none;
 
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
 
-  transition: color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .public-header__link:hover,
 .public-header__link--active {
-  color: var(--primary-color, #2563eb);
+  color: var(--header-primary);
 }
 
 .public-header__link--active::after {
@@ -115,12 +213,12 @@ html[data-theme="dark"] .public-header__logo-light {
 
   border-radius: 999px 999px 0 0;
 
-  background: var(--primary-color, #2563eb);
+  background: var(--header-primary);
 
   content: "";
 }
 
-/*
+/**
 |--------------------------------------------------------------------------
 | ACTIONS
 |--------------------------------------------------------------------------
@@ -129,6 +227,7 @@ html[data-theme="dark"] .public-header__logo-light {
 .public-header__actions {
   display: flex;
   align-items: center;
+
   gap: 10px;
 }
 
@@ -145,10 +244,12 @@ html[data-theme="dark"] .public-header__logo-light {
   border-radius: 10px;
 
   text-decoration: none;
+
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
 
   transition:
+    color 0.2s ease,
     transform 0.2s ease,
     background-color 0.2s ease,
     border-color 0.2s ease,
@@ -156,51 +257,44 @@ html[data-theme="dark"] .public-header__logo-light {
 }
 
 .public-header__login {
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--header-card-border);
 
-  background: var(--card-background, #ffffff);
-  color: var(--text-primary, #111827);
-}
-
-.public-header__register {
-  border: 1px solid var(--primary-color, #2563eb);
-
-  background: var(--primary-color, #2563eb);
-  color: #ffffff;
-
-  box-shadow: 0 10px 24px rgb(37 99 235 / 22%);
-}
-
-.public-header__login:hover,
-.public-header__register:hover {
-  transform: translateY(-1px);
+  background: var(--header-card-bg);
+  color: var(--header-text-primary);
 }
 
 .public-header__login:hover {
-  border-color: var(--primary-color, #2563eb);
+  border-color: var(--header-primary);
+
+  color: var(--header-primary);
+
+  transform: translateY(-1px);
+}
+
+.public-header__register {
+  border: 1px solid #2563eb;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  box-shadow:
+    0 10px 24px
+    rgb(37 99 235 / 22%);
 }
 
 .public-header__register:hover {
-  background: var(--primary-dark, #1d4ed8);
-  border-color: var(--primary-dark, #1d4ed8);
+  border-color: #1d4ed8;
+
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 12px 28px
+    rgb(37 99 235 / 30%);
 }
 
-/*
-|--------------------------------------------------------------------------
-| DARK MODE
-|--------------------------------------------------------------------------
-*/
-
-html[data-theme="dark"] .public-header {
-  background: var(--header-background, #111827);
-}
-
-html[data-theme="dark"] .public-header__login {
-  background: var(--card-background, #111827);
-  color: var(--text-primary, #f8fafc);
-}
-
-/*
+/**
 |--------------------------------------------------------------------------
 | RESPONSIVE
 |--------------------------------------------------------------------------
@@ -220,11 +314,20 @@ html[data-theme="dark"] .public-header__login {
   .public-header__container {
     width: min(100% - 28px, 1320px);
     min-height: 68px;
+
     gap: 14px;
   }
 
   .public-header__logo-container {
     width: 110px;
+  }
+
+  .public-header__brand-copy strong {
+    font-size: 12px;
+  }
+
+  .public-header__brand-copy small {
+    font-size: 9px;
   }
 
   .public-header__login {
@@ -241,13 +344,73 @@ html[data-theme="dark"] .public-header__login {
     width: 95px;
   }
 
+  .public-header__brand {
+    gap: 9px;
+  }
+
+  .public-header__brand-copy small {
+    display: none;
+  }
+
   .public-header__actions {
     gap: 7px;
   }
 
   .public-header__register {
     min-height: 40px;
+
     padding: 8px 11px;
+
     font-size: 12px;
   }
 }
+
+@media (max-width: 440px) {
+  .public-header__brand-copy {
+    display: none;
+  }
+
+  .public-header__actions > :first-child {
+    display: none;
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADER TYPOGRAPHY — IMPROVED READABILITY
+|--------------------------------------------------------------------------
+*/
+
+.public-header__brand-copy strong {
+  font-size: 15px;
+}
+
+.public-header__brand-copy small {
+  font-size: 12px;
+}
+
+.public-header__link {
+  font-size: 15px;
+}
+
+.public-header__login,
+.public-header__register {
+  font-size: 15px;
+}
+
+@media (max-width: 820px) {
+  .public-header__brand-copy strong {
+    font-size: 13px;
+  }
+
+  .public-header__brand-copy small {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 620px) {
+  .public-header__register {
+    font-size: 12px;
+  }
+}
+

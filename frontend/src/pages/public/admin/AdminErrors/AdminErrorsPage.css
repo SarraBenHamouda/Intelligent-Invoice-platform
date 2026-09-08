@@ -1,0 +1,1027 @@
+/*
+|--------------------------------------------------------------------------
+| PAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors {
+  display: grid;
+  gap: 20px;
+
+  color: var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 13px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ERROR MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors__error {
+  padding: 16px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.25);
+
+  border-radius: 15px;
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-errors__error strong {
+  font-size: 13px;
+}
+
+.admin-errors__error p {
+  margin: 5px 0 0;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.admin-errors__error button {
+  min-height: 40px;
+
+  padding:
+    0 14px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background:
+    var(--admin-red);
+
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATS
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors__stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+}
+
+.admin-errors-stat {
+  position: relative;
+
+  min-height: 150px;
+
+  padding: 19px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text);
+
+  text-align: left;
+
+  box-shadow:
+    var(--admin-shadow);
+
+  cursor: pointer;
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease;
+}
+
+.admin-errors-stat:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    rgba(103, 85, 244, 0.25);
+}
+
+.admin-errors-stat::after {
+  position: absolute;
+
+  right: -30px;
+  bottom: -45px;
+
+  width: 125px;
+  height: 125px;
+
+  border-radius: 50%;
+
+  opacity: 0.1;
+
+  content: "";
+}
+
+.admin-errors-stat--all::after {
+  background:
+    var(--admin-purple);
+}
+
+.admin-errors-stat--critical::after {
+  background:
+    var(--admin-red);
+}
+
+.admin-errors-stat--warning::after {
+  background:
+    var(--admin-orange);
+}
+
+.admin-errors-stat--retry::after {
+  background:
+    var(--admin-blue);
+}
+
+.admin-errors-stat > span {
+  position: relative;
+  z-index: 2;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-errors-stat strong {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  margin-top: 14px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 42px;
+
+  line-height: 1;
+}
+
+.admin-errors-stat small {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  margin-top: 11px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+/*
+|--------------------------------------------------------------------------
+| OVERVIEW
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors__overview {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 15px;
+}
+
+.admin-errors-summary {
+  padding: 21px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-errors-summary header span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-errors-summary header h2 {
+  margin:
+    6px 0 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 24px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SUMMARY LIST
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors-summary__list {
+  margin-top: 16px;
+
+  display: grid;
+
+  gap: 9px;
+}
+
+.admin-errors-summary__list > div {
+  min-height: 50px;
+
+  padding:
+    0 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-errors-summary__list span {
+  overflow: hidden;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 11px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-errors-summary__list strong {
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 12px;
+}
+
+.admin-errors-summary__list p {
+  color:
+    var(--admin-text-muted);
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FILTERS
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors__filters {
+  padding: 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1.5fr)
+    repeat(
+      4,
+      minmax(125px, 0.7fr)
+    )
+    auto;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 17px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-errors-search {
+  min-height: 46px;
+
+  padding:
+    0 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-errors-search span {
+  font-size: 14px;
+}
+
+.admin-errors-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 12px;
+}
+
+.admin-errors-search input::placeholder {
+  color:
+    var(--admin-text-muted);
+}
+
+.admin-errors__filters select {
+  min-height: 46px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 11px;
+
+  outline: 0;
+
+  cursor: pointer;
+}
+
+.admin-errors__filters select:focus,
+.admin-errors-search:focus-within {
+  border-color:
+    rgba(103, 85, 244, 0.4);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(103, 85, 244, 0.07);
+}
+
+.admin-errors__reset {
+  min-height: 46px;
+
+  padding:
+    0 15px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.admin-errors__reset:hover {
+  background:
+    rgba(103, 85, 244, 0.06);
+
+  color:
+    var(--admin-purple);
+}
+
+/*
+|--------------------------------------------------------------------------
+| PANEL
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors__panel {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 21px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-errors__panel-header {
+  padding:
+    22px 23px 19px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border);
+}
+
+.admin-errors__panel-header span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.admin-errors__panel-header h2 {
+  margin:
+    6px 0 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 27px;
+}
+
+.admin-errors__panel-header p {
+  margin:
+    6px 0 0;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 11px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ERRORS LIST
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors-list {
+  padding: 17px;
+
+  display: grid;
+
+  gap: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+/*
+|--------------------------------------------------------------------------
+| ERROR ITEM
+|--------------------------------------------------------------------------
+*/
+
+.admin-error-item {
+  position: relative;
+
+  padding: 17px;
+
+  display: grid;
+
+  grid-template-columns:
+    110px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 18px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 14px;
+
+  background:
+    var(--admin-card-solid);
+}
+
+.admin-error-item::before {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 5px;
+
+  content: "";
+}
+
+.admin-error-item--high::before {
+  background:
+    var(--admin-red);
+}
+
+.admin-error-item--medium::before {
+  background:
+    var(--admin-orange);
+}
+
+.admin-error-item--low::before {
+  background:
+    #d7b52e;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SEVERITY
+|--------------------------------------------------------------------------
+*/
+
+.admin-error-item__severity {
+  text-align: center;
+}
+
+.admin-error-item__severity > span {
+  display: block;
+
+  font-size: 22px;
+}
+
+.admin-error-item__severity strong {
+  display: block;
+
+  margin-top: 7px;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADLINE
+|--------------------------------------------------------------------------
+*/
+
+.admin-error-item__headline {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  flex-wrap: wrap;
+}
+
+.admin-error-item__headline strong {
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 13px;
+}
+
+.admin-error-item__headline span {
+  padding:
+    5px 8px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(232, 154, 22, 0.1);
+
+  color:
+    var(--admin-orange);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ERROR DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+.admin-error-item__main > p {
+  margin:
+    8px 0 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+/*
+|--------------------------------------------------------------------------
+| METADATA
+|--------------------------------------------------------------------------
+*/
+
+.admin-error-item__metadata {
+  margin-top: 12px;
+
+  display: flex;
+
+  gap: 7px;
+
+  flex-wrap: wrap;
+}
+
+.admin-error-item__metadata span {
+  padding:
+    6px 8px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 7px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 9px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.admin-error-item__actions {
+  display: flex;
+  align-items: flex-end;
+
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.admin-error-item__retry {
+  padding:
+    6px 9px;
+
+  border-radius: 7px;
+
+  background:
+    rgba(22, 142, 226, 0.08);
+
+  color:
+    var(--admin-blue);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.admin-error-item__actions a {
+  min-height: 38px;
+
+  padding:
+    0 12px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 9px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.admin-error-item__actions a:hover {
+  transform:
+    translateY(-1px);
+
+  border-color:
+    rgba(103, 85, 244, 0.28);
+
+  background:
+    rgba(103, 85, 244, 0.06);
+
+  color:
+    var(--admin-purple);
+}
+
+/*
+|--------------------------------------------------------------------------
+| EMPTY
+|--------------------------------------------------------------------------
+*/
+
+.admin-errors__empty {
+  min-height: 300px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  color:
+    var(--admin-text-muted);
+
+  text-align: center;
+}
+
+.admin-errors__empty > span {
+  font-size: 40px;
+}
+
+.admin-errors__empty h3 {
+  margin: 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 25px;
+}
+
+.admin-errors__empty p {
+  margin: 0;
+
+  font-size: 11px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+:root[data-admin-theme="dark"]
+.admin-errors__panel,
+:root[data-admin-theme="dark"]
+.admin-errors-summary,
+:root[data-admin-theme="dark"]
+.admin-errors__filters,
+:root[data-admin-theme="dark"]
+.admin-errors-stat {
+  background:
+    rgba(15, 29, 48, 0.94);
+}
+
+:root[data-admin-theme="dark"]
+.admin-errors-list {
+  background:
+    #0c1727;
+}
+
+:root[data-admin-theme="dark"]
+.admin-error-item {
+  background:
+    #0f1d30;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 1200px
+) {
+  .admin-errors__stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-errors__filters {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+@media (
+  max-width: 800px
+) {
+  .admin-errors__overview {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-error-item {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-error-item__severity {
+    text-align: left;
+  }
+
+  .admin-error-item__actions {
+    align-items: flex-start;
+  }
+}
+
+@media (
+  max-width: 600px
+) {
+  .admin-errors__stats,
+  .admin-errors__filters {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-errors-stat strong {
+    font-size: 38px;
+  }
+
+  .admin-errors__panel-header h2 {
+    font-size: 24px;
+  }
+}

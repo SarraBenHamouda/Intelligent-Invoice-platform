@@ -2,11 +2,11 @@
   "common": {
     "login": "Se connecter",
     "register": "Créer un compte",
+    "createSpace": "Créer mon espace",
     "startFree": "Commencer gratuitement",
     "discover": "Découvrir la plateforme",
     "learnMore": "En savoir plus"
   },
-
   "navigation": {
     "home": "Accueil",
     "features": "Fonctionnalités",
@@ -14,22 +14,43 @@
     "about": "À propos",
     "contact": "Contact"
   },
-
   "language": {
     "french": "Français",
     "english": "Anglais",
     "changeLanguage": "Changer la langue"
   },
-
   "hero": {
+    "simpleTitleLine1": "Gérez vos factures",
+    "simpleTitleHighlight": "simplement",
+    "simpleTitleLine2": ", du début à la fin.",
+    "simpleDescription": "Importez, vérifiez et suivez vos factures depuis un seul espace.",
+    "viewDemo": "Voir la démonstration",
+    "journeyLabel": "Étapes de traitement d'une facture",
+    "steps": {
+      "import": "Importer",
+      "verify": "Vérifier",
+      "validate": "Valider",
+      "sign": "Signer",
+      "send": "Envoyer",
+      "track": "Suivre"
+    },
     "eyebrow": "Dématérialisation intelligente",
     "title": "Automatisez la gestion de vos factures électroniques",
     "description": "Une plateforme intelligente pour extraire, valider, signer et suivre vos factures jusqu’à leur transmission à la TTN.",
     "pdfOcr": "Import PDF et OCR",
     "erp": "Connexion ERP",
-    "signature": "Signature XAdES"
+    "signature": "Signature XAdES",
+    "centeredTitleLine1": "Vos factures électroniques",
+    "centeredTitleLine2Start": "sont",
+    "centeredTitleLine3": "de bout en bout.",
+    "rotatingWords": {
+      "imported": "importées",
+      "verified": "vérifiées",
+      "validated": "validées",
+      "signed": "signées",
+      "transmitted": "transmises"
+    }
   },
-
   "pipeline": {
     "title": "Pipeline de facturation",
     "active": "Actif",
@@ -44,7 +65,6 @@
     "ttn": "Transmission TTN",
     "sendAndTrack": "Envoi et suivi du statut"
   },
-
   "trust": {
     "title": "Une plateforme pensée pour les entreprises tunisiennes et françaises",
     "pdf": "Factures PDF",
@@ -54,98 +74,80 @@
     "ttn": "Transmission TTN",
     "realtime": "Suivi en temps réel"
   },
-
   "features": {
     "label": "Fonctionnalités",
     "title": "Tout le cycle de facturation dans une seule plateforme",
     "description": "Une solution centralisée pour réduire les tâches manuelles et améliorer la traçabilité.",
-
     "extraction": {
       "title": "Extraction intelligente",
       "description": "Importez une facture PDF ou scannée. La plateforme extrait automatiquement les fournisseurs, clients, lignes, taxes et totaux."
     },
-
     "erp": {
       "title": "Connexion ERP",
       "description": "Importez directement les factures depuis votre ERP sans ressaisie manuelle."
     },
-
     "validation": {
       "title": "Validation automatique",
       "description": "Contrôlez les champs obligatoires, les montants, les taxes et les incohérences."
     },
-
     "signature": {
       "title": "Signature électronique",
       "description": "Signez les factures avec une signature électronique XAdES sécurisée."
     },
-
     "ttn": {
       "title": "Transmission TTN",
       "description": "Envoyez les factures signées vers la TTN et récupérez leur statut."
     },
-
     "tracking": {
       "title": "Suivi des statuts",
       "description": "Consultez les factures acceptées, rejetées, en attente ou à renvoyer."
     }
   },
-
   "workflow": {
     "label": "Comment ça marche",
     "title": "De la facture à la transmission TTN en quelques étapes",
     "description": "Un parcours simple, centralisé et entièrement traçable.",
-
     "import": {
       "title": "Importer",
       "description": "Ajoutez un PDF, une facture scannée ou sélectionnez une facture ERP."
     },
-
     "extract": {
       "title": "Extraire",
       "description": "La plateforme transforme automatiquement les informations en données structurées."
     },
-
     "verify": {
       "title": "Vérifier",
       "description": "Les champs, les montants, les taxes et les lignes sont contrôlés."
     },
-
     "sign": {
       "title": "Signer",
       "description": "La facture est signée électroniquement avec une signature XAdES."
     },
-
     "send": {
       "title": "Envoyer",
       "description": "Le document signé est transmis vers la plateforme TTN."
     },
-
     "track": {
       "title": "Suivre",
       "description": "Le statut accepté, rejeté ou en attente apparaît dans le tableau de bord."
     }
   },
-
   "solutions": {
     "label": "Solutions",
     "title": "Une solution adaptée à chaque besoin",
     "description": "La plateforme accompagne les petites structures comme les entreprises déjà équipées d’un ERP.",
-
     "small": {
       "title": "Petites entreprises",
       "item1": "Import manuel des factures",
       "item2": "Suivi simple des statuts",
       "item3": "Historique centralisé"
     },
-
     "erp": {
       "title": "Entreprises avec ERP",
       "item1": "Connexion à la base ERP",
       "item2": "Import automatisé",
       "item3": "Réduction de la saisie manuelle"
     },
-
     "admin": {
       "title": "Administrateurs",
       "item1": "Vue globale des clients",
@@ -153,33 +155,27 @@
       "item3": "Gestion des erreurs et utilisateurs"
     }
   },
-
   "benefits": {
     "label": "Avantages",
     "title": "Pourquoi choisir notre plateforme ?",
     "description": "Gagnez en productivité tout en conservant une traçabilité complète.",
-
     "speed": {
       "title": "Traitement rapide",
       "description": "Réduisez le temps consacré à la saisie et au contrôle des factures."
     },
-
     "security": {
       "title": "Données sécurisées",
       "description": "Protégez les accès, les comptes utilisateurs et les documents signés."
     },
-
     "tracking": {
       "title": "Suivi en temps réel",
       "description": "Consultez à tout moment le statut et l’historique de chaque facture."
     },
-
     "errors": {
       "title": "Réduction des erreurs",
       "description": "Détectez les incohérences avant la génération et la transmission."
     }
   },
-
   "security": {
     "label": "Sécurité",
     "title": "La sécurité au cœur de votre facturation",
@@ -194,20 +190,17 @@
     "jwtActive": "JWT actif",
     "verifiedSignature": "XAdES vérifiée"
   },
-
   "statistics": {
     "traceability": "Traçabilité des factures",
     "sources": "Sources prises en charge",
     "access": "Accès à la plateforme",
     "steps": "Étapes automatisées"
   },
-
   "cta": {
     "label": "Commencez maintenant",
     "title": "Prêt à simplifier votre gestion des factures ?",
     "description": "Créez votre compte et centralisez vos factures, vos signatures et leur suivi TTN."
   },
-
   "footer": {
     "description": "Une plateforme intelligente pour centraliser, valider, signer et suivre les factures électroniques.",
     "product": "Produit",

@@ -1,0 +1,116 @@
+/*
+|--------------------------------------------------------------------------
+| PUBLIC LAYOUT
+|--------------------------------------------------------------------------
+*/
+
+.public-site {
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  overflow-x: clip;
+
+  transform: none !important;
+  scale: 1 !important;
+  zoom: 1 !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MAIN
+|--------------------------------------------------------------------------
+*/
+
+.public-main {
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  flex: 1 0 auto;
+
+  display: block;
+
+  position: relative;
+
+  transform: none !important;
+  scale: 1 !important;
+  zoom: 1 !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LANDING PAGE DIRECT CHILD
+|--------------------------------------------------------------------------
+*/
+
+.public-main > * {
+  width: 100%;
+  max-width: none;
+
+  margin-left: 0;
+  margin-right: 0;
+
+  transform-origin: top center;
+}
+
+/*
+|--------------------------------------------------------------------------
+| GLOBAL PUBLIC CONTAINERS
+|--------------------------------------------------------------------------
+*/
+
+.public-site .public-container,
+.public-site .notion-shell {
+  box-sizing: border-box;
+}
+
+/*
+|--------------------------------------------------------------------------
+| BOX SIZING
+|--------------------------------------------------------------------------
+*/
+
+.public-site,
+.public-site *,
+.public-site *::before,
+.public-site *::after {
+  box-sizing: border-box;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MEDIA
+|--------------------------------------------------------------------------
+*/
+
+.public-site img,
+.public-site svg,
+.public-site video,
+.public-site canvas {
+  max-width: 100%;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 850px) {
+  .public-site,
+  .public-main {
+    width: 100%;
+    min-width: 0;
+  }
+}

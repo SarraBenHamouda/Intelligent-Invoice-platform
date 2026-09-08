@@ -1,0 +1,1731 @@
+/*
+|--------------------------------------------------------------------------
+| PAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients {
+  display: grid;
+  gap: 17px;
+
+  color:
+    var(--admin-text);
+}
+
+/*
+|--------------------------------------------------------------------------
+| ERROR
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients__error {
+  padding: 15px 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.25);
+
+  border-radius: 15px;
+
+  background:
+    rgba(217, 75, 75, 0.07);
+}
+
+.admin-clients__error strong {
+  color:
+    var(--admin-red);
+
+  font-size: 11px;
+}
+
+.admin-clients__error p {
+  margin:
+    5px 0 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 9px;
+}
+
+.admin-clients__error button {
+  min-height: 37px;
+
+  padding:
+    0 13px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-red);
+
+  color: #ffffff;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATS
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients__stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 13px;
+}
+
+.admin-clients-stat {
+  position: relative;
+
+  min-height: 137px;
+
+  padding: 17px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text);
+
+  text-align: left;
+
+  box-shadow:
+    var(--admin-shadow);
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease;
+}
+
+button.admin-clients-stat {
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  cursor: pointer;
+}
+
+.admin-clients-stat::after {
+  position: absolute;
+
+  right: -34px;
+  bottom: -45px;
+
+  width: 125px;
+  height: 125px;
+
+  border-radius: 50%;
+
+  opacity: 0.11;
+
+  content: "";
+}
+
+.admin-clients-stat--purple::after {
+  background:
+    var(--admin-purple);
+}
+
+.admin-clients-stat--green::after {
+  background:
+    var(--admin-green);
+}
+
+.admin-clients-stat--blue::after {
+  background:
+    var(--admin-blue);
+}
+
+.admin-clients-stat--orange::after {
+  background:
+    var(--admin-orange);
+}
+
+button.admin-clients-stat:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    rgba(103, 85, 244, 0.25);
+}
+
+.admin-clients-stat > span {
+  position: relative;
+  z-index: 2;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.admin-clients-stat > strong {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  margin-top: 13px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 38px;
+
+  line-height: 1;
+}
+
+.admin-clients-stat > small {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  margin-top: 10px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 7px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SUMMARY
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients-summary {
+  padding: 17px 18px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(103, 85, 244, 0.07),
+      rgba(22, 142, 226, 0.025),
+      var(--admin-card)
+    );
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-clients-summary__icon {
+  width: 47px;
+  height: 47px;
+
+  flex: 0 0 47px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background:
+    rgba(103, 85, 244, 0.1);
+
+  font-size: 20px;
+}
+
+.admin-clients-summary span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.admin-clients-summary strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 18px;
+}
+
+.admin-clients-summary p {
+  margin:
+    4px 0 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 9px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FILTERS
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients__filters {
+  padding: 13px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(280px, 1fr)
+    minmax(160px, 230px)
+    auto;
+
+  gap: 8px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 17px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-clients-search {
+  min-height: 42px;
+
+  padding:
+    0 12px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-clients-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 10px;
+}
+
+.admin-clients-search input::placeholder {
+  color:
+    var(--admin-text-muted);
+}
+
+.admin-clients__filters select {
+  min-height: 42px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 9px;
+
+  outline: 0;
+}
+
+.admin-clients__reset {
+  min-height: 42px;
+
+  padding:
+    0 14px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.admin-clients__reset:hover {
+  background:
+    rgba(103, 85, 244, 0.06);
+
+  color:
+    var(--admin-purple);
+}
+
+/*
+|--------------------------------------------------------------------------
+| PANEL
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients__panel {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 21px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-clients__panel-header {
+  padding:
+    20px 21px 17px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border);
+}
+
+.admin-clients__panel-header span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.admin-clients__panel-header h2 {
+  margin:
+    5px 0 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 23px;
+}
+
+.admin-clients__panel-header p {
+  margin:
+    5px 0 0;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 9px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CLIENT GRID
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients-grid {
+  padding: 17px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+/*
+|--------------------------------------------------------------------------
+| CLIENT CARD
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card {
+  min-width: 0;
+
+  padding: 17px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 17px;
+
+  background:
+    var(--admin-card-solid);
+
+  color:
+    var(--admin-text);
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.admin-client-card:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    rgba(103, 85, 244, 0.24);
+
+  box-shadow:
+    0 14px 30px
+    rgba(22, 43, 76, 0.08);
+}
+
+/*
+|--------------------------------------------------------------------------
+| TOP
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 13px;
+}
+
+.admin-client-card__identity {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.admin-client-card__avatar {
+  width: 47px;
+  height: 47px;
+
+  flex: 0 0 47px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7864ff,
+      #315fba
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  box-shadow:
+    0 9px 20px
+    rgba(103, 85, 244, 0.2);
+}
+
+.admin-client-card__eyebrow {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 7px;
+
+  text-transform: uppercase;
+}
+
+.admin-client-card__identity h3 {
+  margin:
+    4px 0 0;
+
+  overflow: hidden;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 17px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-client-card__identity small {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 8px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATUS
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients-status {
+  min-height: 25px;
+
+  padding:
+    0 8px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 999px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.admin-clients-status--active {
+  background:
+    rgba(16, 166, 109, 0.1);
+
+  color:
+    var(--admin-green);
+}
+
+.admin-clients-status--inactive {
+  background:
+    rgba(217, 75, 75, 0.09);
+
+  color:
+    var(--admin-red);
+}
+
+/*
+|--------------------------------------------------------------------------
+| IDENTIFIER
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card__identifier {
+  margin-top: 15px;
+
+  padding:
+    10px 11px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-client-card__identifier span {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 7px;
+}
+
+.admin-client-card__identifier strong {
+  display: block;
+
+  margin-top: 4px;
+
+  overflow-wrap: anywhere;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 8px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| METRICS
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card__metrics {
+  margin-top: 11px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+}
+
+.admin-client-card__metrics > div {
+  min-height: 87px;
+
+  padding: 10px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-client-card__metrics span {
+  font-size: 13px;
+}
+
+.admin-client-card__metrics strong {
+  display: block;
+
+  margin-top: 7px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 14px;
+}
+
+.admin-client-card__metrics small {
+  display: block;
+
+  margin-top: 3px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 7px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEALTH
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card__health {
+  margin-top: 9px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+}
+
+.admin-client-card__health > div {
+  min-height: 54px;
+
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-client-card__health span {
+  color:
+    var(--admin-text-muted);
+
+  font-size: 8px;
+}
+
+.admin-client-card__health strong {
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 11px;
+}
+
+.admin-client-card__attention {
+  color:
+    var(--admin-orange) !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ACTIVITY
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card__activity {
+  margin-top: 9px;
+
+  padding:
+    10px 11px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-client-card__activity span {
+  color:
+    var(--admin-text-muted);
+
+  font-size: 7px;
+}
+
+.admin-client-card__activity strong {
+  display: block;
+
+  margin-top: 3px;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 8px;
+}
+
+.admin-client-card__pulse {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color:
+    var(--admin-green) !important;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 7px !important;
+}
+
+.admin-client-card__pulse i {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background:
+    var(--admin-green);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(16, 166, 109, 0.1);
+
+  animation:
+    adminClientPulse
+    1.8s
+    ease-in-out
+    infinite;
+}
+
+@keyframes adminClientPulse {
+  50% {
+    box-shadow:
+      0 0 0 7px
+      rgba(16, 166, 109, 0);
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| CLIENT CARD ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-card__footer {
+  margin-top: 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 9px;
+}
+
+.admin-client-card__footer a,
+.admin-client-card__footer button {
+  min-height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding:
+    0 12px;
+
+  border-radius: 10px;
+
+  font-family:
+    "Inter",
+    "IBM Plex Sans",
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.admin-client-card__secondary {
+  border:
+    1px solid
+    var(--admin-border);
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+}
+
+.admin-client-card__primary {
+  border:
+    1px solid
+    rgba(103, 85, 244, 0.2);
+
+  background:
+    rgba(103, 85, 244, 0.09);
+
+  color:
+    var(--admin-purple);
+}
+
+.admin-client-card__delete {
+  grid-column:
+    1 / -1;
+
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.22);
+
+  background:
+    rgba(217, 75, 75, 0.055);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-client-card__footer a:hover {
+  transform:
+    translateY(-2px);
+}
+
+.admin-client-card__secondary:hover {
+  border-color:
+    rgba(103, 85, 244, 0.25);
+
+  color:
+    var(--admin-purple);
+}
+
+.admin-client-card__primary:hover {
+  background:
+    rgba(103, 85, 244, 0.14);
+
+  box-shadow:
+    0 7px 18px
+    rgba(103, 85, 244, 0.1);
+}
+
+.admin-client-card__delete:hover {
+  transform:
+    translateY(-1px);
+
+  border-color:
+    rgba(217, 75, 75, 0.4);
+
+  background:
+    rgba(217, 75, 75, 0.11);
+
+  box-shadow:
+    0 7px 18px
+    rgba(217, 75, 75, 0.09);
+}
+
+/*
+|--------------------------------------------------------------------------
+| DELETE CLIENT MODAL
+|--------------------------------------------------------------------------
+*/
+
+.admin-client-delete-modal {
+  position: fixed;
+
+  z-index: 10000;
+
+  inset: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 24px;
+
+  background:
+    rgba(7, 15, 28, 0.62);
+
+  backdrop-filter:
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
+}
+
+.admin-client-delete-modal__panel {
+  position: relative;
+
+  width:
+    min(500px, 100%);
+
+  padding:
+    31px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 22px;
+
+  background:
+    var(--admin-card-solid);
+
+  color:
+    var(--admin-text);
+
+  box-shadow:
+    0 30px 80px
+    rgba(0, 0, 0, 0.28);
+
+  animation:
+    adminClientDeleteModalIn
+    180ms
+    ease-out;
+}
+
+@keyframes adminClientDeleteModalIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+.admin-client-delete-modal__close {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  width: 36px;
+  height: 36px;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 0;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.admin-client-delete-modal__close:hover {
+  border-color:
+    rgba(217, 75, 75, 0.3);
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-client-delete-modal__icon {
+  width: 50px;
+  height: 50px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 19px;
+
+  border-radius: 15px;
+
+  background:
+    rgba(217, 75, 75, 0.1);
+
+  color:
+    var(--admin-red);
+
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.admin-client-delete-modal__eyebrow {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color:
+    var(--admin-red);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing:
+    0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-client-delete-modal__panel h2 {
+  margin: 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 27px;
+  font-weight: 900;
+
+  line-height: 1.12;
+
+  letter-spacing:
+    -0.035em;
+}
+
+.admin-client-delete-modal__panel > p {
+  margin:
+    11px 0 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.65;
+}
+
+.admin-client-delete-modal__panel > p strong {
+  color:
+    var(--admin-text);
+}
+
+.admin-client-delete-modal__warning {
+  margin-top: 21px;
+
+  padding: 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto minmax(0, 1fr);
+
+  gap: 11px;
+
+  border:
+    1px solid
+    rgba(232, 154, 22, 0.2);
+
+  border-radius: 12px;
+
+  background:
+    rgba(232, 154, 22, 0.07);
+}
+
+.admin-client-delete-modal__warning > span {
+  width: 31px;
+  height: 31px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 9px;
+
+  background:
+    rgba(232, 154, 22, 0.12);
+
+  font-size: 14px;
+}
+
+.admin-client-delete-modal__warning strong {
+  display: block;
+
+  color:
+    var(--admin-text);
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.admin-client-delete-modal__warning p {
+  margin:
+    4px 0 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+.admin-client-delete-modal__error {
+  margin-top: 13px;
+
+  padding:
+    11px 12px;
+
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.22);
+
+  border-radius: 10px;
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    var(--admin-red);
+
+  font-size: 10px;
+  font-weight: 650;
+
+  line-height: 1.5;
+}
+
+.admin-client-delete-modal__actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 24px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid
+    var(--admin-border);
+}
+
+.admin-client-delete-modal__cancel,
+.admin-client-delete-modal__confirm {
+  min-height: 42px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    0 15px;
+
+  border-radius: 10px;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.admin-client-delete-modal__cancel {
+  border:
+    1px solid
+    var(--admin-border);
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text);
+}
+
+.admin-client-delete-modal__confirm {
+  border:
+    1px solid
+    var(--admin-red);
+
+  background:
+    var(--admin-red);
+
+  color:
+    #ffffff;
+
+  box-shadow:
+    0 8px 20px
+    rgba(217, 75, 75, 0.18);
+}
+
+.admin-client-delete-modal__cancel:hover:not(:disabled),
+.admin-client-delete-modal__confirm:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+}
+
+.admin-client-delete-modal__confirm:hover:not(:disabled) {
+  box-shadow:
+    0 11px 24px
+    rgba(217, 75, 75, 0.24);
+}
+
+.admin-client-delete-modal__cancel:disabled,
+.admin-client-delete-modal__confirm:disabled,
+.admin-client-delete-modal__close:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODAL
+|--------------------------------------------------------------------------
+*/
+
+:root[data-admin-theme="dark"]
+.admin-client-delete-modal {
+  background:
+    rgba(2, 7, 15, 0.78);
+}
+
+:root[data-admin-theme="dark"]
+.admin-client-delete-modal__panel {
+  background:
+    #0f1d30;
+
+  box-shadow:
+    0 35px 90px
+    rgba(0, 0, 0, 0.55);
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 750px) {
+  .admin-client-card__footer {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-client-card__delete {
+    grid-column:
+      auto;
+  }
+
+  .admin-client-delete-modal {
+    padding: 15px;
+  }
+
+  .admin-client-delete-modal__panel {
+    padding:
+      25px 20px 20px;
+
+    border-radius:
+      18px;
+  }
+
+  .admin-client-delete-modal__actions {
+    flex-direction:
+      column-reverse;
+  }
+
+  .admin-client-delete-modal__cancel,
+  .admin-client-delete-modal__confirm {
+    width: 100%;
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOADING / EMPTY
+|--------------------------------------------------------------------------
+*/
+
+.admin-clients__loading,
+.admin-clients__empty {
+  min-height: 350px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 11px;
+
+  color:
+    var(--admin-text-muted);
+
+  text-align: center;
+}
+
+.admin-clients__loading > span {
+  width: 32px;
+  height: 32px;
+
+  border:
+    3px solid
+    var(--admin-border);
+
+  border-top-color:
+    var(--admin-purple);
+
+  border-radius: 50%;
+
+  animation:
+    adminClientsSpin
+    700ms
+    linear
+    infinite;
+}
+
+@keyframes adminClientsSpin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+.admin-clients__loading p {
+  font-size: 9px;
+}
+
+.admin-clients__empty > span {
+  font-size: 35px;
+}
+
+.admin-clients__empty h3 {
+  margin: 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 22px;
+}
+
+.admin-clients__empty p {
+  margin: 0;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 9px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+:root[data-admin-theme="dark"]
+.admin-clients__panel,
+:root[data-admin-theme="dark"]
+.admin-clients__filters,
+:root[data-admin-theme="dark"]
+.admin-clients-stat {
+  background:
+    rgba(15, 29, 48, 0.94);
+}
+
+:root[data-admin-theme="dark"]
+.admin-clients-grid {
+  background:
+    #0c1727;
+}
+
+:root[data-admin-theme="dark"]
+.admin-client-card {
+  background:
+    #0f1d30;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 1150px
+) {
+  .admin-clients__stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-clients-grid {
+    grid-template-columns:
+      1fr;
+  }
+}
+
+@media (
+  max-width: 750px
+) {
+  .admin-clients__filters {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-clients__stats {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-client-card__metrics {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-client-card__health {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-client-card__footer {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-clients__error {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+}

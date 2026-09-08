@@ -1,0 +1,2043 @@
+/*
+|--------------------------------------------------------------------------
+| PAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-page {
+  display: grid;
+  gap: 20px;
+
+  color: var(--admin-text);
+
+  font-family:
+    "Inter",
+    "IBM Plex Sans",
+    Arial,
+    sans-serif;
+
+  font-size: 13px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-hero {
+  position: relative;
+
+  min-height: 270px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 26px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-profile-hero__visual {
+  position: absolute;
+  inset: 0;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      120deg,
+      #101d35 0%,
+      #28245f 50%,
+      #0b6087 100%
+    );
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__visual {
+  background:
+    linear-gradient(
+      120deg,
+      #eef0ff 0%,
+      #e7f3ff 51%,
+      #e7faf7 100%
+    );
+}
+
+.admin-profile-hero__grid {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    40px
+    40px;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__grid {
+  background-image:
+    linear-gradient(
+      rgba(103, 85, 244, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(103, 85, 244, 0.045) 1px,
+      transparent 1px
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO ORBS
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-hero__orb {
+  position: absolute;
+
+  display: block;
+
+  border-radius: 50%;
+
+  animation:
+    adminProfileFloatingOrb
+    11s
+    ease-in-out
+    infinite;
+}
+
+.admin-profile-hero__orb--one {
+  width: 330px;
+  height: 330px;
+
+  right: -70px;
+  top: -175px;
+
+  background:
+    rgba(122, 92, 255, 0.25);
+}
+
+.admin-profile-hero__orb--two {
+  width: 230px;
+  height: 230px;
+
+  left: 34%;
+  bottom: -155px;
+
+  background:
+    rgba(56, 189, 248, 0.15);
+
+  animation-delay: -4s;
+}
+
+.admin-profile-hero__orb--three {
+  width: 130px;
+  height: 130px;
+
+  left: 8%;
+  top: -55px;
+
+  background:
+    rgba(52, 211, 153, 0.08);
+
+  animation-delay: -7s;
+}
+
+@keyframes adminProfileFloatingOrb {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate3d(28px, 20px, 0)
+      scale(1.07);
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-hero__content {
+  position: relative;
+  z-index: 2;
+
+  min-height: 270px;
+
+  padding: 40px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 27px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| AVATAR ZONE
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-avatar-zone {
+  position: relative;
+
+  width: 112px;
+  height: 112px;
+
+  flex:
+    0 0 112px;
+}
+
+.admin-profile-hero__avatar {
+  position: relative;
+
+  width: 112px;
+  height: 112px;
+
+  overflow: visible;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    5px solid
+    rgba(255, 255, 255, 0.18);
+
+  border-radius: 31px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8370ff,
+      #5544e8
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    serif;
+
+  font-size: 36px;
+  font-weight: 900;
+
+  box-shadow:
+    0
+    20px
+    45px
+    rgba(0, 0, 0, 0.2);
+}
+
+.admin-profile-hero__avatar img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 26px;
+}
+
+.admin-profile-hero__online {
+  position: absolute;
+
+  right: -2px;
+  bottom: -2px;
+
+  width: 22px;
+  height: 22px;
+
+  border:
+    4px solid
+    #ffffff;
+
+  border-radius: 50%;
+
+  background:
+    #22c55e;
+
+  box-shadow:
+    0
+    0
+    0
+    5px
+    rgba(34, 197, 94, 0.13);
+}
+
+/*
+|--------------------------------------------------------------------------
+| CAMERA BUTTON
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-avatar-edit {
+  position: absolute;
+
+  right: -8px;
+  top: -8px;
+
+  z-index: 8;
+
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    3px solid
+    var(--admin-card-solid);
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #725df8,
+      #5140dd
+    );
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0
+    8px
+    18px
+    rgba(64, 46, 180, 0.25);
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.admin-profile-avatar-edit:hover {
+  transform:
+    translateY(-2px)
+    scale(1.06);
+
+  box-shadow:
+    0
+    12px
+    24px
+    rgba(64, 46, 180, 0.32);
+}
+
+.admin-profile-avatar-input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO IDENTITY
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-hero__identity {
+  min-width: 0;
+}
+
+.admin-profile-hero__badges {
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.admin-profile-badge {
+  min-height: 32px;
+
+  padding:
+    0
+    11px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 999px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.admin-profile-badge--admin {
+  border:
+    1px solid
+    rgba(165, 145, 255, 0.25);
+
+  background:
+    rgba(122, 92, 255, 0.18);
+
+  color: #d7d0ff;
+}
+
+.admin-profile-badge--active {
+  border:
+    1px solid
+    rgba(52, 211, 153, 0.2);
+
+  background:
+    rgba(52, 211, 153, 0.11);
+
+  color: #8df0c4;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-badge--admin {
+  color:
+    #5f4bd6;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-badge--active {
+  color:
+    #078453;
+}
+
+.admin-profile-hero__identity h2 {
+  margin:
+    14px
+    0
+    0;
+
+  color: #ffffff;
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    sans-serif;
+
+  font-size:
+    clamp(
+      36px,
+      4vw,
+      48px
+    );
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  letter-spacing:
+    -0.04em;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__identity h2 {
+  color:
+    var(--admin-text);
+}
+
+.admin-profile-hero__identity > p {
+  margin:
+    10px
+    0
+    0;
+
+  color:
+    rgba(255, 255, 255, 0.72);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__identity > p {
+  color:
+    var(--admin-text-secondary);
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO META
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-hero__meta {
+  margin-top: 18px;
+
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.admin-profile-hero__meta > span {
+  min-height: 33px;
+
+  padding:
+    0
+    11px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.11);
+
+  border-radius: 9px;
+
+  background:
+    rgba(0, 0, 0, 0.1);
+
+  color:
+    rgba(255, 255, 255, 0.8);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__meta > span {
+  border-color:
+    var(--admin-border);
+
+  background:
+    rgba(255, 255, 255, 0.55);
+
+  color:
+    var(--admin-text-secondary);
+}
+
+/*
+|--------------------------------------------------------------------------
+| AVATAR ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-avatar-actions {
+  margin-top: 18px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  flex-wrap: wrap;
+}
+
+.admin-profile-avatar-button {
+  min-height: 40px;
+
+  padding:
+    0
+    14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.13);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  color:
+    rgba(255, 255, 255, 0.87);
+
+  font-family:
+    "Inter",
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  backdrop-filter:
+    blur(10px);
+
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-profile-avatar-button:hover:not(:disabled) {
+  transform:
+    translateY(-2px);
+
+  background:
+    rgba(255, 255, 255, 0.13);
+}
+
+.admin-profile-avatar-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+.admin-profile-avatar-button--primary {
+  border-color:
+    rgba(154, 137, 255, 0.35);
+
+  background:
+    rgba(123, 99, 255, 0.24);
+
+  color: #ffffff;
+}
+
+.admin-profile-avatar-button--save {
+  border-color:
+    rgba(52, 211, 153, 0.26);
+
+  background:
+    rgba(52, 211, 153, 0.15);
+
+  color:
+    #a7f3d0;
+}
+
+.admin-profile-avatar-button--danger {
+  border-color:
+    rgba(251, 113, 133, 0.24);
+
+  background:
+    rgba(251, 113, 133, 0.11);
+
+  color:
+    #fecdd3;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-button {
+  border-color:
+    var(--admin-border);
+
+  background:
+    rgba(255, 255, 255, 0.64);
+
+  color:
+    var(--admin-text-secondary);
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-button--primary {
+  border-color:
+    rgba(103, 85, 244, 0.22);
+
+  background:
+    rgba(103, 85, 244, 0.11);
+
+  color:
+    #5946d7;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-button--save {
+  border-color:
+    rgba(16, 166, 109, 0.2);
+
+  background:
+    rgba(16, 166, 109, 0.09);
+
+  color:
+    #08794f;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-button--danger {
+  border-color:
+    rgba(217, 75, 75, 0.18);
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    #bd3939;
+}
+
+/*
+|--------------------------------------------------------------------------
+| AVATAR FILE
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-avatar-file {
+  max-width: 440px;
+
+  margin-top: 11px;
+
+  padding:
+    10px
+    12px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.1);
+
+  border-radius: 9px;
+
+  background:
+    rgba(0, 0, 0, 0.08);
+}
+
+.admin-profile-avatar-file span {
+  color:
+    rgba(255, 255, 255, 0.55);
+
+  font-size: 10px;
+}
+
+.admin-profile-avatar-file strong {
+  overflow: hidden;
+
+  color:
+    rgba(255, 255, 255, 0.84);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-file {
+  border-color:
+    var(--admin-border);
+
+  background:
+    rgba(255, 255, 255, 0.5);
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-file span {
+  color:
+    var(--admin-text-muted);
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-file strong {
+  color:
+    var(--admin-text);
+}
+
+/*
+|--------------------------------------------------------------------------
+| AVATAR MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-avatar-message {
+  max-width: 440px;
+
+  margin-top: 11px;
+
+  padding:
+    11px
+    13px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-profile-avatar-message--success {
+  border:
+    1px solid
+    rgba(52, 211, 153, 0.2);
+
+  background:
+    rgba(52, 211, 153, 0.11);
+
+  color:
+    #8df0c4;
+}
+
+.admin-profile-avatar-message--error {
+  border:
+    1px solid
+    rgba(251, 113, 133, 0.22);
+
+  background:
+    rgba(251, 113, 133, 0.11);
+
+  color:
+    #fecdd3;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-message--success {
+  color:
+    #08794f;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-avatar-message--error {
+  color:
+    #bd3939;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO STATUS
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-hero__status {
+  min-width: 180px;
+
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-radius: 17px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  backdrop-filter:
+    blur(13px);
+
+  text-align: center;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__status {
+  border-color:
+    var(--admin-border);
+
+  background:
+    rgba(255, 255, 255, 0.58);
+}
+
+.admin-profile-hero__status-label {
+  color:
+    rgba(255, 255, 255, 0.58);
+
+  font-size: 10px;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__status-label {
+  color:
+    var(--admin-text-muted);
+}
+
+.admin-profile-hero__status strong {
+  display: block;
+
+  margin-top: 9px;
+
+  color: #ffffff;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 22px;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__status strong {
+  color:
+    var(--admin-purple);
+}
+
+.admin-profile-hero__status small {
+  display: block;
+
+  margin-top: 5px;
+
+  color:
+    rgba(255, 255, 255, 0.52);
+
+  font-size: 10px;
+}
+
+:root[data-admin-theme="light"]
+.admin-profile-hero__status small {
+  color:
+    var(--admin-text-muted);
+}
+
+/*
+|--------------------------------------------------------------------------
+| MISSION
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-mission {
+  padding: 22px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 18px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(103, 85, 244, 0.09),
+      rgba(22, 142, 226, 0.04),
+      var(--admin-card)
+    );
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-profile-mission__icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background:
+    rgba(103, 85, 244, 0.11);
+
+  font-size: 24px;
+}
+
+.admin-profile-mission__content > span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-profile-mission__content h3 {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    sans-serif;
+
+  font-size: 24px;
+  font-weight: 850;
+}
+
+.admin-profile-mission__content p {
+  max-width: 850px;
+
+  margin:
+    8px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+.admin-profile-mission__link {
+  min-height: 44px;
+
+  padding:
+    0
+    16px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-solid);
+
+  color:
+    var(--admin-text);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-profile-mission__link:hover {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(103, 85, 244, 0.3);
+}
+
+/*
+|--------------------------------------------------------------------------
+| MAIN GRID
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 17px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CARDS
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-card {
+  min-width: 0;
+
+  padding: 22px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 20px;
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text);
+
+  box-shadow:
+    var(--admin-shadow);
+
+  backdrop-filter:
+    blur(12px);
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease;
+}
+
+.admin-profile-card:hover {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(103, 85, 244, 0.2);
+}
+
+/*
+|--------------------------------------------------------------------------
+| CARD HEADER
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-card__header {
+  padding-bottom: 17px;
+
+  margin-bottom: 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border-soft);
+}
+
+.admin-profile-card__header-icon {
+  width: 47px;
+  height: 47px;
+
+  flex:
+    0 0 47px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(103, 85, 244, 0.11),
+      rgba(22, 142, 226, 0.06)
+    );
+
+  font-size: 20px;
+}
+
+.admin-profile-card__header span {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-profile-card__header h3 {
+  margin:
+    4px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    sans-serif;
+
+  font-size: 24px;
+  font-weight: 850;
+}
+
+/*
+|--------------------------------------------------------------------------
+| INFORMATION
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-information {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+}
+
+.admin-profile-information__item {
+  min-height: 78px;
+
+  padding: 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-profile-information__item--wide {
+  grid-column:
+    1 / -1;
+}
+
+.admin-profile-information__icon {
+  width: 40px;
+  height: 40px;
+
+  flex:
+    0 0 40px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 10px;
+
+  background:
+    rgba(103, 85, 244, 0.07);
+
+  font-size: 17px;
+}
+
+.admin-profile-information__item small {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-profile-information__item strong {
+  display: block;
+
+  margin-top: 5px;
+
+  overflow-wrap: anywhere;
+
+  color:
+    var(--admin-text);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SECURITY
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-security {
+  display: grid;
+
+  gap: 10px;
+}
+
+.admin-profile-security__item {
+  min-height: 72px;
+
+  padding: 12px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-profile-security__icon {
+  width: 41px;
+  height: 41px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 10px;
+
+  background:
+    rgba(103, 85, 244, 0.08);
+
+  font-size: 17px;
+}
+
+.admin-profile-security__item small {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-profile-security__item strong {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--admin-text);
+
+  font-size: 13px;
+}
+
+.admin-profile-security__state {
+  padding:
+    6px
+    9px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(16, 166, 109, 0.1);
+
+  color:
+    var(--admin-green);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.admin-profile-security__notice {
+  margin-top: 11px;
+
+  padding: 14px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    rgba(22, 142, 226, 0.12);
+
+  border-radius: 11px;
+
+  background:
+    rgba(22, 142, 226, 0.06);
+}
+
+.admin-profile-security__notice p {
+  margin: 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ORGANIZATION
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-organization {
+  padding: 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 13px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-profile-organization__logo {
+  width: 58px;
+  height: 58px;
+
+  flex:
+    0 0 58px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7864ff,
+      #134f8a
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    sans-serif;
+
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.admin-profile-organization small {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-profile-organization strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    sans-serif;
+
+  font-size: 20px;
+  font-weight: 850;
+}
+
+.admin-profile-organization p {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.admin-profile-organization__id {
+  margin-top: 11px;
+
+  padding: 13px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-profile-organization__id span {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-profile-organization__id strong {
+  display: block;
+
+  margin-top: 6px;
+
+  overflow-wrap: anywhere;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SCOPE
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-scope {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+}
+
+.admin-profile-scope > div {
+  min-height: 100px;
+
+  padding: 14px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--admin-card-soft);
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-profile-scope > div:hover {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(103, 85, 244, 0.22);
+}
+
+.admin-profile-scope span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.admin-profile-scope p {
+  margin:
+    20px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIBILITIES
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-responsibilities {
+  padding: 24px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 22px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-profile-section-header {
+  margin-bottom: 20px;
+}
+
+.admin-profile-section-header span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.admin-profile-section-header h3 {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Inter",
+    "Fraunces",
+    sans-serif;
+
+  font-size: 28px;
+  font-weight: 850;
+}
+
+.admin-profile-section-header p {
+  margin:
+    7px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+}
+
+.admin-profile-responsibilities__grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(0, 1fr)
+    );
+
+  gap: 11px;
+}
+
+.admin-profile-responsibility {
+  min-height: 220px;
+
+  padding: 17px;
+
+  display: flex;
+  flex-direction: column;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 15px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text);
+
+  text-decoration: none;
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.admin-profile-responsibility:hover {
+  transform:
+    translateY(-4px);
+
+  border-color:
+    rgba(103, 85, 244, 0.26);
+
+  box-shadow:
+    0
+    13px
+    27px
+    rgba(20, 38, 70, 0.08);
+}
+
+.admin-profile-responsibility__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-profile-responsibility__number {
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+.admin-profile-responsibility__icon {
+  width: 43px;
+  height: 43px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background:
+    rgba(103, 85, 244, 0.08);
+
+  font-size: 19px;
+}
+
+.admin-profile-responsibility > strong {
+  margin-top: 19px;
+
+  color:
+    var(--admin-text);
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.admin-profile-responsibility > p {
+  margin:
+    8px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+.admin-profile-responsibility__link {
+  margin-top: auto;
+
+  padding-top: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color:
+    var(--admin-purple);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER
+|--------------------------------------------------------------------------
+*/
+
+.admin-profile-footer {
+  padding: 19px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 13px;
+
+  border:
+    1px solid
+    rgba(103, 85, 244, 0.16);
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(103, 85, 244, 0.075),
+      rgba(22, 142, 226, 0.03)
+    );
+}
+
+.admin-profile-footer__icon {
+  width: 45px;
+  height: 45px;
+
+  flex:
+    0 0 45px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background:
+    rgba(103, 85, 244, 0.09);
+
+  font-size: 19px;
+}
+
+.admin-profile-footer strong {
+  color:
+    var(--admin-text);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.admin-profile-footer p {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 1250px
+) {
+  .admin-profile-responsibilities__grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+@media (
+  max-width: 950px
+) {
+  .admin-profile-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-profile-hero__content {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .admin-profile-hero__status {
+    grid-column:
+      1 / -1;
+
+    width: 100%;
+  }
+
+  .admin-profile-mission {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .admin-profile-mission__link {
+    grid-column:
+      2;
+
+    justify-self:
+      start;
+  }
+}
+
+@media (
+  max-width: 720px
+) {
+  .admin-profile-hero__content {
+    padding: 26px;
+
+    grid-template-columns:
+      1fr;
+
+    align-items: flex-start;
+  }
+
+  .admin-profile-avatar-zone {
+    width: 90px;
+    height: 90px;
+  }
+
+  .admin-profile-hero__avatar {
+    width: 90px;
+    height: 90px;
+
+    border-radius: 25px;
+
+    font-size: 29px;
+  }
+
+  .admin-profile-hero__avatar img {
+    border-radius: 20px;
+  }
+
+  .admin-profile-avatar-actions {
+    width: 100%;
+  }
+
+  .admin-profile-information {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-profile-information__item--wide {
+    grid-column: auto;
+  }
+
+  .admin-profile-scope {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-profile-responsibilities__grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-profile-mission {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-profile-mission__link {
+    grid-column: auto;
+  }
+}
+
+@media (
+  max-width: 520px
+) {
+  .admin-profile-scope {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-profile-card {
+    padding:
+      17px;
+  }
+
+  .admin-profile-card__header h3 {
+    font-size:
+      21px;
+  }
+
+  .admin-profile-hero__identity h2 {
+    font-size:
+      33px;
+  }
+}

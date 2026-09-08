@@ -42,24 +42,8 @@ function PartnersSection() {
     >
       <div className="notion-shell">
         <div className="moving-partners-heading">
-          <span className="moving-partners-check">
-            ✓
-          </span>
 
           <div>
-            <strong>
-              {t('partners.title', {
-                defaultValue:
-                  'Des intégrations de confiance',
-              })}
-            </strong>
-
-            <p>
-              {t('partners.description', {
-                defaultValue:
-                  'Pour un écosystème performant',
-              })}
-            </p>
           </div>
         </div>
       </div>
@@ -105,7 +89,7 @@ function PartnersSection() {
         <p className="moving-partners-note">
           {t('partners.disclaimer', {
             defaultValue:
-              'Les marques présentées appartiennent à leurs propriétaires respectifs. Leur affichage décrit des scénarios de compatibilité et d’intégration.',
+              '',
           })}
         </p>
       </div>

@@ -1,0 +1,668 @@
+/*
+|--------------------------------------------------------------------------
+| PROCESSING TIMELINE
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE BADGE
+|--------------------------------------------------------------------------
+*/
+
+.processing-source {
+  display: inline-flex;
+
+  align-items: center;
+
+  width: fit-content;
+
+  padding:
+    6px
+    10px;
+
+  border:
+    1px solid
+    #cfe0ff;
+
+  border-radius:
+    999px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f5f8ff 0%,
+      var(--dashboard-primary-soft) 100%
+    );
+
+  color:
+    var(--dashboard-primary-dark);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    9px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.03em;
+
+  box-shadow:
+    0 4px 10px
+    rgba(
+      37,
+      99,
+      235,
+      0.06
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TIMELINE
+|--------------------------------------------------------------------------
+*/
+
+.processing-timeline {
+  position:
+    relative;
+
+  display:
+    grid;
+
+  gap:
+    6px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VERTICAL LINE
+|--------------------------------------------------------------------------
+*/
+
+.processing-timeline::before {
+  position:
+    absolute;
+
+  top:
+    24px;
+
+  bottom:
+    24px;
+
+  left:
+    18px;
+
+  width:
+    2px;
+
+  border-radius:
+    999px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #22c55e 0%,
+      #22c55e 35%,
+      #60a5fa 60%,
+      var(--dashboard-border) 100%
+    );
+
+  content:
+    "";
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STEP
+|--------------------------------------------------------------------------
+*/
+
+.processing-step {
+  position:
+    relative;
+
+  z-index:
+    1;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    38px
+    minmax(0, 1fr)
+    auto;
+
+  align-items:
+    center;
+
+  gap:
+    13px;
+
+  min-height:
+    58px;
+
+  padding:
+    8px
+    11px;
+
+  border:
+    1px solid
+    transparent;
+
+  border-radius:
+    13px;
+
+  background:
+    transparent;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HOVER
+|--------------------------------------------------------------------------
+*/
+
+.processing-step:hover {
+  background:
+    var(--dashboard-surface-soft);
+
+  border-color:
+    var(--dashboard-border);
+
+  transform:
+    translateX(2px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIVE STEP
+|--------------------------------------------------------------------------
+*/
+
+.processing-step.is-active {
+  border-color:
+    #cfe0ff;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f3f7ff 0%,
+      #edf5ff 100%
+    );
+
+  box-shadow:
+    0 8px 20px
+    rgba(
+      37,
+      99,
+      235,
+      0.07
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| COMPLETED STEP
+|--------------------------------------------------------------------------
+*/
+
+.processing-step.is-completed {
+  background:
+    color-mix(
+      in srgb,
+      var(--dashboard-success) 3%,
+      transparent
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MARKER
+|--------------------------------------------------------------------------
+*/
+
+.processing-step-marker {
+  width:
+    36px;
+
+  height:
+    36px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border:
+    2px solid
+    var(--dashboard-border);
+
+  border-radius:
+    50%;
+
+  background:
+    var(--dashboard-surface);
+
+  color:
+    var(--dashboard-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+
+  box-shadow:
+    0 4px 10px
+    rgba(
+      15,
+      23,
+      42,
+      0.04
+    );
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| COMPLETED MARKER
+|--------------------------------------------------------------------------
+*/
+
+.processing-step.is-completed
+.processing-step-marker {
+  border-color:
+    var(--dashboard-success);
+
+  background:
+    linear-gradient(
+      135deg,
+      #16a34a 0%,
+      #22c55e 100%
+    );
+
+  color:
+    #ffffff;
+
+  box-shadow:
+    0 6px 14px
+    rgba(
+      22,
+      163,
+      74,
+      0.2
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIVE MARKER
+|--------------------------------------------------------------------------
+*/
+
+.processing-step.is-active
+.processing-step-marker {
+  border-color:
+    var(--dashboard-primary);
+
+  background:
+    #ffffff;
+
+  color:
+    var(--dashboard-primary);
+
+  box-shadow:
+    0 0 0 6px
+    rgba(
+      37,
+      99,
+      235,
+      0.1
+    ),
+    0 7px 16px
+    rgba(
+      37,
+      99,
+      235,
+      0.12
+    );
+
+  transform:
+    scale(1.03);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STEP CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.processing-step
+> div:nth-child(2) {
+  display:
+    grid;
+
+  gap:
+    3px;
+
+  min-width:
+    0;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STEP TITLE
+|--------------------------------------------------------------------------
+*/
+
+.processing-step strong {
+  color:
+    var(--dashboard-text);
+
+  font-size:
+    11.5px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1.35;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STEP DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+.processing-step span {
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    500;
+
+  line-height:
+    1.4;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STEP META
+|--------------------------------------------------------------------------
+*/
+
+.processing-step small {
+  width:
+    fit-content;
+
+  padding:
+    3px
+    7px;
+
+  border-radius:
+    999px;
+
+  background:
+    var(--dashboard-primary-soft);
+
+  color:
+    var(--dashboard-primary-dark);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    8px;
+
+  font-weight:
+    700;
+
+  white-space:
+    nowrap;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| COMPLETED META
+|--------------------------------------------------------------------------
+*/
+
+.processing-step.is-completed
+small {
+  background:
+    var(--dashboard-success-soft);
+
+  color:
+    var(--dashboard-success-dark);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIVE META
+|--------------------------------------------------------------------------
+*/
+
+.processing-step.is-active
+small {
+  background:
+    #dbeafe;
+
+  color:
+    #1d4ed8;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER
+|--------------------------------------------------------------------------
+*/
+
+.processing-footer {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    16px;
+
+  margin-top:
+    18px;
+
+  padding-top:
+    16px;
+
+  border-top:
+    1px solid
+    var(--dashboard-border);
+
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    9.5px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER VALUE
+|--------------------------------------------------------------------------
+*/
+
+.processing-footer strong {
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    700;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.processing-step.is-active {
+  border-color:
+    #31527b;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(
+        37,
+        99,
+        235,
+        0.13
+      ) 0%,
+      rgba(
+        96,
+        165,
+        250,
+        0.08
+      ) 100%
+    );
+}
+
+
+html[data-theme="dark"]
+.processing-step.is-active
+.processing-step-marker {
+  background:
+    var(--dashboard-surface);
+}
+
+
+html[data-theme="dark"]
+.processing-step:hover {
+  background:
+    var(--dashboard-surface-hover);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    600px
+) {
+
+  .processing-step {
+    grid-template-columns:
+      36px
+      minmax(0, 1fr);
+
+    gap:
+      11px;
+
+    padding:
+      8px
+      9px;
+  }
+
+
+  .processing-step
+  > small {
+    grid-column:
+      2;
+
+    justify-self:
+      flex-start;
+
+    margin-top:
+      2px;
+  }
+
+
+  .processing-footer {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      6px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+
+  .processing-step,
+  .processing-step-marker {
+    transition-duration:
+      0.01ms !important;
+  }
+}

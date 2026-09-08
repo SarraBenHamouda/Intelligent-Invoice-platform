@@ -1,0 +1,2910 @@
+/*
+|--------------------------------------------------------------------------
+| INVOICE UPLOAD PAGE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-page {
+  --upload-bg: #f5f8fd;
+  --upload-bg-top: #fbfdff;
+
+  --upload-surface: #ffffff;
+  --upload-surface-soft: #f7faff;
+  --upload-surface-hover: #f1f6fd;
+
+  --upload-border: #dbe5f1;
+  --upload-border-strong: #c9d7e8;
+
+  --upload-text: #0f172a;
+  --upload-text-soft: #334155;
+  --upload-muted: #64748b;
+  --upload-muted-light: #94a3b8;
+
+  --upload-primary: #2563eb;
+  --upload-primary-dark: #1d4ed8;
+  --upload-primary-soft: #edf4ff;
+
+  --upload-success: #16a34a;
+  --upload-success-soft: #ecfdf3;
+
+  --upload-danger: #dc2626;
+  --upload-danger-soft: #fef2f2;
+
+  --upload-warning: #d97706;
+  --upload-warning-soft: #fff7ed;
+
+  --upload-purple: #7c3aed;
+  --upload-purple-soft: #f5f3ff;
+
+  --upload-shadow:
+    0 14px 38px rgba(15, 23, 42, 0.065);
+
+  --upload-shadow-hover:
+    0 20px 46px rgba(15, 23, 42, 0.1);
+
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    radial-gradient(
+      circle at 7% 5%,
+      rgba(37, 99, 235, 0.08),
+      transparent 27rem
+    ),
+    radial-gradient(
+      circle at 93% 10%,
+      rgba(124, 58, 237, 0.045),
+      transparent 26rem
+    ),
+    linear-gradient(
+      180deg,
+      var(--upload-bg-top) 0%,
+      var(--upload-bg) 100%
+    );
+
+  color: var(--upload-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+}
+
+
+.invoice-upload-page *,
+.invoice-upload-page *::before,
+.invoice-upload-page *::after {
+  box-sizing: border-box;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"] .invoice-upload-page {
+  --upload-bg: #080d19;
+  --upload-bg-top: #0d1422;
+
+  --upload-surface: #111827;
+  --upload-surface-soft: #172033;
+  --upload-surface-hover: #1b263b;
+
+  --upload-border: #263449;
+  --upload-border-strong: #384960;
+
+  --upload-text: #f8fafc;
+  --upload-text-soft: #dbe4f0;
+  --upload-muted: #9eacc0;
+  --upload-muted-light: #69778e;
+
+  --upload-primary: #60a5fa;
+  --upload-primary-dark: #93c5fd;
+  --upload-primary-soft: #172554;
+
+  --upload-success: #4ade80;
+  --upload-success-soft: #10251a;
+
+  --upload-danger: #f87171;
+  --upload-danger-soft: #2b1717;
+
+  --upload-warning: #fbbf24;
+  --upload-warning-soft: #2a2111;
+
+  --upload-purple: #a78bfa;
+  --upload-purple-soft: #24163b;
+
+  --upload-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.27);
+
+  --upload-shadow-hover:
+    0 24px 58px rgba(0, 0, 0, 0.36);
+
+  background:
+    radial-gradient(
+      circle at 7% 5%,
+      rgba(59, 130, 246, 0.12),
+      transparent 27rem
+    ),
+    linear-gradient(
+      180deg,
+      #0d1422 0%,
+      #080d19 100%
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MAIN
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-main {
+  width: min(
+    1180px,
+    calc(100% - 48px)
+  );
+
+  /*
+  | Important :
+  | pas de flex: 1 ici.
+  | Le footer vient directement après le contenu.
+  */
+
+  flex: 0 0 auto;
+
+  margin: 0 auto;
+
+  padding:
+    36px 0 50px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HERO
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-hero {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 26px;
+}
+
+
+.invoice-upload-hero > div:first-child {
+  max-width: 720px;
+}
+
+
+.invoice-upload-hero h1 {
+  margin: 0;
+
+  color: var(--upload-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: clamp(
+    44px,
+    4.4vw,
+    60px
+  );
+
+  font-weight: 900;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.055em;
+}
+
+
+.invoice-upload-hero p {
+  max-width: 670px;
+
+  margin: 14px 0 0;
+
+  color: var(--upload-muted);
+
+  font-size: 14px;
+
+  line-height: 1.65;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VIEW INVOICES
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-list-link {
+  min-height: 40px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  padding: 0 14px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-text);
+
+  font-size: 10.5px;
+
+  font-weight: 750;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 5px 14px
+    rgba(15, 23, 42, 0.04);
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+
+.invoice-upload-list-link:hover {
+  border-color:
+    var(--upload-primary);
+
+  background:
+    var(--upload-primary-soft);
+
+  color:
+    var(--upload-primary);
+
+  transform:
+    translateY(-1px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE SECTION
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-section {
+  padding: 26px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 22px;
+
+  background:
+    var(--upload-surface);
+
+  box-shadow:
+    var(--upload-shadow);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE HEADING
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-heading {
+  margin-bottom: 23px;
+}
+
+
+.invoice-source-heading > span {
+  color:
+    var(--upload-primary);
+
+  font-size: 8.5px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-source-heading h2 {
+  margin: 6px 0 7px;
+
+  color:
+    var(--upload-text);
+
+  font-size: 25px;
+
+  font-weight: 850;
+
+  letter-spacing: -0.035em;
+}
+
+
+.invoice-source-heading p {
+  margin: 0;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 11.5px;
+
+  line-height: 1.6;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE GRID
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 15px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE CARDS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-card {
+  position: relative;
+
+  overflow: hidden;
+
+  min-height: 250px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 19px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--upload-surface) 0%,
+      var(--upload-surface-soft) 100%
+    );
+
+  color:
+    var(--upload-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 22px
+    rgba(15, 23, 42, 0.04);
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+
+.invoice-source-card:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    var(--upload-primary);
+
+  box-shadow:
+    var(--upload-shadow-hover);
+}
+
+
+.invoice-source-card--erp {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--upload-purple) 24%,
+      var(--upload-border)
+    );
+}
+
+
+.invoice-source-card--erp:hover {
+  border-color:
+    var(--upload-purple);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE TOP
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-card-top {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 10px;
+}
+
+
+.invoice-source-icon {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 14px;
+
+  background:
+    var(--upload-primary-soft);
+
+  color:
+    var(--upload-primary);
+
+  font-size: 9px;
+
+  font-weight: 850;
+}
+
+
+.invoice-source-card--scan
+.invoice-source-icon {
+  background:
+    #edf9ff;
+
+  color:
+    #0284c7;
+}
+
+
+.invoice-source-card--erp
+.invoice-source-icon {
+  background:
+    var(--upload-purple-soft);
+
+  color:
+    var(--upload-purple);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BADGE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-badge {
+  min-height: 23px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 0 8px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 999px;
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-muted);
+
+  font-size: 7.5px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.035em;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-source-badge--erp {
+  color:
+    var(--upload-purple);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE TEXT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-card-copy {
+  display: grid;
+
+  gap: 7px;
+
+  margin-top: 21px;
+}
+
+
+.invoice-source-card-copy strong {
+  color:
+    var(--upload-text);
+
+  font-size: 18px;
+
+  font-weight: 850;
+
+  letter-spacing:
+    -0.025em;
+}
+
+
+.invoice-source-card-copy small {
+  min-height: 44px;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE NOTE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-simple-note {
+  display: inline-flex;
+
+  width: fit-content;
+
+  margin-top: 13px;
+
+  padding: 6px 9px;
+
+  border-radius: 7px;
+
+  background:
+    var(--upload-surface-soft);
+
+  color:
+    var(--upload-muted);
+
+  font-size: 8.5px;
+
+  font-weight: 650;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE ACTION
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-action {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  margin-top: auto;
+
+  padding-top: 18px;
+
+  color:
+    var(--upload-primary);
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+
+.invoice-source-card--erp
+.invoice-source-action {
+  color:
+    var(--upload-purple);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PROCESS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-source-common-pipeline {
+  margin-top: 18px;
+
+  padding: 14px 16px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--upload-surface-soft);
+}
+
+
+.invoice-source-common-label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 7.5px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.07em;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-source-common-pipeline > div {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 8px;
+}
+
+
+.invoice-source-common-pipeline
+> div
+> span {
+  flex: 1;
+
+  padding: 8px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 8px;
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-text-soft);
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+
+.invoice-source-common-pipeline b {
+  color:
+    var(--upload-primary);
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SELECTED SOURCE LAYOUT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-layout {
+  display: grid;
+
+  /*
+  | La carte principale prend beaucoup plus
+  | de place que le panneau d'aide.
+  */
+
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(270px, 0.72fr);
+
+  align-items: start;
+
+  gap: 18px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BACK
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-back {
+  margin-bottom: 11px;
+
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--upload-primary);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 9.5px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| UPLOAD CARD
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-card {
+  padding: 24px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 19px;
+
+  background:
+    var(--upload-surface);
+
+  box-shadow:
+    var(--upload-shadow);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CARD HEADER
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-card-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content:
+    space-between;
+
+  gap: 16px;
+
+  margin-bottom: 17px;
+}
+
+
+.invoice-upload-card-header
+> div
+> span {
+  color:
+    var(--upload-primary);
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.07em;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-upload-card-header h2 {
+  margin: 6px 0 0;
+
+  color:
+    var(--upload-text);
+
+  font-size: 21px;
+
+  font-weight: 850;
+
+  letter-spacing:
+    -0.03em;
+}
+
+
+.invoice-upload-card-header > small {
+  color:
+    var(--upload-muted);
+
+  font-size: 8.5px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DROPZONE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone {
+  position: relative;
+
+  min-height: 215px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1.5px dashed
+    #c9d9eb;
+
+  border-radius: 15px;
+
+  background:
+    #f7faff;
+
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    background 170ms ease;
+}
+
+
+html[data-theme="dark"]
+.invoice-upload-dropzone {
+  background:
+    var(--upload-surface-soft);
+}
+
+
+.invoice-upload-dropzone:hover,
+.invoice-upload-dropzone.is-drag-active {
+  border-color:
+    var(--upload-primary);
+
+  background:
+    var(--upload-primary-soft);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(37, 99, 235, 0.06);
+}
+
+
+.invoice-upload-dropzone.has-file {
+  min-height: 120px;
+
+  border-style: solid;
+}
+
+
+.invoice-upload-dropzone.is-disabled {
+  opacity: 0.62;
+
+  cursor: wait;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| INPUT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  overflow: hidden;
+
+  clip-path: inset(50%);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DROPZONE CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone-content {
+  width: 100%;
+
+  min-height: 215px;
+
+  display: grid;
+
+  justify-items: center;
+
+  align-content: center;
+
+  padding: 22px;
+
+  text-align: center;
+
+  cursor: pointer;
+}
+
+
+.invoice-upload-icon {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 12px;
+
+  border-radius: 14px;
+
+  background:
+    var(--upload-primary-soft);
+
+  color:
+    var(--upload-primary);
+
+  font-size: 9px;
+
+  font-weight: 850;
+}
+
+
+.invoice-upload-dropzone-content strong {
+  color:
+    var(--upload-text);
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+
+.invoice-upload-dropzone-content
+> span:not(.invoice-upload-icon) {
+  margin-top: 4px;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 9.5px;
+}
+
+
+.invoice-upload-dropzone-content small {
+  margin-top: 11px;
+
+  padding: 5px 8px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 999px;
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-muted);
+
+  font-size: 7.5px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SELECTED FILE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-selected-file {
+  width:
+    calc(100% - 28px);
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--upload-surface);
+}
+
+
+.invoice-upload-file-icon {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 11px;
+
+  background:
+    var(--upload-primary-soft);
+
+  color:
+    var(--upload-primary);
+
+  font-size: 8px;
+
+  font-weight: 850;
+}
+
+
+.invoice-upload-selected-file > div {
+  min-width: 0;
+
+  display: grid;
+
+  gap: 3px;
+}
+
+
+.invoice-upload-selected-file strong {
+  overflow: hidden;
+
+  color:
+    var(--upload-text);
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+.invoice-upload-selected-file span {
+  color:
+    var(--upload-muted);
+
+  font-size: 8px;
+}
+
+
+.invoice-upload-selected-file button {
+  width: 31px;
+  height: 31px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 9px;
+
+  background:
+    var(--upload-surface-soft);
+
+  color:
+    var(--upload-muted);
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| INFORMATION
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-information {
+  display: grid;
+
+  gap: 8px;
+
+  margin-top: 14px;
+}
+
+
+.invoice-upload-information > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+.invoice-upload-information
+> div
+> span {
+  width: 19px;
+  height: 19px;
+
+  display: grid;
+
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background:
+    var(--upload-success-soft);
+
+  color:
+    var(--upload-success);
+
+  font-size: 8px;
+
+  font-weight: 900;
+}
+
+
+.invoice-upload-information p {
+  margin: 0;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  margin-top: 17px;
+
+  padding-top: 15px;
+
+  border-top:
+    1px solid
+    var(--upload-border);
+}
+
+
+.invoice-upload-cancel,
+.invoice-upload-submit {
+  min-height: 38px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 13px;
+
+  border-radius: 9px;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 9.5px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+
+.invoice-upload-cancel {
+  border:
+    1px solid
+    var(--upload-border);
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-text);
+}
+
+
+.invoice-upload-submit {
+  border:
+    1px solid
+    var(--upload-primary);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--upload-primary),
+      #3b82f6
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 7px 17px
+    rgba(37, 99, 235, 0.16);
+}
+
+
+.invoice-upload-submit:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+}
+
+
+.invoice-upload-submit--erp {
+  border-color:
+    var(--upload-purple);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--upload-purple),
+      #8b5cf6
+    );
+}
+
+
+.invoice-upload-cancel:disabled,
+.invoice-upload-submit:disabled {
+  opacity: 0.48;
+
+  cursor: not-allowed;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FEEDBACK
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-feedback {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+
+  gap: 10px;
+
+  margin-top: 14px;
+
+  padding: 12px;
+
+  border: 1px solid;
+
+  border-radius: 10px;
+}
+
+
+.invoice-upload-feedback > span {
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+
+.invoice-upload-feedback strong {
+  font-size: 10px;
+}
+
+
+.invoice-upload-feedback p {
+  margin: 3px 0 0;
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
+
+
+.invoice-upload-feedback--error {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--upload-danger) 28%,
+      transparent
+    );
+
+  background:
+    var(--upload-danger-soft);
+
+  color:
+    var(--upload-danger);
+}
+
+
+.invoice-upload-feedback--success {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--upload-success) 28%,
+      transparent
+    );
+
+  background:
+    var(--upload-success-soft);
+
+  color:
+    var(--upload-success);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SPINNER
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-spinner {
+  width: 14px;
+  height: 14px;
+
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.35);
+
+  border-top-color:
+    #ffffff;
+
+  border-radius: 50%;
+
+  animation:
+    invoice-upload-spin
+    0.75s linear infinite;
+}
+
+
+@keyframes invoice-upload-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ERP CARD
+|--------------------------------------------------------------------------
+*/
+
+.invoice-erp-card {
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+.invoice-erp-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--upload-purple),
+      var(--upload-primary)
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ERP STATUS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-erp-live {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 8px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--upload-success) 25%,
+      var(--upload-border)
+    );
+
+  border-radius: 999px;
+
+  background:
+    var(--upload-success-soft);
+
+  color:
+    var(--upload-success);
+
+  font-size: 7.5px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-erp-live i {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background:
+    currentColor;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ERP INTRO
+|--------------------------------------------------------------------------
+*/
+
+.invoice-erp-intro {
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+
+  gap: 13px;
+
+  margin-bottom: 19px;
+
+  padding: 14px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--upload-purple) 18%,
+      var(--upload-border)
+    );
+
+  border-radius: 13px;
+
+  background:
+    var(--upload-purple-soft);
+}
+
+
+.invoice-erp-system-icon {
+  width: 43px;
+  height: 43px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 11px;
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-purple);
+
+  font-size: 8px;
+
+  font-weight: 850;
+}
+
+
+.invoice-erp-intro strong {
+  color:
+    var(--upload-text);
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+
+.invoice-erp-intro p {
+  margin: 4px 0 0;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ERP FIELDS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-erp-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 12px;
+}
+
+
+.invoice-erp-fields label {
+  display: grid;
+
+  gap: 4px;
+}
+
+
+.invoice-erp-fields
+label > span {
+  color:
+    var(--upload-text);
+
+  font-size: 10px;
+
+  font-weight: 750;
+}
+
+
+.invoice-erp-fields
+label > small {
+  color:
+    var(--upload-muted);
+
+  font-size: 7.5px;
+}
+
+
+.invoice-erp-fields input {
+  width: 100%;
+
+  min-height: 43px;
+
+  margin-top: 4px;
+
+  padding: 0 12px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 9px;
+
+  outline: 0;
+
+  background:
+    var(--upload-surface-soft);
+
+  color:
+    var(--upload-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+}
+
+
+.invoice-erp-fields input:focus {
+  border-color:
+    var(--upload-purple);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(124, 58, 237, 0.08);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ERP NOTE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-erp-note {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  margin-top: 14px;
+
+  padding: 10px 11px;
+
+  border-radius: 9px;
+
+  background:
+    var(--upload-surface-soft);
+}
+
+
+.invoice-erp-note > span {
+  width: 19px;
+  height: 19px;
+
+  display: grid;
+
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background:
+    var(--upload-primary-soft);
+
+  color:
+    var(--upload-primary);
+
+  font-size: 8px;
+
+  font-weight: 800;
+}
+
+
+.invoice-erp-note p {
+  margin: 1px 0 0;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 8.5px;
+
+  line-height: 1.45;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SIDE PANEL
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-side-panel {
+  display: grid;
+
+  align-content: start;
+
+  gap: 14px;
+}
+
+
+.invoice-upload-side-panel > section {
+  padding: 19px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 17px;
+
+  background:
+    var(--upload-surface);
+
+  box-shadow:
+    0 10px 28px
+    rgba(15, 23, 42, 0.045);
+}
+
+
+.invoice-upload-side-label {
+  color:
+    var(--upload-primary);
+
+  font-size: 7.5px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.07em;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-upload-side-panel h2 {
+  margin: 6px 0 0;
+
+  color:
+    var(--upload-text);
+
+  font-size: 17px;
+
+  font-weight: 850;
+
+  line-height: 1.2;
+
+  letter-spacing:
+    -0.025em;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SIMPLE STEPS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-pipeline {
+  position: relative;
+
+  display: grid;
+
+  gap: 2px;
+
+  margin: 15px 0 0;
+
+  padding: 0;
+
+  list-style: none;
+}
+
+
+.invoice-upload-pipeline::before {
+  content: "";
+
+  position: absolute;
+
+  top: 19px;
+  bottom: 19px;
+  left: 14px;
+
+  width: 1px;
+
+  background:
+    var(--upload-border);
+}
+
+
+.invoice-upload-pipeline li {
+  position: relative;
+
+  z-index: 1;
+
+  min-height: 48px;
+
+  display: grid;
+
+  grid-template-columns:
+    30px
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.invoice-upload-pipeline
+li > span {
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 50%;
+
+  background:
+    var(--upload-surface);
+
+  color:
+    var(--upload-primary);
+
+  font-size: 8px;
+
+  font-weight: 800;
+}
+
+
+.invoice-upload-pipeline
+li > div {
+  display: grid;
+
+  gap: 2px;
+}
+
+
+.invoice-upload-pipeline strong {
+  color:
+    var(--upload-text);
+
+  font-size: 9.5px;
+
+  font-weight: 800;
+}
+
+
+.invoice-upload-pipeline small {
+  color:
+    var(--upload-muted);
+
+  font-size: 7.5px;
+
+  line-height: 1.3;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESULT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-result-message {
+  margin: 11px 0 16px;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+.invoice-upload-dashboard-link {
+  min-height: 36px;
+
+  width: 100%;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background:
+    var(--upload-primary);
+
+  color: #ffffff;
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  text-decoration: none;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK CARD OVERRIDES
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.invoice-source-card,
+html[data-theme="dark"]
+.invoice-source-card--scan,
+html[data-theme="dark"]
+.invoice-source-card--erp {
+  background:
+    var(--upload-surface);
+}
+
+
+html[data-theme="dark"]
+.invoice-source-card--scan
+.invoice-source-icon {
+  background:
+    #10293a;
+
+  color:
+    #38bdf8;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 1050px) {
+  .invoice-upload-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .invoice-upload-side-panel {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+@media (max-width: 900px) {
+  .invoice-source-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 760px) {
+  .invoice-upload-main {
+    width:
+      calc(100% - 28px);
+
+    padding:
+      28px 0 38px;
+  }
+
+  .invoice-upload-hero {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+  .invoice-upload-list-link {
+    width: 100%;
+  }
+
+  .invoice-source-section {
+    padding:
+      20px 16px;
+  }
+
+  .invoice-source-common-pipeline
+  > div {
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+  }
+
+  .invoice-source-common-pipeline b {
+    align-self:
+      center;
+
+    transform:
+      rotate(90deg);
+  }
+
+  .invoice-upload-card {
+    padding:
+      20px 16px;
+  }
+
+  .invoice-erp-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .invoice-upload-side-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .invoice-upload-actions {
+    flex-direction:
+      column-reverse;
+  }
+
+  .invoice-upload-cancel,
+  .invoice-upload-submit {
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 520px) {
+  .invoice-upload-hero h1 {
+    font-size: 38px;
+  }
+
+  .invoice-upload-card-header {
+    flex-direction:
+      column;
+  }
+
+  .invoice-upload-dropzone,
+  .invoice-upload-dropzone-content {
+    min-height: 195px;
+  }
+
+  .invoice-upload-selected-file {
+    width:
+      calc(100% - 20px);
+
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .invoice-upload-selected-file button {
+    grid-column:
+      1 / -1;
+
+    justify-self:
+      end;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .invoice-upload-spinner {
+    animation: none;
+  }
+
+  .invoice-source-card,
+  .invoice-upload-submit,
+  .invoice-upload-cancel,
+  .invoice-upload-dropzone,
+  .invoice-upload-list-link {
+    transition: none;
+  }
+}
+/*
+|--------------------------------------------------------------------------
+| PDF IMPORT CARD — MORE ATTRACTIVE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-card {
+  position: relative;
+  overflow: hidden;
+
+  padding: 26px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    0 18px 48px
+    rgba(15, 23, 42, 0.07);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOFT TOP ACCENT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb 0%,
+      #60a5fa 60%,
+      #8b5cf6 100%
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HEADER
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-card-header {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 20px;
+}
+
+
+.invoice-upload-card-header > div > span {
+  display: inline-flex;
+
+  margin-bottom: 6px;
+
+  color:
+    var(--upload-primary);
+
+  font-size: 8px;
+
+  font-weight: 850;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+.invoice-upload-card-header h2 {
+  margin: 0;
+
+  color:
+    var(--upload-text);
+
+  font-size: 25px;
+
+  font-weight: 900;
+
+  letter-spacing: -0.035em;
+}
+
+
+.invoice-upload-card-header > small {
+  margin-top: 4px;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DROPZONE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone {
+  position: relative;
+
+  min-height: 255px;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  border:
+    1.5px dashed
+    #a9c8ff;
+
+  border-radius: 18px;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(37, 99, 235, 0.07),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      #f8fbff 0%,
+      #f3f7ff 100%
+    );
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+
+.invoice-upload-dropzone::before {
+  content: "";
+
+  position: absolute;
+
+  width: 250px;
+  height: 250px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(37, 99, 235, 0.035);
+
+  pointer-events: none;
+}
+
+
+.invoice-upload-dropzone:hover,
+.invoice-upload-dropzone.is-drag-active {
+  border-color:
+    var(--upload-primary);
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(37, 99, 235, 0.11),
+      transparent 44%
+    ),
+    linear-gradient(
+      180deg,
+      #f5f9ff 0%,
+      #edf4ff 100%
+    );
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(37, 99, 235, 0.04),
+    0 14px 32px
+    rgba(37, 99, 235, 0.08);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DROPZONE CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone-content {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+
+  min-height: 255px;
+
+  display: grid;
+
+  justify-items: center;
+
+  align-content: center;
+
+  padding: 28px;
+
+  text-align: center;
+
+  cursor: pointer;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PDF ICON
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-icon {
+  width: 66px;
+  height: 66px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 16px;
+
+  border:
+    1px solid
+    #cfe0ff;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #eaf2ff
+    );
+
+  color:
+    var(--upload-primary);
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+  box-shadow:
+    0 12px 28px
+    rgba(37, 99, 235, 0.12);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DROPZONE TITLE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone-content strong {
+  color:
+    var(--upload-text);
+
+  font-size: 17px;
+
+  font-weight: 900;
+
+  letter-spacing: -0.02em;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DROPZONE SUBTEXT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone-content
+> span:not(.invoice-upload-icon) {
+  margin-top: 7px;
+
+  color:
+    var(--upload-muted);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FILE TYPE BADGE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone-content small {
+  margin-top: 15px;
+
+  padding:
+    7px 12px;
+
+  border:
+    1px solid
+    #d5e2f3;
+
+  border-radius: 999px;
+
+  background:
+    #ffffff;
+
+  color:
+    var(--upload-primary);
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  box-shadow:
+    0 5px 14px
+    rgba(15, 23, 42, 0.035);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SELECTED FILE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-dropzone.has-file {
+  min-height: 135px;
+
+  border-style: solid;
+
+  border-color:
+    #bfd3f2;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f8fbff
+    );
+}
+
+
+.invoice-upload-selected-file {
+  position: relative;
+
+  z-index: 1;
+
+  width:
+    calc(100% - 36px);
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 17px;
+
+  border:
+    1px solid
+    #d5e2f3;
+
+  border-radius: 14px;
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0 8px 22px
+    rgba(15, 23, 42, 0.045);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SELECTED FILE ICON
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-file-icon {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 14px;
+
+  background:
+    var(--upload-primary-soft);
+
+  color:
+    var(--upload-primary);
+
+  font-size: 9px;
+
+  font-weight: 900;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BENEFITS BELOW DROPZONE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-information {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+
+.invoice-upload-information > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-height: 54px;
+
+  padding: 10px 12px;
+
+  border:
+    1px solid
+    #e4ebf5;
+
+  border-radius: 11px;
+
+  background:
+    #fbfdff;
+}
+
+
+.invoice-upload-information
+> div
+> span {
+  width: 24px;
+  height: 24px;
+
+  display: grid;
+
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background:
+    var(--upload-success-soft);
+
+  color:
+    var(--upload-success);
+
+  font-size: 9px;
+
+  font-weight: 900;
+}
+
+
+.invoice-upload-information p {
+  margin: 0;
+
+  color:
+    var(--upload-text-soft);
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  line-height: 1.45;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-upload-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid
+    var(--upload-border);
+}
+
+
+.invoice-upload-cancel {
+  min-height: 42px;
+
+  padding: 0 15px;
+
+  border:
+    1px solid
+    var(--upload-border);
+
+  border-radius: 10px;
+
+  background:
+    #ffffff;
+
+  color:
+    var(--upload-text);
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+}
+
+
+.invoice-upload-submit {
+  min-height: 42px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 17px;
+
+  border:
+    1px solid
+    var(--upload-primary);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #3b82f6
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Inter",
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 9px 22px
+    rgba(37, 99, 235, 0.18);
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.invoice-upload-submit:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 12px 28px
+    rgba(37, 99, 235, 0.23);
+}
+
+
+.invoice-upload-submit:disabled {
+  opacity: 0.48;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.invoice-upload-card {
+  background:
+    var(--upload-surface);
+}
+
+
+html[data-theme="dark"]
+.invoice-upload-dropzone {
+  border-color:
+    #33527a;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(96, 165, 250, 0.08),
+      transparent 42%
+    ),
+    var(--upload-surface-soft);
+}
+
+
+html[data-theme="dark"]
+.invoice-upload-dropzone-content small,
+html[data-theme="dark"]
+.invoice-upload-selected-file,
+html[data-theme="dark"]
+.invoice-upload-cancel {
+  background:
+    var(--upload-surface);
+}
+
+
+html[data-theme="dark"]
+.invoice-upload-information > div {
+  border-color:
+    var(--upload-border);
+
+  background:
+    var(--upload-surface-soft);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 760px) {
+
+  .invoice-upload-information {
+    grid-template-columns:
+      1fr;
+  }
+
+  .invoice-upload-dropzone,
+  .invoice-upload-dropzone-content {
+    min-height: 220px;
+  }
+
+  .invoice-upload-icon {
+    width: 58px;
+    height: 58px;
+  }
+}

@@ -1,0 +1,1335 @@
+/*
+|--------------------------------------------------------------------------
+| RECENT INVOICES
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices {
+  position: relative;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fbfdff 100%
+    );
+
+  box-shadow:
+    var(--dashboard-shadow-soft);
+
+  font-family:
+    var(--font-body);
+
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    transform 170ms ease;
+}
+
+
+.recent-invoices::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb 0%,
+      #38bdf8 55%,
+      #22c55e 100%
+    );
+
+  z-index: 2;
+}
+
+
+.recent-invoices:hover {
+  border-color:
+    var(--dashboard-border-strong);
+
+  box-shadow:
+    var(--dashboard-shadow);
+
+  transform:
+    translateY(-2px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HEADER
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    20px;
+
+  padding:
+    25px
+    28px
+    18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(248, 251, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| EYEBROW
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-bottom:
+    7px;
+
+  color:
+    var(--dashboard-primary);
+
+  font-family:
+    var(--font-mono);
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.07em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.recent-invoices-eyebrow::before {
+  content: "";
+
+  width:
+    6px;
+
+  height:
+    6px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--dashboard-primary);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(
+      37,
+      99,
+      235,
+      0.09
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TITLE
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-header h2 {
+  margin:
+    0;
+
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  font-size:
+    22px;
+
+  font-weight:
+    800;
+
+  line-height:
+    1.15;
+
+  letter-spacing:
+    -0.025em;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VIEW ALL
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-view-all {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height:
+    34px;
+
+  padding:
+    0
+    11px;
+
+  border:
+    1px solid
+    #cfe0ff;
+
+  border-radius:
+    9px;
+
+  background:
+    var(--dashboard-primary-soft);
+
+  color:
+    var(--dashboard-primary-dark);
+
+  font-size:
+    10.5px;
+
+  font-weight:
+    700;
+
+  text-decoration:
+    none;
+
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.recent-invoices-view-all:hover {
+  border-color:
+    var(--dashboard-primary);
+
+  background:
+    #e2edff;
+
+  color:
+    var(--dashboard-primary);
+
+  transform:
+    translateX(2px);
+
+  box-shadow:
+    0 6px 14px
+    rgba(
+      37,
+      99,
+      235,
+      0.08
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TABLE WRAPPER
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table-wrapper {
+  overflow-x:
+    auto;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TABLE
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table {
+  width:
+    100%;
+
+  border-collapse:
+    collapse;
+
+  white-space:
+    nowrap;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TABLE HEAD
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table thead {
+  background:
+    #f4f8fd;
+}
+
+
+.recent-invoices-table th {
+  padding:
+    11px
+    12px;
+
+  border-top:
+    1px solid
+    var(--dashboard-border);
+
+  border-bottom:
+    1px solid
+    var(--dashboard-border);
+
+  color:
+    #526175;
+
+  font-family:
+    var(--font-mono);
+
+  font-size:
+    9px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.055em;
+
+  text-align:
+    left;
+
+  text-transform:
+    uppercase;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TABLE CELL PADDING
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table th:first-child,
+.recent-invoices-table td:first-child {
+  padding-left:
+    28px;
+}
+
+
+.recent-invoices-table th:last-child,
+.recent-invoices-table td:last-child {
+  padding-right:
+    28px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BODY CELLS
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table td {
+  padding:
+    15px
+    12px;
+
+  border-bottom:
+    1px solid
+    #edf1f6;
+
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    11.5px;
+
+  vertical-align:
+    middle;
+}
+
+
+.recent-invoices-table tbody tr:last-child td {
+  border-bottom:
+    0;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ROW HOVER
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table tbody tr {
+  transition:
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.recent-invoices-table tbody tr:hover {
+  background:
+    linear-gradient(
+      90deg,
+      #f8fbff 0%,
+      #f3f8ff 100%
+    );
+
+  box-shadow:
+    inset
+    3px
+    0
+    0
+    var(--dashboard-primary);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IMPORTANT VALUES
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoices-table td strong,
+.recent-invoice-amount {
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    var(--font-mono);
+
+  font-weight:
+    650;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DUPLICATE LABEL
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-duplicate-label {
+  display:
+    block;
+
+  width:
+    fit-content;
+
+  margin-top:
+    6px;
+
+  padding:
+    4px
+    7px;
+
+  border:
+    1px solid
+    #fecaca;
+
+  border-radius:
+    999px;
+
+  background:
+    #fff1f2;
+
+  color:
+    var(--dashboard-danger);
+
+  font-family:
+    var(--font-mono);
+
+  font-size:
+    8px;
+
+  font-weight:
+    700;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SOURCE BADGE
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-source {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    5px
+    8px;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    999px;
+
+  background:
+    #f7f9fc;
+
+  color:
+    var(--dashboard-muted);
+
+  font-family:
+    var(--font-mono);
+
+  font-size:
+    8.5px;
+
+  font-weight:
+    600;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STATUS BADGES
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-status {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  gap:
+    5px;
+
+  padding:
+    5px
+    8px;
+
+  border:
+    1px solid
+    transparent;
+
+  border-radius:
+    999px;
+
+  font-size:
+    8.5px;
+
+  font-weight:
+    700;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACCEPTED
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-status--accepted {
+  border-color:
+    #bbf7d0;
+
+  background:
+    #ecfdf3;
+
+  color:
+    #15803d;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PENDING
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-status--pending {
+  border-color:
+    #fed7aa;
+
+  background:
+    #fff7ed;
+
+  color:
+    #b45309;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REJECTED
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-status--rejected {
+  border-color:
+    #fecaca;
+
+  background:
+    #fff1f2;
+
+  color:
+    #b91c1c;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REJECTION REASON
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-reason {
+  display:
+    block;
+
+  max-width:
+    210px;
+
+  margin-top:
+    5px;
+
+  overflow:
+    hidden;
+
+  color:
+    var(--dashboard-danger);
+
+  font-size:
+    8.5px;
+
+  line-height:
+    1.35;
+
+  text-overflow:
+    ellipsis;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-actions {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTION BUTTON
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-action {
+  width:
+    34px;
+
+  height:
+    34px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  flex:
+    0
+    0
+    34px;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    9px;
+
+  background:
+    #ffffff;
+
+  color:
+    var(--dashboard-text);
+
+  text-decoration:
+    none;
+
+  box-shadow:
+    0 4px 10px
+    rgba(
+      15,
+      23,
+      42,
+      0.035
+    );
+
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.recent-invoice-action:hover {
+  border-color:
+    #bcd3f6;
+
+  background:
+    var(--dashboard-primary-soft);
+
+  color:
+    var(--dashboard-primary);
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 7px 16px
+    rgba(
+      37,
+      99,
+      235,
+      0.08
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RETRY
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-retry {
+  min-height:
+    34px;
+
+  padding:
+    0
+    11px;
+
+  border:
+    1px solid
+    #fed7aa;
+
+  border-radius:
+    9px;
+
+  background:
+    #fffaf4;
+
+  color:
+    #b45309;
+
+  font-family:
+    var(--font-body);
+
+  font-size:
+    9px;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.recent-invoice-retry:hover:not(:disabled) {
+  border-color:
+    var(--dashboard-warning);
+
+  background:
+    #fff3df;
+
+  color:
+    #92400e;
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 7px 16px
+    rgba(
+      217,
+      119,
+      6,
+      0.09
+    );
+}
+
+
+.recent-invoice-retry:disabled {
+  opacity:
+    0.55;
+
+  cursor:
+    wait;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DELETE DUPLICATES
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-delete {
+  position:
+    relative;
+
+  width:
+    35px;
+
+  height:
+    35px;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  flex:
+    0
+    0
+    35px;
+
+  padding:
+    0;
+
+  border:
+    1px solid
+    #fecaca;
+
+  border-radius:
+    9px;
+
+  background:
+    #fff5f5;
+
+  color:
+    var(
+      --dashboard-danger,
+      #dc2626
+    );
+
+  cursor:
+    pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.recent-invoice-delete:hover:not(:disabled) {
+  border-color:
+    var(
+      --dashboard-danger,
+      #dc2626
+    );
+
+  background:
+    var(
+      --dashboard-danger,
+      #dc2626
+    );
+
+  color:
+    #ffffff;
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(
+      220,
+      38,
+      38,
+      0.18
+    );
+}
+
+
+.recent-invoice-delete:active:not(:disabled) {
+  transform:
+    translateY(0);
+}
+
+
+.recent-invoice-delete:focus-visible {
+  outline:
+    3px solid
+    rgba(
+      220,
+      38,
+      38,
+      0.17
+    );
+
+  outline-offset:
+    2px;
+}
+
+
+.recent-invoice-delete:disabled {
+  opacity:
+    0.55;
+
+  cursor:
+    wait;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DELETE ICON
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-delete-icon {
+  width:
+    17px;
+
+  height:
+    17px;
+
+  display:
+    block;
+
+  pointer-events:
+    none;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DUPLICATE COUNT BADGE
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-delete-count {
+  position:
+    absolute;
+
+  top:
+    -7px;
+
+  right:
+    -7px;
+
+  min-width:
+    18px;
+
+  height:
+    18px;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    0
+    5px;
+
+  border:
+    2px solid
+    var(
+      --dashboard-surface,
+      #ffffff
+    );
+
+  border-radius:
+    999px;
+
+  background:
+    var(
+      --dashboard-danger,
+      #dc2626
+    );
+
+  color:
+    #ffffff;
+
+  font-family:
+    var(--font-mono);
+
+  font-size:
+    8px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1;
+
+  pointer-events:
+    none;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DELETE LOADER
+|--------------------------------------------------------------------------
+*/
+
+.recent-invoice-delete-loader {
+  width:
+    15px;
+
+  height:
+    15px;
+
+  border:
+    2px solid
+    rgba(
+      220,
+      38,
+      38,
+      0.22
+    );
+
+  border-top-color:
+    currentColor;
+
+  border-radius:
+    50%;
+
+  animation:
+    recent-invoice-delete-spin
+    0.7s linear infinite;
+}
+
+
+@keyframes recent-invoice-delete-spin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.recent-invoices {
+  background:
+    linear-gradient(
+      180deg,
+      var(--dashboard-surface) 0%,
+      var(--dashboard-surface-soft) 100%
+    );
+}
+
+
+html[data-theme="dark"]
+.recent-invoices-table thead {
+  background:
+    #162033;
+}
+
+
+html[data-theme="dark"]
+.recent-invoices-table td {
+  border-bottom-color:
+    #223047;
+}
+
+
+html[data-theme="dark"]
+.recent-invoices-table tbody tr:hover {
+  background:
+    #16243a;
+}
+
+
+html[data-theme="dark"]
+.recent-invoice-action {
+  background:
+    var(--dashboard-surface);
+}
+
+
+html[data-theme="dark"]
+.recent-invoice-source {
+  background:
+    #162033;
+
+  border-color:
+    #2b3a51;
+}
+
+
+html[data-theme="dark"]
+.recent-invoice-delete {
+  border-color:
+    rgba(
+      248,
+      113,
+      113,
+      0.22
+    );
+
+  background:
+    rgba(
+      248,
+      113,
+      113,
+      0.07
+    );
+
+  color:
+    #f87171;
+}
+
+
+html[data-theme="dark"]
+.recent-invoice-delete:hover:not(:disabled) {
+  border-color:
+    #dc2626;
+
+  background:
+    #dc2626;
+
+  color:
+    #ffffff;
+}
+
+
+html[data-theme="dark"]
+.recent-invoice-delete-count {
+  border-color:
+    var(
+      --dashboard-surface,
+      #111c2f
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE — TABLET
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    900px
+) {
+
+  .recent-invoices-header {
+    padding:
+      21px
+      20px
+      16px;
+  }
+
+
+  .recent-invoices-table th:first-child,
+  .recent-invoices-table td:first-child {
+    padding-left:
+      20px;
+  }
+
+
+  .recent-invoices-table th:last-child,
+  .recent-invoices-table td:last-child {
+    padding-right:
+      20px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE — MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    640px
+) {
+
+  .recent-invoices-header {
+    align-items:
+      flex-start;
+
+    padding:
+      18px
+      16px
+      14px;
+  }
+
+
+  .recent-invoices-header h2 {
+    font-size:
+      19px;
+  }
+
+
+  .recent-invoices-view-all {
+    min-height:
+      32px;
+
+    padding:
+      0
+      9px;
+
+    font-size:
+      9.5px;
+  }
+
+
+  .recent-invoices-table th:first-child,
+  .recent-invoices-table td:first-child {
+    padding-left:
+      16px;
+  }
+
+
+  .recent-invoices-table th:last-child,
+  .recent-invoices-table td:last-child {
+    padding-right:
+      16px;
+  }
+
+
+  .recent-invoice-actions {
+    gap:
+      6px;
+  }
+
+
+  .recent-invoice-delete {
+    width:
+      33px;
+
+    height:
+      33px;
+
+    flex-basis:
+      33px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+
+  .recent-invoices,
+  .recent-invoices-view-all,
+  .recent-invoice-action,
+  .recent-invoice-retry,
+  .recent-invoice-delete,
+  .recent-invoices-table tbody tr {
+    transition-duration:
+      0.01ms !important;
+  }
+
+
+  .recent-invoice-delete-loader {
+    animation-duration:
+      0.01ms !important;
+  }
+}

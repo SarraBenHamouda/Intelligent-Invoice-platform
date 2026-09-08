@@ -1,0 +1,1306 @@
+/*
+|--------------------------------------------------------------------------
+| PAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-users {
+  display: grid;
+  gap: 20px;
+
+  color: var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 13px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MESSAGES
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-message {
+  padding: 16px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  border-radius: 15px;
+}
+
+.admin-users-message strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-users-message p {
+  margin:
+    5px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.admin-users-message button {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: inherit;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.admin-users-message--error {
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.24);
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-users-message--success {
+  border:
+    1px solid
+    rgba(16, 166, 109, 0.22);
+
+  background:
+    rgba(16, 166, 109, 0.07);
+
+  color:
+    var(--admin-green);
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATS
+|--------------------------------------------------------------------------
+*/
+
+.admin-users__stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+}
+
+.admin-users-stat {
+  position: relative;
+
+  min-height: 150px;
+
+  padding: 20px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  text-align: left;
+
+  box-shadow:
+    var(--admin-shadow);
+
+  cursor: pointer;
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease;
+}
+
+.admin-users-stat::after {
+  position: absolute;
+
+  right: -34px;
+  bottom: -44px;
+
+  width: 125px;
+  height: 125px;
+
+  border-radius: 50%;
+
+  opacity: 0.11;
+
+  content: "";
+}
+
+.admin-users-stat--purple::after {
+  background:
+    var(--admin-purple);
+}
+
+.admin-users-stat--green::after {
+  background:
+    var(--admin-green);
+}
+
+.admin-users-stat--blue::after {
+  background:
+    var(--admin-blue);
+}
+
+.admin-users-stat--orange::after {
+  background:
+    var(--admin-orange);
+}
+
+.admin-users-stat:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    rgba(103, 85, 244, 0.26);
+}
+
+.admin-users-stat > span {
+  position: relative;
+  z-index: 2;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-users-stat > strong {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  margin-top: 13px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 42px;
+
+  line-height: 1;
+}
+
+.admin-users-stat > small {
+  position: relative;
+  z-index: 2;
+
+  display: block;
+
+  margin-top: 10px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 11px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ACCESS OVERVIEW
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-access {
+  padding: 19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(103, 85, 244, 0.075),
+      rgba(22, 142, 226, 0.03),
+      var(--admin-card)
+    );
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-users-access__copy {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.admin-users-access__icon {
+  width: 52px;
+  height: 52px;
+
+  flex: 0 0 52px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background:
+    rgba(103, 85, 244, 0.1);
+
+  font-size: 22px;
+}
+
+.admin-users-access__copy div > span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-users-access__copy strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 22px;
+}
+
+.admin-users-access__copy p {
+  margin:
+    5px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.55;
+}
+
+.admin-users-access__providers {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.admin-users-access__providers > div {
+  min-width: 100px;
+
+  padding:
+    11px
+    13px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-users-access__providers span {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 11px;
+}
+
+.admin-users-access__providers strong {
+  display: block;
+
+  margin-top: 6px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 15px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FILTERS
+|--------------------------------------------------------------------------
+*/
+
+.admin-users__filters {
+  padding: 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1.6fr)
+    repeat(
+      4,
+      minmax(140px, 0.65fr)
+    )
+    auto;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 17px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-users-search {
+  min-height: 46px;
+
+  padding:
+    0
+    13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-users-search span {
+  font-size: 14px;
+}
+
+.admin-users-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 13px;
+}
+
+.admin-users-search input::placeholder {
+  color:
+    var(--admin-text-muted);
+}
+
+.admin-users__filters select {
+  min-width: 0;
+  min-height: 46px;
+
+  padding:
+    0
+    11px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 12px;
+
+  outline: 0;
+
+  cursor: pointer;
+}
+
+.admin-users__reset {
+  min-height: 46px;
+
+  padding:
+    0
+    15px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-users__reset:hover {
+  border-color:
+    rgba(103, 85, 244, 0.25);
+
+  background:
+    rgba(103, 85, 244, 0.06);
+
+  color:
+    var(--admin-purple);
+}
+
+/*
+|--------------------------------------------------------------------------
+| PANEL
+|--------------------------------------------------------------------------
+*/
+
+.admin-users__panel {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 21px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-users__panel-header {
+  padding:
+    22px
+    23px
+    19px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border);
+}
+
+.admin-users__panel-header span {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.admin-users__panel-header h2 {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 27px;
+}
+
+.admin-users__panel-header p {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 12px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TABLE
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  background:
+    var(--admin-card-solid);
+}
+
+.admin-users-table {
+  width: 100%;
+
+  min-width: 1350px;
+
+  border-collapse: collapse;
+
+  background:
+    var(--admin-card-solid);
+}
+
+.admin-users-table thead {
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-users-table th {
+  padding:
+    14px
+    14px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border);
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.05em;
+
+  text-align: left;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+.admin-users-table td {
+  padding:
+    15px
+    14px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+
+  vertical-align: middle;
+}
+
+.admin-users-table tbody tr {
+  transition:
+    background 150ms ease;
+}
+
+.admin-users-table tbody tr:hover {
+  background:
+    rgba(103, 85, 244, 0.035);
+}
+
+/*
+|--------------------------------------------------------------------------
+| USER
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-user {
+  min-width: 235px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.admin-users-avatar {
+  position: relative;
+
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  overflow: hidden;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7864ff,
+      #416cca
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-users-avatar img {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.admin-users-user strong {
+  display: block;
+
+  color:
+    var(--admin-text);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-users-user small {
+  display: block;
+
+  margin-top: 3px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 11px;
+}
+
+.admin-users-user em {
+  display: inline-block;
+
+  margin-top: 5px;
+
+  padding:
+    3px
+    7px;
+
+  border-radius: 6px;
+
+  background:
+    rgba(103, 85, 244, 0.1);
+
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 9px;
+  font-style: normal;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ORGANIZATION
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-organization {
+  min-width: 160px;
+}
+
+.admin-users-organization strong {
+  display: block;
+
+  color:
+    var(--admin-text);
+
+  font-size: 12px;
+}
+
+.admin-users-organization small {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ROLE
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-role {
+  min-height: 29px;
+
+  padding:
+    0
+    10px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 999px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.admin-users-role--admin {
+  background:
+    rgba(103, 85, 244, 0.1);
+
+  color:
+    var(--admin-purple);
+}
+
+.admin-users-role--client {
+  background:
+    rgba(22, 142, 226, 0.09);
+
+  color:
+    var(--admin-blue);
+}
+
+/*
+|--------------------------------------------------------------------------
+| PROVIDER
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-provider {
+  min-height: 30px;
+
+  padding:
+    0
+    10px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 8px;
+
+  background:
+    var(--admin-card-soft);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.admin-users-provider--google {
+  color:
+    var(--admin-blue);
+}
+
+.admin-users-provider--github {
+  color:
+    var(--admin-text);
+}
+
+.admin-users-provider--local {
+  color:
+    var(--admin-orange);
+}
+
+/*
+|--------------------------------------------------------------------------
+| INVOICE COUNTER
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-invoices strong {
+  display: block;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 14px;
+}
+
+.admin-users-invoices small {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DATE
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-date {
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATUS
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-status {
+  min-height: 29px;
+
+  padding:
+    0
+    10px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 999px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.admin-users-status--active {
+  background:
+    rgba(16, 166, 109, 0.1);
+
+  color:
+    var(--admin-green);
+}
+
+.admin-users-status--inactive {
+  background:
+    rgba(217, 75, 75, 0.09);
+
+  color:
+    var(--admin-red);
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATUS BUTTON
+|--------------------------------------------------------------------------
+*/
+
+.admin-users-state-button {
+  min-height: 36px;
+
+  padding:
+    0
+    11px;
+
+  border-radius: 9px;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    transform 150ms ease,
+    background 150ms ease;
+}
+
+.admin-users-state-button:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+}
+
+.admin-users-state-button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.admin-users-state-button--disable {
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.18);
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-users-state-button--enable {
+  border:
+    1px solid
+    rgba(16, 166, 109, 0.18);
+
+  background:
+    rgba(16, 166, 109, 0.07);
+
+  color:
+    var(--admin-green);
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOADING / EMPTY
+|--------------------------------------------------------------------------
+*/
+
+.admin-users__loading,
+.admin-users__empty {
+  min-height: 330px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 11px;
+
+  color:
+    var(--admin-text-muted);
+
+  text-align: center;
+}
+
+.admin-users__loading > span {
+  width: 34px;
+  height: 34px;
+
+  border:
+    3px solid
+    var(--admin-border);
+
+  border-top-color:
+    var(--admin-purple);
+
+  border-radius: 50%;
+
+  animation:
+    adminUsersSpin
+    700ms
+    linear
+    infinite;
+}
+
+@keyframes adminUsersSpin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+.admin-users__empty > span {
+  font-size: 38px;
+}
+
+.admin-users__empty h3 {
+  margin: 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 24px;
+}
+
+.admin-users__empty p,
+.admin-users__loading p {
+  margin: 0;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 12px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK
+|--------------------------------------------------------------------------
+*/
+
+:root[data-admin-theme="dark"]
+.admin-users__panel,
+:root[data-admin-theme="dark"]
+.admin-users__filters,
+:root[data-admin-theme="dark"]
+.admin-users-stat {
+  background:
+    rgba(15, 29, 48, 0.94);
+}
+
+:root[data-admin-theme="dark"]
+.admin-users-table-wrapper,
+:root[data-admin-theme="dark"]
+.admin-users-table {
+  background:
+    #0d1a2b;
+}
+
+:root[data-admin-theme="dark"]
+.admin-users-table thead {
+  background:
+    #122238;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 1250px
+) {
+  .admin-users__stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-users__filters {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-users-search {
+    grid-column:
+      span 2;
+  }
+}
+
+@media (
+  max-width: 850px
+) {
+  .admin-users-access {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+  .admin-users-access__providers {
+    width: 100%;
+  }
+
+  .admin-users-access__providers > div {
+    flex: 1;
+  }
+
+  .admin-users__filters {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+@media (
+  max-width: 600px
+) {
+  .admin-users__stats {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-users__filters {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-users-search {
+    grid-column:
+      auto;
+  }
+
+  .admin-users-access__providers {
+    flex-direction:
+      column;
+  }
+
+  .admin-users-access__providers > div {
+    width: 100%;
+  }
+
+  .admin-users-table td {
+    font-size: 12px;
+  }
+}

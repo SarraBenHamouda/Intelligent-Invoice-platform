@@ -1,41 +1,41 @@
 import {
   useEffect,
   useState,
-} from 'react';
+} from "react";
 
 import {
   useNavigate,
-} from 'react-router-dom';
+} from "react-router-dom";
 
 import {
   useTranslation,
-} from 'react-i18next';
+} from "react-i18next";
 
 const HERO_WORDS = [
   {
-    key: 'automated',
-    defaultValue: 'automatisées',
-    className: 'green',
+    key: "imported",
+    defaultValue: "importées",
+    className: "blue",
   },
   {
-    key: 'extracted',
-    defaultValue: 'extraites',
-    className: 'blue',
+    key: "verified",
+    defaultValue: "vérifiées",
+    className: "orange",
   },
   {
-    key: 'validated',
-    defaultValue: 'validées',
-    className: 'yellow',
+    key: "validated",
+    defaultValue: "validées",
+    className: "green",
   },
   {
-    key: 'signed',
-    defaultValue: 'signées',
-    className: 'purple',
+    key: "signed",
+    defaultValue: "signées",
+    className: "purple",
   },
   {
-    key: 'transmitted',
-    defaultValue: 'transmises',
-    className: 'pink',
+    key: "transmitted",
+    defaultValue: "transmises",
+    className: "teal",
   },
 ];
 
@@ -67,25 +67,11 @@ function HeroSection() {
     HERO_WORDS[activeWordIndex];
 
   function openRegistration() {
-    navigate('/auth?mode=register');
+    navigate("/auth?mode=register");
   }
 
-  function scrollToDemo() {
-    const demonstration =
-      document.getElementById(
-        'promotional-demo'
-      );
-
-    if (demonstration) {
-      demonstration.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-
-      return;
-    }
-
-    navigate('/how-it-works');
+  function openDemo() {
+    navigate("/demonstration");
   }
 
   return (
@@ -95,36 +81,21 @@ function HeroSection() {
         aria-hidden="true"
       >
         <div className="stripe-gradient-mesh" />
-
         <div className="stripe-orb stripe-orb-one" />
         <div className="stripe-orb stripe-orb-two" />
         <div className="stripe-orb stripe-orb-three" />
-
         <div className="stripe-light-beam" />
-
         <div className="stripe-grid-pattern" />
       </div>
 
       <div className="notion-shell stripe-hero-content">
-        <div className="stripe-hero-badge">
-          <span className="stripe-badge-dot" />
-
-          {t(
-            'hero.eyebrow',
-            {
-              defaultValue:
-                'Plateforme intelligente de facturation électronique',
-            }
-          )}
-        </div>
-
         <h1 className="stripe-hero-title">
           <span className="stripe-title-line">
             {t(
-              'hero.centeredTitleLine1',
+              "hero.centeredTitleLine1",
               {
                 defaultValue:
-                  'Vos factures électroniques',
+                  "Vos factures électroniques",
               }
             )}
           </span>
@@ -132,10 +103,10 @@ function HeroSection() {
           <span className="stripe-title-line stripe-title-middle">
             <span>
               {t(
-                'hero.centeredTitleLine2Start',
+                "hero.centeredTitleLine2Start",
                 {
                   defaultValue:
-                    'sont',
+                    "sont",
                 }
               )}
             </span>
@@ -160,24 +131,14 @@ function HeroSection() {
 
           <span className="stripe-title-line">
             {t(
-              'hero.centeredTitleLine3',
+              "hero.centeredTitleLine3",
               {
                 defaultValue:
-                  'de bout en bout.',
+                  "de bout en bout.",
               }
             )}
           </span>
         </h1>
-
-        <p className="stripe-hero-description">
-          {t(
-            'hero.centeredDescription',
-            {
-              defaultValue:
-                'Importez vos factures PDF, scannées ou issues de votre ERP. Tenor Afrique extrait les données, contrôle leur cohérence, génère le format TEIF, applique la signature électronique XAdES et suit leur transmission vers la TTN.',
-            }
-          )}
-        </p>
 
         <div className="stripe-hero-actions">
           <button
@@ -187,10 +148,10 @@ function HeroSection() {
           >
             <span>
               {t(
-                'common.createSpace',
+                "common.createSpace",
                 {
                   defaultValue:
-                    'Créer mon espace',
+                    "Créer mon espace",
                 }
               )}
             </span>
@@ -206,7 +167,7 @@ function HeroSection() {
           <button
             type="button"
             className="stripe-secondary-button"
-            onClick={scrollToDemo}
+            onClick={openDemo}
           >
             <span
               className="stripe-play-button"
@@ -216,53 +177,13 @@ function HeroSection() {
             </span>
 
             {t(
-              'hero.viewDemo',
+              "hero.viewDemo",
               {
                 defaultValue:
-                  'Voir la démonstration',
+                  "Voir la démonstration",
               }
             )}
           </button>
-        </div>
-
-        <div className="stripe-hero-proof">
-          <span>PDF, OCR et ERP</span>
-          <i />
-          <span>Génération TEIF</span>
-          <i />
-          <span>Signature XAdES</span>
-          <i />
-          <span>Suivi TTN</span>
-        </div>
-
-        <div
-          className="stripe-floating-card stripe-floating-card-left"
-          aria-hidden="true"
-        >
-          <span className="stripe-floating-card-label">
-            Facture analysée
-          </span>
-
-          <strong>FA260002</strong>
-
-          <span className="stripe-floating-status">
-            Validée
-          </span>
-        </div>
-
-        <div
-          className="stripe-floating-card stripe-floating-card-right"
-          aria-hidden="true"
-        >
-          <span className="stripe-floating-card-label">
-            Transmission TTN
-          </span>
-
-          <strong>Terminée</strong>
-
-          <span className="stripe-floating-success">
-            ✓ Acceptée
-          </span>
         </div>
       </div>
     </section>

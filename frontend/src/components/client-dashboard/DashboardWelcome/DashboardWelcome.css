@@ -1,0 +1,1521 @@
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD WELCOME
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-panel {
+  position: relative;
+
+  overflow: hidden;
+
+  min-height: 320px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 42px;
+
+  padding:
+    38px
+    40px;
+
+  border:
+    1px solid
+    var(--dashboard-border-strong);
+
+  border-radius:
+    24px;
+
+  background:
+    radial-gradient(
+      circle at 88% 18%,
+      rgba(37, 99, 235, 0.14),
+      transparent 25rem
+    ),
+    radial-gradient(
+      circle at 12% 88%,
+      rgba(14, 165, 233, 0.08),
+      transparent 22rem
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f8fbff 48%,
+      #edf5ff 100%
+    );
+
+  box-shadow:
+    0 18px 42px
+    rgba(37, 99, 235, 0.08);
+
+  isolation:
+    isolate;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DECORATIVE ACCENT
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-panel::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb 0%,
+      #38bdf8 60%,
+      #22c55e 100%
+    );
+
+  z-index: 3;
+}
+
+
+.dashboard-welcome-panel::after {
+  content: "";
+
+  position: absolute;
+
+  top: -110px;
+  right: -90px;
+
+  width: 320px;
+  height: 320px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.11) 0%,
+      rgba(37, 99, 235, 0.04) 45%,
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  z-index: 1;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-copy,
+.dashboard-welcome-actions {
+  position: relative;
+
+  z-index: 5;
+}
+
+
+.dashboard-welcome-copy {
+  max-width: 790px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| EYEBROW
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-label {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 14px;
+
+  padding:
+    6px
+    11px;
+
+  border:
+    1px solid
+    #cfe0ff;
+
+  border-radius:
+    999px;
+
+  background:
+    #eef5ff;
+
+  color:
+    var(--dashboard-primary-dark);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.07em;
+
+  text-transform:
+    uppercase;
+
+  box-shadow:
+    0 4px 12px
+    rgba(37, 99, 235, 0.06);
+}
+
+
+.dashboard-welcome-label::before {
+  width: 6px;
+  height: 6px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--dashboard-primary);
+
+  content: "";
+
+  box-shadow:
+    0 0 0 4px
+    rgba(37, 99, 235, 0.1);
+
+  animation:
+    dashboard-dot-pulse
+    2s ease-in-out
+    infinite;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MAIN TITLE
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-panel h1 {
+  margin: 0;
+
+  max-width: 760px;
+
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    "Fraunces",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(
+      2rem,
+      4vw,
+      3rem
+    );
+
+  font-weight:
+    650;
+
+  line-height:
+    1.06;
+
+  letter-spacing:
+    -0.03em;
+}
+
+
+.dashboard-welcome-panel
+h1
+> span {
+  font-family:
+    inherit;
+
+  font-weight:
+    inherit;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ANIMATED LINE
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-animated-title {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap:
+    7px
+    8px;
+
+  margin-top:
+    10px;
+
+  color:
+    var(--dashboard-text-soft);
+
+  font-family:
+    "IBM Plex Sans",
+    system-ui,
+    sans-serif;
+
+  font-size:
+    16px;
+
+  font-weight:
+    500;
+
+  line-height:
+    1.45;
+}
+
+
+.dashboard-welcome-animated-prefix {
+  white-space:
+    nowrap;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DYNAMIC WORD
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-dynamic-word {
+  --dynamic-color:
+    #2563eb;
+
+  --dynamic-bg:
+    #dbeafe;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+
+  min-height:
+    31px;
+
+  padding:
+    4px
+    11px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--dynamic-color) 18%,
+      transparent
+    );
+
+  border-radius:
+    999px;
+
+  background:
+    var(--dynamic-bg);
+
+  color:
+    var(--dynamic-color);
+
+  font-family:
+    "IBM Plex Sans",
+    system-ui,
+    sans-serif;
+
+  font-size:
+    15px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1;
+
+  white-space:
+    nowrap;
+
+  box-shadow:
+    0 5px 12px
+    color-mix(
+      in srgb,
+      var(--dynamic-color) 7%,
+      transparent
+    );
+
+  transform-origin:
+    center;
+
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+
+.dashboard-welcome-dynamic-word i {
+  width: 8px;
+  height: 8px;
+
+  flex:
+    0 0 8px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--dynamic-color);
+
+  font-style:
+    normal;
+
+  box-shadow:
+    0 0 0 4px
+    color-mix(
+      in srgb,
+      var(--dynamic-color) 12%,
+      transparent
+    );
+}
+
+
+.dashboard-welcome-dynamic-word.is-visible {
+  opacity: 1;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  filter:
+    blur(0);
+}
+
+
+.dashboard-welcome-dynamic-word.is-hidden {
+  opacity: 0;
+
+  transform:
+    translateY(6px)
+    scale(0.98);
+
+  filter:
+    blur(2px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DYNAMIC WORD COLORS
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-dynamic-word--blue {
+  --dynamic-color:
+    #2563eb;
+
+  --dynamic-bg:
+    #dbeafe;
+}
+
+
+.dashboard-welcome-dynamic-word--green {
+  --dynamic-color:
+    #15803d;
+
+  --dynamic-bg:
+    #dcfce7;
+}
+
+
+.dashboard-welcome-dynamic-word--purple {
+  --dynamic-color:
+    #0284c7;
+
+  --dynamic-bg:
+    #e0f2fe;
+}
+
+
+.dashboard-welcome-dynamic-word--pink {
+  --dynamic-color:
+    #0f766e;
+
+  --dynamic-bg:
+    #ccfbf1;
+}
+
+
+.dashboard-welcome-dynamic-word--yellow {
+  --dynamic-color:
+    #b45309;
+
+  --dynamic-bg:
+    #fef3c7;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK WORD COLORS
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.dashboard-welcome-dynamic-word--blue {
+  --dynamic-color:
+    #60a5fa;
+
+  --dynamic-bg:
+    rgba(
+      37,
+      99,
+      235,
+      0.2
+    );
+}
+
+
+html[data-theme="dark"]
+.dashboard-welcome-dynamic-word--green {
+  --dynamic-color:
+    #4ade80;
+
+  --dynamic-bg:
+    rgba(
+      22,
+      163,
+      74,
+      0.18
+    );
+}
+
+
+html[data-theme="dark"]
+.dashboard-welcome-dynamic-word--purple {
+  --dynamic-color:
+    #38bdf8;
+
+  --dynamic-bg:
+    rgba(
+      14,
+      165,
+      233,
+      0.18
+    );
+}
+
+
+html[data-theme="dark"]
+.dashboard-welcome-dynamic-word--pink {
+  --dynamic-color:
+    #2dd4bf;
+
+  --dynamic-bg:
+    rgba(
+      20,
+      184,
+      166,
+      0.18
+    );
+}
+
+
+html[data-theme="dark"]
+.dashboard-welcome-dynamic-word--yellow {
+  --dynamic-color:
+    #fbbf24;
+
+  --dynamic-bg:
+    rgba(
+      217,
+      119,
+      6,
+      0.18
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DESCRIPTION
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-panel p {
+  max-width:
+    640px;
+
+  margin:
+    16px
+    0
+    0;
+
+  color:
+    var(--dashboard-muted);
+
+  font-family:
+    "IBM Plex Sans",
+    system-ui,
+    sans-serif;
+
+  font-size:
+    14px;
+
+  font-weight:
+    400;
+
+  line-height:
+    1.7;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| META
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-meta {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top:
+    17px;
+
+  color:
+    var(--dashboard-muted);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size:
+    11px;
+}
+
+
+.dashboard-welcome-meta > span {
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    11px;
+
+  font-weight:
+    500;
+}
+
+
+.dashboard-welcome-meta strong {
+  max-width:
+    420px;
+
+  overflow:
+    hidden;
+
+  color:
+    var(--dashboard-text-soft);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    600;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-actions {
+  min-width:
+    215px;
+
+  display: grid;
+
+  gap:
+    11px;
+}
+
+
+.dashboard-welcome-primary,
+.dashboard-welcome-secondary {
+  min-height:
+    44px;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    8px;
+
+  padding:
+    0
+    17px;
+
+  border-radius:
+    11px;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size:
+    12px;
+
+  font-weight:
+    700;
+
+  text-decoration:
+    none;
+
+  transition:
+    transform 170ms ease,
+    background 170ms ease,
+    border-color 170ms ease,
+    color 170ms ease,
+    box-shadow 170ms ease;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PRIMARY ACTION
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-primary {
+  border:
+    1px solid
+    #2563eb;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb 0%,
+      #3b82f6 100%
+    );
+
+  color:
+    #ffffff;
+
+  box-shadow:
+    0 11px 24px
+    rgba(
+      37,
+      99,
+      235,
+      0.2
+    );
+}
+
+
+.dashboard-welcome-primary:hover {
+  transform:
+    translateY(-2px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #1d4ed8 0%,
+      #2563eb 100%
+    );
+
+  box-shadow:
+    0 15px 30px
+    rgba(
+      37,
+      99,
+      235,
+      0.26
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SECONDARY ACTION
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-secondary {
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.86
+    );
+
+  color:
+    var(--dashboard-text);
+
+  box-shadow:
+    0 6px 16px
+    rgba(
+      15,
+      23,
+      42,
+      0.04
+    );
+}
+
+
+.dashboard-welcome-secondary:hover {
+  border-color:
+    #bdd2f4;
+
+  background:
+    #edf5ff;
+
+  color:
+    var(--dashboard-primary-dark);
+
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 9px 20px
+    rgba(
+      37,
+      99,
+      235,
+      0.08
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FLOATING CARDS
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-floating-card {
+  position: absolute;
+
+  z-index: 2;
+
+  display: grid;
+
+  gap: 4px;
+
+  min-width:
+    145px;
+
+  padding:
+    12px
+    14px;
+
+  border:
+    1px solid
+    #d8e5f4;
+
+  border-radius:
+    13px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.88
+    );
+
+  box-shadow:
+    0 14px 30px
+    rgba(
+      37,
+      99,
+      235,
+      0.09
+    );
+
+  backdrop-filter:
+    blur(14px);
+
+  -webkit-backdrop-filter:
+    blur(14px);
+
+  pointer-events:
+    none;
+}
+
+
+.dashboard-floating-card > span {
+  color:
+    var(--dashboard-muted);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size:
+    8px;
+
+  font-weight:
+    600;
+}
+
+
+.dashboard-floating-card > strong {
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    10.5px;
+
+  font-weight:
+    700;
+}
+
+
+.dashboard-floating-card > small {
+  width:
+    fit-content;
+
+  margin-top:
+    2px;
+
+  padding:
+    4px
+    7px;
+
+  border:
+    1px solid
+    #bbf7d0;
+
+  border-radius:
+    999px;
+
+  background:
+    #ecfdf3;
+
+  color:
+    #15803d;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size:
+    7px;
+
+  font-weight:
+    800;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FLOATING CARD POSITIONS
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-floating-card--analysis {
+  top:
+    22px;
+
+  right:
+    270px;
+
+  animation:
+    dashboard-card-float-one
+    6s ease-in-out
+    infinite;
+}
+
+
+.dashboard-floating-card--ttn {
+  right:
+    26px;
+
+  bottom:
+    22px;
+
+  animation:
+    dashboard-card-float-two
+    7s ease-in-out
+    infinite;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ORBS
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-welcome-orb {
+  position:
+    absolute;
+
+  z-index:
+    1;
+
+  display:
+    block;
+
+  border-radius:
+    50%;
+
+  pointer-events:
+    none;
+
+  filter:
+    blur(1px);
+}
+
+
+.dashboard-welcome-orb--one {
+  top:
+    34px;
+
+  left:
+    34px;
+
+  width:
+    8px;
+
+  height:
+    8px;
+
+  background:
+    #60a5fa;
+
+  box-shadow:
+    0 0 15px
+    #60a5fa;
+
+  animation:
+    dashboard-orb-one
+    8s ease-in-out
+    infinite;
+}
+
+
+.dashboard-welcome-orb--two {
+  top:
+    55px;
+
+  right:
+    115px;
+
+  width:
+    10px;
+
+  height:
+    10px;
+
+  background:
+    #38bdf8;
+
+  box-shadow:
+    0 0 18px
+    #38bdf8;
+
+  animation:
+    dashboard-orb-two
+    9s ease-in-out
+    infinite;
+}
+
+
+.dashboard-welcome-orb--three {
+  bottom:
+    32px;
+
+  left:
+    46%;
+
+  width:
+    7px;
+
+  height:
+    7px;
+
+  background:
+    #22c55e;
+
+  box-shadow:
+    0 0 15px
+    #22c55e;
+
+  animation:
+    dashboard-orb-three
+    7s ease-in-out
+    infinite;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.dashboard-welcome-panel {
+  background:
+    radial-gradient(
+      circle at 88% 18%,
+      rgba(
+        37,
+        99,
+        235,
+        0.17
+      ),
+      transparent 25rem
+    ),
+    radial-gradient(
+      circle at 12% 88%,
+      rgba(
+        14,
+        165,
+        233,
+        0.08
+      ),
+      transparent 22rem
+    ),
+    linear-gradient(
+      135deg,
+      #111827 0%,
+      #152035 60%,
+      #13233b 100%
+    );
+}
+
+
+html[data-theme="dark"]
+.dashboard-welcome-secondary {
+  background:
+    rgba(
+      17,
+      24,
+      39,
+      0.86
+    );
+}
+
+
+html[data-theme="dark"]
+.dashboard-floating-card {
+  border-color:
+    #31415a;
+
+  background:
+    rgba(
+      17,
+      24,
+      39,
+      0.88
+    );
+
+  box-shadow:
+    0 16px 34px
+    rgba(
+      0,
+      0,
+      0,
+      0.3
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ANIMATIONS
+|--------------------------------------------------------------------------
+*/
+
+@keyframes dashboard-card-float-one {
+  0%,
+  100% {
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        0,
+        -7px,
+        0
+      );
+  }
+}
+
+
+@keyframes dashboard-card-float-two {
+  0%,
+  100% {
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
+  }
+
+  50% {
+    transform:
+      translate3d(
+        -3px,
+        7px,
+        0
+      );
+  }
+}
+
+
+@keyframes dashboard-orb-one {
+  0%,
+  100% {
+    transform:
+      translate(
+        0,
+        0
+      );
+
+    opacity:
+      0.45;
+  }
+
+  50% {
+    transform:
+      translate(
+        15px,
+        10px
+      );
+
+    opacity:
+      0.85;
+  }
+}
+
+
+@keyframes dashboard-orb-two {
+  0%,
+  100% {
+    transform:
+      translate(
+        0,
+        0
+      );
+
+    opacity:
+      0.45;
+  }
+
+  50% {
+    transform:
+      translate(
+        -12px,
+        12px
+      );
+
+    opacity:
+      0.85;
+  }
+}
+
+
+@keyframes dashboard-orb-three {
+  0%,
+  100% {
+    transform:
+      translateY(
+        0
+      )
+      scale(
+        1
+      );
+
+    opacity:
+      0.45;
+  }
+
+  50% {
+    transform:
+      translateY(
+        -12px
+      )
+      scale(
+        1.2
+      );
+
+    opacity:
+      0.85;
+  }
+}
+
+
+@keyframes dashboard-dot-pulse {
+  0%,
+  100% {
+    opacity:
+      1;
+
+    transform:
+      scale(
+        1
+      );
+  }
+
+  50% {
+    opacity:
+      0.65;
+
+    transform:
+      scale(
+        0.85
+      );
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE - TABLET
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    1180px
+) {
+
+  .dashboard-floating-card--analysis {
+    display:
+      none;
+  }
+}
+
+
+@media (
+  max-width:
+    900px
+) {
+
+  .dashboard-welcome-panel {
+    grid-template-columns:
+      1fr;
+
+    align-items:
+      flex-start;
+
+    gap:
+      26px;
+  }
+
+
+  .dashboard-welcome-actions {
+    width:
+      100%;
+
+    min-width:
+      0;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+
+  .dashboard-floating-card--ttn {
+    display:
+      none;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE - MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    600px
+) {
+
+  .dashboard-welcome-panel {
+    min-height:
+      0;
+
+    padding:
+      26px
+      20px;
+
+    border-radius:
+      18px;
+  }
+
+
+  .dashboard-welcome-panel h1 {
+    font-size:
+      clamp(
+        1.9rem,
+        10vw,
+        2.8rem
+      );
+
+    line-height:
+      1.04;
+  }
+
+
+  .dashboard-welcome-animated-title {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      row;
+
+    font-size:
+      15px;
+  }
+
+
+  .dashboard-welcome-animated-prefix {
+    white-space:
+      normal;
+  }
+
+
+  .dashboard-welcome-dynamic-word {
+    min-height:
+      29px;
+
+    padding:
+      3px
+      9px;
+
+    font-size:
+      14px;
+  }
+
+
+  .dashboard-welcome-actions {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .dashboard-welcome-meta {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      5px;
+  }
+
+
+  .dashboard-welcome-meta strong {
+    max-width:
+      100%;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+
+  .dashboard-welcome-orb,
+  .dashboard-floating-card,
+  .dashboard-welcome-label::before {
+    animation:
+      none !important;
+  }
+
+
+  .dashboard-welcome-dynamic-word {
+    transition:
+      none !important;
+  }
+}

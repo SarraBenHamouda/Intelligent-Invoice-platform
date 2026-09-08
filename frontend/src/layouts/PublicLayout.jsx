@@ -1,7 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import {
+  Outlet,
+} from "react-router-dom";
 
-import PublicHeader from '../components/navigation/PublicHeader/PublicHeader';
-import PublicFooter from '../components/navigation/PublicFooter/PublicFooter';
+import PublicHeader from "../components/navigation/PublicHeader/PublicHeader";
+import PublicFooter from "../components/navigation/PublicFooter/PublicFooter";
+
+import "./PublicLayout.css";
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC LAYOUT
+|--------------------------------------------------------------------------
+*/
 
 function PublicLayout() {
   return (

@@ -1,62 +1,265 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const path = require("path");
 
 const {
   getDatabase,
-} = require('./config/database');
+} = require("./config/database");
+
+const contactRoutes =
+  require("./routes/contact.routes");
+
+/*
+|--------------------------------------------------------------------------
+| ROUTES
+|--------------------------------------------------------------------------
+*/
 
 const authRoutes =
-  require('./routes/auth.routes');
+  require("./routes/auth.routes");
 
 const invoiceRoutes =
-  require('./routes/invoice.routes');
+  require("./routes/invoice.routes");
 
 const webhookRoutes =
-  require('./routes/webhook.routes');
+  require("./routes/webhook.routes");
+
+const clientDashboardRoutes =
+  require("./routes/clientDashboardRoutes");
+
+const profileRoutes =
+  require("./routes/profile.routes");
+
+const avatarRoutes =
+  require("./routes/avatar.routes");
+
+const notificationRoutes =
+  require("./routes/notification.routes");
+
+const assistantRoutes =
+  require("./routes/assistant.routes");
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+
+const adminRoutes =
+  require("./routes/admin.route");
+
+/*
+|--------------------------------------------------------------------------
+| ERROR HANDLER
+|--------------------------------------------------------------------------
+*/
 
 const errorHandler =
-  require('./middleware/errorHandler');
+  require("./middleware/errorHandler");
 
-const app = express();
+/*
+|--------------------------------------------------------------------------
+| APP
+|--------------------------------------------------------------------------
+*/
 
-console.log('=== NOUVEAU APP.JS CHARGE ===');
+const app =
+  express();
 
-app.disable('x-powered-by');
+console.log(
+  "=== NOUVEAU APP.JS CHARGE ===",
+);
 
-// Use Helmet but disable Cross-Origin-Opener-Policy for local development
+app.disable(
+  "x-powered-by",
+);
+
+/*
+|--------------------------------------------------------------------------
+| SECURITY
+|--------------------------------------------------------------------------
+*/
+
 app.use(
   helmet({
-    crossOriginOpenerPolicy: false,
+    crossOriginOpenerPolicy:
+      false,
+
+    crossOriginResourcePolicy: {
+      policy:
+        "cross-origin",
+    },
   }),
 );
+
+/*
+|--------------------------------------------------------------------------
+| CORS - ORIGINES AUTORISÉES
+|--------------------------------------------------------------------------
+*/
+
+const allowedOrigins =
+  new Set([
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://192.168.1.105:5173",
+
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://192.168.1.105:3000",
+  ]);
+
+/*
+|--------------------------------------------------------------------------
+| CORS
+|--------------------------------------------------------------------------
+*/
 
 app.use(
   cors({
-    origin: [
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
+    origin(
+      origin,
+      callback,
+    ) {
+      /*
+      |--------------------------------------------------------------------------
+      | REQUÊTES SANS ORIGIN
+      |--------------------------------------------------------------------------
+      |
+      | Postman, backend-to-backend, n8n, etc.
+      |
+      |--------------------------------------------------------------------------
+      */
+
+      if (!origin) {
+        return callback(
+          null,
+          true,
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | ORIGIN AUTORISÉE
+      |--------------------------------------------------------------------------
+      */
+
+      if (
+        allowedOrigins.has(
+          origin,
+        )
+      ) {
+        return callback(
+          null,
+          true,
+        );
+      }
+
+      /*
+      |--------------------------------------------------------------------------
+      | ORIGIN REFUSÉE
+      |--------------------------------------------------------------------------
+      */
+
+      console.warn(
+        "[CORS] Origin refusée:",
+        origin,
+      );
+
+      return callback(
+        new Error(
+          `Origin non autorisée par CORS : ${origin}`,
+        ),
+      );
+    },
+
+    credentials:
+      true,
+
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
     ],
-    credentials: true,
+
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "Cache-Control",
+      "Pragma",
+      "x-workflow-secret",
+    ],
+
+    exposedHeaders: [
+      "Content-Length",
+    ],
+
+    optionsSuccessStatus:
+      204,
   }),
 );
 
-app.use(morgan('dev'));
+/*
+|--------------------------------------------------------------------------
+| LOGGING
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  morgan(
+    "dev",
+  ),
+);
+
+/*
+|--------------------------------------------------------------------------
+| BODY PARSERS
+|--------------------------------------------------------------------------
+|
+| IMPORTANT :
+|
+| Toutes les routes qui utilisent req.body doivent être déclarées APRÈS.
+|
+|--------------------------------------------------------------------------
+*/
 
 app.use(
   express.json({
-    limit: '10mb',
-  })
+    limit:
+      "10mb",
+  }),
 );
 
 app.use(
   express.urlencoded({
-    extended: true,
-    limit: '10mb',
-  })
+    extended:
+      true,
+
+    limit:
+      "10mb",
+  }),
+);
+
+/*
+|--------------------------------------------------------------------------
+| STATIC FILES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/uploads",
+  express.static(
+    path.join(
+      process.cwd(),
+      "uploads",
+    ),
+  ),
 );
 
 /*
@@ -65,41 +268,87 @@ app.use(
 |--------------------------------------------------------------------------
 */
 
-app.get('/api/health', (req, res) => {
-  return res.status(200).json({
-    success: true,
-    service: 'invoice-platform-backend',
-    status: 'UP',
-    version: 'AUTH-V2',
-    timestamp: new Date().toISOString(),
-  });
-});
+app.get(
+  "/api/health",
+
+  (req, res) => {
+    return res
+      .status(200)
+      .json({
+        success:
+          true,
+
+        service:
+          "invoice-platform-backend",
+
+        status:
+          "UP",
+
+        version:
+          "AUTH-V2",
+
+        timestamp:
+          new Date()
+            .toISOString(),
+      });
+  },
+);
+
+/*
+|--------------------------------------------------------------------------
+| HEALTH DATABASE
+|--------------------------------------------------------------------------
+*/
 
 app.get(
-  '/api/health/database',
-  async (req, res, next) => {
+  "/api/health/database",
+
+  async (
+    req,
+    res,
+    next,
+  ) => {
     try {
-      const database = getDatabase();
+      const database =
+        getDatabase();
 
       const result =
-        await database.request().query(`
-          SELECT
-            DB_NAME() AS database_name,
-            GETDATE() AS server_time
-        `);
+        await database
+          .request()
+          .query(`
+            SELECT
+              DB_NAME()
+                AS database_name,
 
-      return res.status(200).json({
-        success: true,
-        status: 'CONNECTED',
-        database:
-          result.recordset[0].database_name,
-        serverTime:
-          result.recordset[0].server_time,
-      });
+              GETDATE()
+                AS server_time
+          `);
+
+      return res
+        .status(200)
+        .json({
+          success:
+            true,
+
+          status:
+            "CONNECTED",
+
+          database:
+            result
+              .recordset[0]
+              .database_name,
+
+          serverTime:
+            result
+              .recordset[0]
+              .server_time,
+        });
     } catch (error) {
-      next(error);
+      return next(
+        error,
+      );
     }
-  }
+  },
 );
 
 /*
@@ -108,46 +357,206 @@ app.get(
 |--------------------------------------------------------------------------
 */
 
-app.get('/api/direct-test', (req, res) => {
-  return res.status(200).json({
-    success: true,
-    message: 'Le nouveau fichier app.js est actif',
-    version: 'AUTH-V2',
-  });
-});
+app.get(
+  "/api/direct-test",
+
+  (req, res) => {
+    return res
+      .status(200)
+      .json({
+        success:
+          true,
+
+        message:
+          "Le nouveau fichier app.js est actif",
+
+        version:
+          "AUTH-V2",
+      });
+  },
+);
 
 /*
 |--------------------------------------------------------------------------
-| ROUTES
+| TEST CORS
 |--------------------------------------------------------------------------
 */
 
-app.use('/api/auth', authRoutes);
+app.get(
+  "/api/cors-test",
+
+  (req, res) => {
+    return res
+      .status(200)
+      .json({
+        success:
+          true,
+
+        message:
+          "CORS fonctionne.",
+
+        origin:
+          req.headers
+            .origin ||
+          null,
+
+        timestamp:
+          new Date()
+            .toISOString(),
+      });
+  },
+);
+
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES
+|--------------------------------------------------------------------------
+*/
 
 app.use(
-  '/api/invoices',
-  invoiceRoutes
+  "/api/auth",
+  authRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| PROFILE ROUTES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/profile",
+  profileRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| AVATAR AI ROUTES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/avatar",
+  avatarRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| INVOICE ROUTES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/invoices",
+  invoiceRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| ASSISTANT FACTURES
+|--------------------------------------------------------------------------
+|
+| IMPORTANT :
+|
+| Cette route doit être APRÈS express.json().
+|
+| POST /api/assistant/ask
+|
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/assistant",
+  assistantRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/admin",
+  adminRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| WEBHOOK ROUTES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/webhooks",
+  webhookRoutes,
+);
+
+/*
+|--------------------------------------------------------------------------
+| CLIENT DASHBOARD
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/client",
+  clientDashboardRoutes,
 );
 
 app.use(
-  '/api/webhooks',
-  webhookRoutes
+  "/api/client-dashboard",
+  clientDashboardRoutes,
 );
 
+/*
+|--------------------------------------------------------------------------
+| NOTIFICATION ROUTES
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/notifications",
+  notificationRoutes,
+);
+/*
+|--------------------------------------------------------------------------
+| PUBLIC CONTACT
+|--------------------------------------------------------------------------
+*/
+
+app.use(
+  "/api/contact",
+  contactRoutes,
+);
 /*
 |--------------------------------------------------------------------------
 | NOT FOUND
 |--------------------------------------------------------------------------
+|
+| Toujours garder cette route APRÈS toutes les routes applicatives.
+|
+|--------------------------------------------------------------------------
 */
 
-app.use((req, res) => {
-  return res.status(404).json({
-    success: false,
-    errorCode: 'ROUTE_NOT_FOUND',
-    message:
-      `Route not found: ${req.method} ${req.originalUrl}`,
-  });
-});
+app.use(
+  (
+    req,
+    res,
+  ) => {
+    return res
+      .status(404)
+      .json({
+        success:
+          false,
+
+        errorCode:
+          "ROUTE_NOT_FOUND",
+
+        message:
+          `Route not found: ${req.method} ${req.originalUrl}`,
+      });
+  },
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -155,6 +564,15 @@ app.use((req, res) => {
 |--------------------------------------------------------------------------
 */
 
-app.use(errorHandler);
+app.use(
+  errorHandler,
+);
 
-module.exports = app;
+/*
+|--------------------------------------------------------------------------
+| EXPORT
+|--------------------------------------------------------------------------
+*/
+
+module.exports =
+  app;

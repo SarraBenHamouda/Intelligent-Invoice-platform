@@ -1,0 +1,715 @@
+/*
+|--------------------------------------------------------------------------
+| INVOICE STATUS OVERVIEW
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-panel {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 26px;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f9fbfe 100%
+    );
+
+  box-shadow:
+    var(--dashboard-shadow-soft);
+
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    transform 170ms ease;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TOP ACCENT
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-panel::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb 0%,
+      #38bdf8 55%,
+      #22c55e 100%
+    );
+}
+
+
+.dashboard-panel:hover {
+  border-color:
+    var(--dashboard-border-strong);
+
+  box-shadow:
+    var(--dashboard-shadow);
+
+  transform:
+    translateY(-2px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HEADER
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-panel-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 24px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LABEL
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-panel-label {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color:
+    var(--dashboard-primary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    9.5px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.08em;
+
+  text-transform:
+    uppercase;
+}
+
+
+.dashboard-panel-label::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--dashboard-primary);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(37, 99, 235, 0.09);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TITLE
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-panel-header h2 {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--dashboard-text);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  font-size:
+    21px;
+
+  font-weight:
+    800;
+
+  line-height:
+    1.2;
+
+  letter-spacing:
+    -0.025em;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PERIOD
+|--------------------------------------------------------------------------
+*/
+
+.dashboard-panel-period {
+  padding:
+    5px
+    9px;
+
+  border:
+    1px solid
+    var(--dashboard-border);
+
+  border-radius:
+    999px;
+
+  background:
+    var(--dashboard-surface-soft);
+
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    9px;
+
+  font-weight:
+    650;
+
+  white-space:
+    nowrap;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STATUS LIST
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-list {
+  display: grid;
+
+  gap: 16px;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STATUS ITEM
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-item {
+  --status-color:
+    var(--dashboard-primary);
+
+  --status-soft:
+    var(--dashboard-primary-soft);
+
+  position: relative;
+
+  padding:
+    12px
+    13px;
+
+  border:
+    1px solid
+    transparent;
+
+  border-radius:
+    12px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--status-color) 2.8%,
+      #ffffff
+    );
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+
+.invoice-status-item:hover {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--status-color) 20%,
+      var(--dashboard-border)
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(--status-color) 5%,
+      #ffffff
+    );
+
+  transform:
+    translateX(2px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TONES
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-item--success {
+  --status-color:
+    var(--dashboard-success);
+
+  --status-soft:
+    var(--dashboard-success-soft);
+}
+
+
+.invoice-status-item--warning {
+  --status-color:
+    var(--dashboard-warning);
+
+  --status-soft:
+    var(--dashboard-warning-soft);
+}
+
+
+.invoice-status-item--danger {
+  --status-color:
+    var(--dashboard-danger);
+
+  --status-soft:
+    var(--dashboard-danger-soft);
+}
+
+
+.invoice-status-item--purple {
+  --status-color:
+    #0284c7;
+
+  --status-soft:
+    #e0f2fe;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ROW
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 9px;
+}
+
+
+.invoice-status-row > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 0;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DOT
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-dot {
+  width:
+    9px;
+
+  height:
+    9px;
+
+  flex:
+    0 0 9px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--status-color);
+
+  box-shadow:
+    0 0 0 4px
+    color-mix(
+      in srgb,
+      var(--status-color) 10%,
+      transparent
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STATUS LABEL
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-row strong {
+  color:
+    var(--dashboard-text);
+
+  font-size:
+    11.5px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1.35;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VALUE
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-row > span {
+  color:
+    var(--status-color);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size:
+    11.5px;
+
+  font-weight:
+    700;
+
+  white-space:
+    nowrap;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TRACK
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-track {
+  position: relative;
+
+  height:
+    8px;
+
+  overflow:
+    hidden;
+
+  border-radius:
+    999px;
+
+  background:
+    #e9eff6;
+
+  box-shadow:
+    inset
+    0
+    1px
+    2px
+    rgba(
+      15,
+      23,
+      42,
+      0.05
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PROGRESS
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-track span {
+  display:
+    block;
+
+  height:
+    100%;
+
+  min-width:
+    4px;
+
+  border-radius:
+    inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--status-color) 0%,
+      color-mix(
+        in srgb,
+        var(--status-color) 72%,
+        #ffffff
+      ) 100%
+    );
+
+  box-shadow:
+    0 0 10px
+    color-mix(
+      in srgb,
+      var(--status-color) 18%,
+      transparent
+    );
+
+  transition:
+    width 300ms ease;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| META
+|--------------------------------------------------------------------------
+*/
+
+.invoice-status-item small {
+  display:
+    block;
+
+  margin-top:
+    7px;
+
+  color:
+    var(--dashboard-muted);
+
+  font-size:
+    9px;
+
+  font-weight:
+    500;
+
+  line-height:
+    1.4;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.dashboard-panel {
+  background:
+    linear-gradient(
+      180deg,
+      var(--dashboard-surface) 0%,
+      var(--dashboard-surface-soft) 100%
+    );
+}
+
+
+html[data-theme="dark"]
+.invoice-status-item {
+  background:
+    color-mix(
+      in srgb,
+      var(--status-color) 4%,
+      var(--dashboard-surface)
+    );
+}
+
+
+html[data-theme="dark"]
+.invoice-status-item:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--status-color) 7%,
+      var(--dashboard-surface)
+    );
+}
+
+
+html[data-theme="dark"]
+.invoice-status-track {
+  background:
+    #1f2d40;
+
+  box-shadow:
+    inset
+    0
+    1px
+    2px
+    rgba(
+      0,
+      0,
+      0,
+      0.25
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE — TABLET
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    900px
+) {
+
+  .dashboard-panel {
+    padding:
+      22px;
+  }
+
+
+  .dashboard-panel-header h2 {
+    font-size:
+      20px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE — MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width:
+    600px
+) {
+
+  .dashboard-panel {
+    padding:
+      19px;
+
+    border-radius:
+      17px;
+  }
+
+
+  .dashboard-panel-header {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      10px;
+
+    margin-bottom:
+      20px;
+  }
+
+
+  .dashboard-panel-header h2 {
+    font-size:
+      18px;
+  }
+
+
+  .invoice-status-list {
+    gap:
+      13px;
+  }
+
+
+  .invoice-status-item {
+    padding:
+      11px;
+  }
+
+
+  .invoice-status-row {
+    gap:
+      10px;
+  }
+
+
+  .invoice-status-row strong {
+    font-size:
+      11px;
+  }
+
+
+  .invoice-status-row > span {
+    font-size:
+      11px;
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+
+  .dashboard-panel,
+  .invoice-status-item,
+  .invoice-status-track span {
+    transition-duration:
+      0.01ms !important;
+  }
+}

@@ -1,6 +1,15 @@
-import { useTranslation } from 'react-i18next';
+import {
+  useNavigate,
+} from 'react-router-dom';
+
+import {
+  useTranslation,
+} from 'react-i18next';
+
+import logoDark from '../../../../assets/logo-dark.png';
 
 import './ProductShowcaseSection.css';
+
 const INVOICE_ROWS = [
   {
     number: 'FA260002',
@@ -57,30 +66,30 @@ const TIMELINE_ITEMS = [
   {
     time: '09:12',
     title: 'Facture importée',
-    description: 'Source PDF',
+    description: 'Document reçu',
     state: 'completed',
   },
   {
     time: '09:12',
-    title: 'Extraction terminée',
+    title: 'Informations récupérées',
     description: '5 lignes détectées',
     state: 'completed',
   },
   {
     time: '09:13',
-    title: 'Validation réussie',
+    title: 'Vérification réussie',
     description: 'Aucune erreur bloquante',
     state: 'completed',
   },
   {
     time: '09:14',
-    title: 'Signature XAdES appliquée',
-    description: 'Certificat fournisseur',
+    title: 'Facture signée',
+    description: 'Signature terminée',
     state: 'completed',
   },
   {
     time: '09:15',
-    title: 'Transmission TTN',
+    title: 'Facture envoyée',
     description: 'En cours',
     state: 'active',
   },
@@ -88,63 +97,41 @@ const TIMELINE_ITEMS = [
 
 function ProductShowcaseSection() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  function openLoginForImport() {
+    navigate('/auth?mode=login&redirect=%2Fclient%2Finvoices%2Fupload');
+  }
+
+  function openLogin() {
+    navigate('/auth?mode=login');
+  }
 
   return (
     <section className="product-showcase-section stripe-animated-background">
       <div className="notion-shell">
-        <div className="product-showcase-heading">
-          <span className="notion-section-label">
-            {t('productShowcase.label', {
-              defaultValue:
-                'Une plateforme conçue pour vos factures',
-            })}
-          </span>
-
-          <h2>
-            {t('productShowcase.title', {
-              defaultValue:
-                'Centralisez, contrôlez et transmettez vos factures depuis un seul espace.',
-            })}
-          </h2>
-
-          <p>
-            {t('productShowcase.description', {
-              defaultValue:
-                'Chaque étape importante est visible, compréhensible et entièrement traçable.',
-            })}
-          </p>
-        </div>
-
         <div className="product-showcase-grid">
           <article className="product-showcase-card product-showcase-card-large">
             <div className="product-showcase-card-heading">
               <div>
                 <span className="product-showcase-kicker">
                   {t('productShowcase.import.kicker', {
-                    defaultValue:
-                      'Centraliser les sources',
+                    defaultValue: 'Centraliser les sources',
                   })}
                 </span>
 
                 <h3>
                   {t('productShowcase.import.title', {
-                    defaultValue:
-                      'Importez toutes vos factures au même endroit.',
+                    defaultValue: 'Importez toutes vos factures au même endroit.',
                   })}
                 </h3>
-
-                <p>
-                  {t('productShowcase.import.description', {
-                    defaultValue:
-                      'Ajoutez une facture PDF, une image scannée ou récupérez directement les données depuis votre ERP.',
-                  })}
-                </p>
               </div>
 
               <button
                 type="button"
                 className="product-showcase-arrow"
-                aria-label="Voir les possibilités d’importation"
+                aria-label="Importer une facture"
+                onClick={openLoginForImport}
               >
                 →
               </button>
@@ -152,16 +139,33 @@ function ProductShowcaseSection() {
 
             <div className="showcase-import-preview">
               <div className="showcase-sidebar">
-                <strong>Tenor Afrique</strong>
+                <div className="showcase-sidebar-brand">
+                  <img
+                    src={logoDark}
+                    alt="Tenor Afrique"
+                  />
+
+                  <span>
+                    Espace Client
+                  </span>
+                </div>
 
                 <nav>
                   <span className="active">
                     Tableau de bord
                   </span>
-                  <span>Mes factures</span>
-                  <span>Importer</span>
-                  <span>Historique</span>
-                  <span>Notifications</span>
+                  <span>
+                    Mes factures
+                  </span>
+                  <span>
+                    Importer
+                  </span>
+                  <span>
+                    Historique
+                  </span>
+                  <span>
+                    Notifications
+                  </span>
                 </nav>
               </div>
 
@@ -176,25 +180,37 @@ function ProductShowcaseSection() {
                       Suivez tous vos documents
                     </h4>
                   </div>
-
-                  <button type="button">
-                    + Importer une facture
-                  </button>
                 </div>
 
                 <div className="showcase-source-tabs">
-                  <span className="active">Toutes</span>
-                  <span>PDF</span>
-                  <span>OCR</span>
-                  <span>ERP</span>
+                  <span className="active">
+                    Toutes
+                  </span>
+                  <span>
+                    PDF
+                  </span>
+                  <span>
+                    Image
+                  </span>
+                  <span>
+                    Autres
+                  </span>
                 </div>
 
                 <div className="showcase-invoice-table">
                   <div className="showcase-table-header">
-                    <span>Facture</span>
-                    <span>Client</span>
-                    <span>Montant</span>
-                    <span>Statut</span>
+                    <span>
+                      Facture
+                    </span>
+                    <span>
+                      Client
+                    </span>
+                    <span>
+                      Montant
+                    </span>
+                    <span>
+                      Statut
+                    </span>
                   </div>
 
                   {INVOICE_ROWS.map((invoice) => (
@@ -223,7 +239,20 @@ function ProductShowcaseSection() {
                   ))}
                 </div>
 
-                <div className="showcase-import-dropzone">
+                <div
+                  className="showcase-import-dropzone"
+                  role="button"
+                  tabIndex={0}
+                  onClick={openLoginForImport}
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === 'Enter' ||
+                      event.key === ' '
+                    ) {
+                      openLoginForImport();
+                    }
+                  }}
+                >
                   <div className="showcase-dropzone-icon">
                     ↓
                   </div>
@@ -234,11 +263,17 @@ function ProductShowcaseSection() {
                     </strong>
 
                     <span>
-                      PDF, PNG, JPG ou source ERP
+                      PDF, PNG ou JPG
                     </span>
                   </div>
 
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      openLoginForImport();
+                    }}
+                  >
                     Parcourir
                   </button>
                 </div>
@@ -251,40 +286,30 @@ function ProductShowcaseSection() {
               <div>
                 <span className="product-showcase-kicker">
                   {t('productShowcase.validation.kicker', {
-                    defaultValue:
-                      'Contrôle automatique',
+                    defaultValue: 'Contrôle automatique',
                   })}
                 </span>
 
                 <h3>
                   {t('productShowcase.validation.title', {
-                    defaultValue:
-                      'Détectez les erreurs avant la signature.',
+                    defaultValue: 'Détectez les erreurs avant la validation.',
                   })}
                 </h3>
 
                 <p>
                   {t('productShowcase.validation.description', {
                     defaultValue:
-                      'Les champs obligatoires, les taxes, les lignes et les montants sont vérifiés automatiquement.',
+                      'Les informations importantes sont vérifiées automatiquement avant de poursuivre.',
                   })}
                 </p>
               </div>
-
-              <button
-                type="button"
-                className="product-showcase-arrow"
-                aria-label="Voir la validation automatique"
-              >
-                →
-              </button>
             </div>
 
             <div className="showcase-validation-preview">
               <div className="showcase-validation-header">
                 <div>
                   <span>
-                    Validation de la facture
+                    Vérification de la facture
                   </span>
 
                   <strong>
@@ -308,24 +333,30 @@ function ProductShowcaseSection() {
                     </span>
 
                     <div>
-                      <span>{row.label}</span>
-                      <strong>{row.value}</strong>
+                      <span>
+                        {row.label}
+                      </span>
+
+                      <strong>
+                        {row.value}
+                      </strong>
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="showcase-validation-result">
-                <span>✓</span>
+                <span>
+                  ✓
+                </span>
 
                 <div>
                   <strong>
-                    Facture prête à être signée
+                    Facture prête
                   </strong>
 
                   <p>
-                    Aucun blocage ni incohérence
-                    détecté.
+                    Aucun problème détecté.
                   </p>
                 </div>
               </div>
@@ -337,8 +368,7 @@ function ProductShowcaseSection() {
               <div>
                 <span className="product-showcase-kicker">
                   {t('productShowcase.errors.kicker', {
-                    defaultValue:
-                      'Comprendre les rejets',
+                    defaultValue: 'Comprendre les erreurs',
                   })}
                 </span>
 
@@ -352,23 +382,17 @@ function ProductShowcaseSection() {
                 <p>
                   {t('productShowcase.errors.description', {
                     defaultValue:
-                      'La plateforme indique le champ concerné, la cause du problème et l’action recommandée.',
+                      'La plateforme indique clairement le problème et ce que vous devez faire.',
                   })}
                 </p>
               </div>
-
-              <button
-                type="button"
-                className="product-showcase-arrow"
-                aria-label="Voir le détail des erreurs"
-              >
-                →
-              </button>
             </div>
 
             <div className="showcase-error-preview">
               <div className="showcase-error-banner">
-                <span>!</span>
+                <span>
+                  !
+                </span>
 
                 <div>
                   <strong>
@@ -376,8 +400,7 @@ function ProductShowcaseSection() {
                   </strong>
 
                   <p>
-                    La facture ne peut pas encore
-                    être transmise.
+                    La facture doit être corrigée avant de continuer.
                   </p>
                 </div>
               </div>
@@ -393,11 +416,14 @@ function ProductShowcaseSection() {
                   </strong>
 
                   <span>
-                    Champ : document.numero
+                    Vérifiez le numéro de la facture.
                   </span>
                 </div>
 
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={openLogin}
+                >
                   Corriger
                 </button>
               </div>
@@ -409,229 +435,36 @@ function ProductShowcaseSection() {
 
                 <div>
                   <strong>
-                    Désignation de ligne manquante
+                    Désignation manquante
                   </strong>
 
                   <span>
-                    Champ : lignes[0].designation
+                    Vérifiez la ligne concernée.
                   </span>
                 </div>
 
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={openLogin}
+                >
                   Corriger
                 </button>
               </div>
 
               <div className="showcase-error-suggestion">
-                <span>✦</span>
-
-                <p>
-                  Vérifiez les données signalées puis
-                  relancez automatiquement la validation.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <article className="product-showcase-card">
-            <div className="product-showcase-card-heading">
-              <div>
-                <span className="product-showcase-kicker">
-                  {t('productShowcase.signature.kicker', {
-                    defaultValue:
-                      'Signature sécurisée',
-                  })}
+                <span>
+                  ✦
                 </span>
 
-                <h3>
-                  {t('productShowcase.signature.title', {
-                    defaultValue:
-                      'Signez vos factures au format XAdES.',
-                  })}
-                </h3>
-
                 <p>
-                  {t('productShowcase.signature.description', {
-                    defaultValue:
-                      'La signature électronique garantit l’intégrité, l’origine et la traçabilité du document.',
-                  })}
+                  Corrigez les informations signalées puis relancez la vérification.
                 </p>
-              </div>
-
-              <button
-                type="button"
-                className="product-showcase-arrow"
-                aria-label="Voir la signature électronique"
-              >
-                →
-              </button>
-            </div>
-
-            <div className="showcase-signature-preview">
-              <div className="showcase-document-card">
-                <div className="showcase-document-top">
-                  <span>TEIF XML</span>
-                  <small>FA260002</small>
-                </div>
-
-                <div className="showcase-code-lines">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-
-                <div className="showcase-document-signature">
-                  <span className="showcase-certificate-icon">
-                    ✓
-                  </span>
-
-                  <div>
-                    <strong>
-                      Signature XAdES valide
-                    </strong>
-
-                    <small>
-                      Certificat fournisseur
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <div className="showcase-signature-side">
-                <div className="showcase-signature-badge">
-                  <span>✓</span>
-
-                  <div>
-                    <strong>
-                      Document signé
-                    </strong>
-
-                    <small>
-                      Intégrité vérifiée
-                    </small>
-                  </div>
-                </div>
-
-                <div className="showcase-signature-detail">
-                  <span>Algorithme</span>
-                  <strong>RSA-SHA256</strong>
-                </div>
-
-                <div className="showcase-signature-detail">
-                  <span>Format</span>
-                  <strong>XAdES-EPES</strong>
-                </div>
-
-                <div className="showcase-signature-detail">
-                  <span>Rôle</span>
-                  <strong>Fournisseur</strong>
-                </div>
               </div>
             </div>
           </article>
 
-          <article className="product-showcase-card product-showcase-card-wide">
-            <div className="product-showcase-card-heading">
-              <div>
-                <span className="product-showcase-kicker">
-                  {t('productShowcase.tracking.kicker', {
-                    defaultValue:
-                      'Traçabilité complète',
-                  })}
-                </span>
-
-                <h3>
-                  {t('productShowcase.tracking.title', {
-                    defaultValue:
-                      'Suivez la facture jusqu’à son acceptation par la TTN.',
-                  })}
-                </h3>
-
-                <p>
-                  {t('productShowcase.tracking.description', {
-                    defaultValue:
-                      'Chaque événement est horodaté afin de comprendre immédiatement où se trouve votre facture.',
-                  })}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="product-showcase-arrow"
-                aria-label="Voir la traçabilité"
-              >
-                →
-              </button>
-            </div>
-
-            <div className="showcase-timeline-preview">
-              <div className="showcase-timeline-summary">
-                <div>
-                  <span>
-                    Facture suivie
-                  </span>
-
-                  <strong>
-                    FA260002
-                  </strong>
-                </div>
-
-                <small className="pending">
-                  Transmission en cours
-                </small>
-              </div>
-
-              <div className="showcase-timeline-list">
-                {TIMELINE_ITEMS.map((item) => (
-                  <div
-                    className={`showcase-timeline-item ${item.state}`}
-                    key={`${item.time}-${item.title}`}
-                  >
-                    <time>
-                      {item.time}
-                    </time>
-
-                    <span className="showcase-timeline-dot">
-                      {item.state === 'completed'
-                        ? '✓'
-                        : ''}
-                    </span>
-
-                    <div>
-                      <strong>
-                        {item.title}
-                      </strong>
-
-                      <small>
-                        {item.description}
-                      </small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="showcase-ttn-result">
-                <div className="showcase-ttn-icon">
-                  TTN
-                </div>
-
-                <div>
-                  <span>
-                    Dernière mise à jour
-                  </span>
-
-                  <strong>
-                    En attente de la réponse TTN
-                  </strong>
-                </div>
-
-                <span className="showcase-live-pulse" />
-              </div>
-            </div>
-          </article>
+         
+          
         </div>
       </div>
     </section>

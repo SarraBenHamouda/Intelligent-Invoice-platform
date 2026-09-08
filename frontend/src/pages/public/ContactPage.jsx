@@ -1,132 +1,412 @@
 import {
   useState,
-} from 'react';
+} from "react";
 
-import './styles/ContactPage.css';
+import RecaptchaV2 from "../../components/auth/RecaptchaV2";
+
+import "./styles/ContactPage.css";
+
+/*
+|--------------------------------------------------------------------------
+| API
+|--------------------------------------------------------------------------
+*/
+
+const API_BASE_URL =
+  String(
+    import.meta.env.VITE_API_URL ||
+      "http://localhost:3000",
+  ).replace(/\/+$/, "");
+
+/*
+|--------------------------------------------------------------------------
+| SUBJECTS
+|--------------------------------------------------------------------------
+*/
 
 const CONTACT_SUBJECTS = [
   {
-    value: 'demo',
-    label: 'Demande de démonstration',
+    value: "demo",
+    label:
+      "Demande de démonstration",
   },
+
   {
-    value: 'integration',
-    label: 'Intégration ERP',
+    value: "integration",
+    label:
+      "Intégration ERP",
   },
+
   {
-    value: 'signature',
-    label: 'Signature électronique',
+    value: "signature",
+    label:
+      "Signature électronique",
   },
+
   {
-    value: 'ttn',
-    label: 'Transmission TTN',
+    value: "ttn",
+    label:
+      "Transmission TTN",
   },
+
   {
-    value: 'support',
-    label: 'Support technique',
+    value: "support",
+    label:
+      "Support technique",
   },
+
   {
-    value: 'other',
-    label: 'Autre demande',
+    value: "other",
+    label:
+      "Autre demande",
   },
 ];
 
-function ContactPage() {
-  const [submitted, setSubmitted] =
-    useState(false);
+/*
+|--------------------------------------------------------------------------
+| CONTACT PAGE
+|--------------------------------------------------------------------------
+*/
 
-  const [formData, setFormData] =
+function ContactPage() {
+  const [
+    formData,
+    setFormData,
+  ] =
     useState({
-      name: '',
-      email: '',
-      company: '',
-      subject: 'demo',
-      message: '',
+      name: "",
+      email: "",
+      company: "",
+      subject:
+        "demo",
+      message: "",
     });
 
-  function handleChange(event) {
+  const [
+    captchaVisible,
+    setCaptchaVisible,
+  ] =
+    useState(false);
+
+  const [
+    loading,
+    setLoading,
+  ] =
+    useState(false);
+
+  const [
+    error,
+    setError,
+  ] =
+    useState("");
+
+  const [
+    success,
+    setSuccess,
+  ] =
+    useState("");
+
+  /*
+  |--------------------------------------------------------------------------
+  | CHANGE
+  |--------------------------------------------------------------------------
+  */
+
+  function handleChange(
+    event,
+  ) {
     const {
       name,
       value,
-    } = event.target;
+    } =
+      event.target;
 
-    setFormData((currentData) => ({
-      ...currentData,
-      [name]: value,
-    }));
+    setFormData(
+      (
+        currentData,
+      ) => ({
+        ...currentData,
 
-    if (submitted) {
-      setSubmitted(false);
+        [name]:
+          value,
+      }),
+    );
+
+    if (error) {
+      setError("");
+    }
+
+    if (success) {
+      setSuccess("");
     }
   }
 
-  function handleSubmit(event) {
+  /*
+  |--------------------------------------------------------------------------
+  | SUBMIT
+  |--------------------------------------------------------------------------
+  */
+
+  function handleSubmit(
+    event,
+  ) {
     event.preventDefault();
 
-    setSubmitted(true);
+    setError("");
+    setSuccess("");
+
+    const name =
+      String(
+        formData.name ||
+          "",
+      ).trim();
+
+    const email =
+      String(
+        formData.email ||
+          "",
+      )
+        .trim()
+        .toLowerCase();
+
+    const message =
+      String(
+        formData.message ||
+          "",
+      ).trim();
+
+    if (!name) {
+      setError(
+        "Veuillez saisir votre nom.",
+      );
+
+      return;
+    }
+
+    if (
+      !email ||
+      !email.includes(
+        "@",
+      )
+    ) {
+      setError(
+        "Veuillez saisir une adresse e-mail valide.",
+      );
+
+      return;
+    }
+
+    if (
+      message.length <
+      10
+    ) {
+      setError(
+        "Votre message doit contenir au moins 10 caractères.",
+      );
+
+      return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW CAPTCHA
+    |--------------------------------------------------------------------------
+    */
+
+    setCaptchaVisible(
+      true,
+    );
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | CAPTCHA VERIFIED
+  |--------------------------------------------------------------------------
+  */
+
+  async function handleCaptchaVerified(
+    recaptchaToken,
+  ) {
+    setCaptchaVisible(
+      false,
+    );
+
+    setLoading(
+      true,
+    );
+
+    setError("");
+    setSuccess("");
+
+    try {
+      const response =
+        await fetch(
+          `${API_BASE_URL}/api/contact`,
+          {
+            method:
+              "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Accept:
+                "application/json",
+            },
+
+            body:
+              JSON.stringify({
+                name:
+                  formData.name,
+
+                email:
+                  formData.email,
+
+                company:
+                  formData.company,
+
+                subject:
+                  formData.subject,
+
+                message:
+                  formData.message,
+
+                recaptchaToken,
+              }),
+          },
+        );
+
+      let data =
+        null;
+
+      try {
+        data =
+          await response.json();
+      } catch {
+        data =
+          null;
+      }
+
+      if (
+        !response.ok
+      ) {
+        throw new Error(
+          data?.message ||
+            "Impossible d'envoyer votre message.",
+        );
+      }
+
+      setSuccess(
+        data?.message ||
+          "Merci, votre message a bien été envoyé.",
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | RESET FORM
+      |--------------------------------------------------------------------------
+      */
+
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        subject:
+          "demo",
+        message: "",
+      });
+    } catch (
+      submitError
+    ) {
+      console.error(
+        "CONTACT SUBMIT ERROR:",
+        submitError,
+      );
+
+      setError(
+        submitError?.message ||
+          "Impossible d'envoyer votre message. Veuillez réessayer.",
+      );
+    } finally {
+      setLoading(
+        false,
+      );
+    }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | RENDER
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <main className="contact-page">
+      {/*
+      |--------------------------------------------------------------------------
+      | HERO
+      |--------------------------------------------------------------------------
+      */}
+
       <section className="contact-hero">
         <div className="contact-hero-decoration contact-hero-decoration-one" />
+
         <div className="contact-hero-decoration contact-hero-decoration-two" />
 
         <div className="contact-container contact-hero-content">
-          <span className="contact-label">
-            Contact
-          </span>
+          
 
           <h1>
-            Parlons de votre projet de
-            facturation électronique
+            Construisons ensemble
+            votre projet digital
           </h1>
 
-          <p>
-            Notre équipe vous accompagne dans
-            l’extraction, la validation, la
-            signature électronique et la
-            transmission de vos factures vers
-            TTN.
-          </p>
+        
 
           <div className="contact-hero-points">
-            <span>
-              Réponse personnalisée
-            </span>
-
-            <span>
-              Analyse de votre besoin
-            </span>
-
-            <span>
-              Accompagnement technique
-            </span>
+        
           </div>
         </div>
       </section>
 
+      {/*
+      |--------------------------------------------------------------------------
+      | MAIN
+      |--------------------------------------------------------------------------
+      */}
+
       <section className="contact-main-section">
         <div className="contact-container contact-layout">
+          {/*
+          |--------------------------------------------------------------------------
+          | SIDEBAR
+          |--------------------------------------------------------------------------
+          */}
+
           <aside className="contact-sidebar">
             <div className="contact-sidebar-header">
-              <span className="contact-sidebar-badge">
-                Tenor Afrique
-              </span>
+              
 
               <h2>
-                Nous sommes à votre écoute
+                Parlons de votre besoin
               </h2>
 
               <p>
-                Décrivez votre besoin et notre
-                équipe reviendra vers vous avec
-                une réponse adaptée à votre
-                contexte.
+                Vous avez une question,
+                un projet ERP ou un besoin
+                lié à la facturation
+                électronique ? Contactez
+                directement notre équipe.
               </p>
             </div>
 
             <div className="contact-details">
+              {/*
+              |--------------------------------------------------------------------------
+              | EMAIL
+              |--------------------------------------------------------------------------
+              */}
+
               <a
                 className="contact-detail-card"
                 href="mailto:contact@tenorafrique.com"
@@ -135,7 +415,7 @@ function ContactPage() {
                   className="contact-detail-icon"
                   aria-hidden="true"
                 >
-                  ✉
+                  @
                 </span>
 
                 <span className="contact-detail-content">
@@ -156,7 +436,53 @@ function ContactPage() {
                 </span>
               </a>
 
-              <div className="contact-detail-card">
+              {/*
+              |--------------------------------------------------------------------------
+              | PHONE
+              |--------------------------------------------------------------------------
+              */}
+
+              <a
+                className="contact-detail-card"
+                href="tel:+21629965538"
+              >
+                <span
+                  className="contact-detail-icon"
+                  aria-hidden="true"
+                >
+                  ☎
+                </span>
+
+                <span className="contact-detail-content">
+                  <small>
+                    Téléphone
+                  </small>
+
+                  <strong>
+                    (+216) 29 965 538
+                  </strong>
+                </span>
+
+                <span
+                  className="contact-detail-arrow"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </a>
+
+              {/*
+              |--------------------------------------------------------------------------
+              | LOCATION
+              |--------------------------------------------------------------------------
+              */}
+
+              <a
+                className="contact-detail-card"
+                href="https://www.google.com/maps/search/?api=1&query=Residence+ARCHE+Les+Jardins+de+Carthage+Tunisie"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span
                   className="contact-detail-icon"
                   aria-hidden="true"
@@ -166,34 +492,40 @@ function ContactPage() {
 
                 <span className="contact-detail-content">
                   <small>
-                    Localisation
+                    Siège
                   </small>
 
                   <strong>
-                    Tunis, Tunisie
+                    App C1-1 Résidence ARCHE
+                    <br />
+                    Les Jardins de Carthage
+                    <br />
+                    Tunisie
                   </strong>
                 </span>
-              </div>
 
-              <div className="contact-detail-card">
                 <span
-                  className="contact-detail-icon"
+                  className="contact-detail-arrow"
                   aria-hidden="true"
                 >
-                  ◷
+                  →
                 </span>
+              </a>
 
-                <span className="contact-detail-content">
-                  <small>
-                    Temps de réponse
-                  </small>
+              {/*
+              |--------------------------------------------------------------------------
+              | WEBSITE
+              |--------------------------------------------------------------------------
+              */}
 
-                  <strong>
-                    Sous 24 à 48 heures
-                  </strong>
-                </span>
-              </div>
+             
             </div>
+
+            {/*
+            |--------------------------------------------------------------------------
+            | TRUST
+            |--------------------------------------------------------------------------
+            */}
 
             <div className="contact-trust-card">
               <span
@@ -205,25 +537,29 @@ function ContactPage() {
 
               <div>
                 <strong>
-                  Vos informations restent
-                  confidentielles
+                  Vos informations restent confidentielles
                 </strong>
 
                 <p>
-                  Elles sont utilisées uniquement
-                  pour répondre à votre demande.
+                  Elles sont utilisées
+                  uniquement dans le cadre
+                  du traitement de votre
+                  demande.
                 </p>
               </div>
             </div>
           </aside>
 
+          {/*
+          |--------------------------------------------------------------------------
+          | FORM
+          |--------------------------------------------------------------------------
+          */}
+
           <div className="contact-form-card">
             <div className="contact-form-heading">
               <div>
-                <span className="contact-form-label">
-                  Votre demande
-                </span>
-
+                
                 <h2>
                   Envoyez-nous un message
                 </h2>
@@ -234,9 +570,65 @@ function ContactPage() {
               </span>
             </div>
 
+            {/*
+            |--------------------------------------------------------------------------
+            | ERROR
+            |--------------------------------------------------------------------------
+            */}
+
+            {error && (
+              <div
+                className="contact-alert contact-alert--error"
+                role="alert"
+              >
+                <span aria-hidden="true">
+                  !
+                </span>
+
+                <div>
+                  <strong>
+                    Envoi impossible
+                  </strong>
+
+                  <p>
+                    {error}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/*
+            |--------------------------------------------------------------------------
+            | SUCCESS
+            |--------------------------------------------------------------------------
+            */}
+
+            {success && (
+              <div
+                className="contact-success-message"
+                role="status"
+              >
+                <span aria-hidden="true">
+                  ✓
+                </span>
+
+                <div>
+                  <strong>
+                    Message envoyé
+                  </strong>
+
+                  <p>
+                    {success}
+                  </p>
+                </div>
+              </div>
+            )}
+
             <form
               className="contact-form"
-              onSubmit={handleSubmit}
+              onSubmit={
+                handleSubmit
+              }
             >
               <div className="contact-form-row">
                 <div className="contact-form-group">
@@ -248,10 +640,15 @@ function ContactPage() {
                     id="contact-name"
                     name="name"
                     type="text"
-                    value={formData.name}
-                    onChange={handleChange}
+                    value={
+                      formData.name
+                    }
+                    onChange={
+                      handleChange
+                    }
                     placeholder="Votre nom"
                     autoComplete="name"
+                    maxLength={150}
                     required
                   />
                 </div>
@@ -265,10 +662,15 @@ function ContactPage() {
                     id="contact-email"
                     name="email"
                     type="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={
+                      formData.email
+                    }
+                    onChange={
+                      handleChange
+                    }
                     placeholder="nom@entreprise.tn"
                     autoComplete="email"
+                    maxLength={255}
                     required
                   />
                 </div>
@@ -284,10 +686,15 @@ function ContactPage() {
                     id="contact-company"
                     name="company"
                     type="text"
-                    value={formData.company}
-                    onChange={handleChange}
+                    value={
+                      formData.company
+                    }
+                    onChange={
+                      handleChange
+                    }
                     placeholder="Nom de votre entreprise"
                     autoComplete="organization"
+                    maxLength={150}
                   />
                 </div>
 
@@ -299,18 +706,30 @@ function ContactPage() {
                   <select
                     id="contact-subject"
                     name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
+                    value={
+                      formData.subject
+                    }
+                    onChange={
+                      handleChange
+                    }
                   >
                     {CONTACT_SUBJECTS.map(
-                      (subject) => (
+                      (
+                        subject,
+                      ) => (
                         <option
-                          key={subject.value}
-                          value={subject.value}
+                          key={
+                            subject.value
+                          }
+                          value={
+                            subject.value
+                          }
                         >
-                          {subject.label}
+                          {
+                            subject.label
+                          }
                         </option>
-                      )
+                      ),
                     )}
                   </select>
                 </div>
@@ -325,60 +744,98 @@ function ContactPage() {
                   id="contact-message"
                   name="message"
                   rows="7"
-                  value={formData.message}
-                  onChange={handleChange}
+                  value={
+                    formData.message
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Décrivez votre projet, votre besoin ou les difficultés rencontrées..."
+                  minLength={10}
+                  maxLength={3000}
                   required
                 />
 
                 <span className="contact-character-count">
-                  {formData.message.length}
-                  {' '}
-                  caractères
+                  {
+                    formData
+                      .message
+                      .length
+                  }
+                  /3000 caractères
                 </span>
               </div>
 
-              {submitted && (
-                <div
-                  className="contact-success-message"
-                  role="status"
-                >
-                  <span aria-hidden="true">
-                    ✓
-                  </span>
+              {/*
+              |--------------------------------------------------------------------------
+              | RECAPTCHA
+              |--------------------------------------------------------------------------
+              */}
 
-                  <div>
-                    <strong>
-                      Votre message a été préparé
-                    </strong>
+              <div className="contact-recaptcha-wrapper">
+                <RecaptchaV2
+                  visible={
+                    captchaVisible
+                  }
+                  onVerified={
+                    handleCaptchaVerified
+                  }
+                  onExpired={() => {
+                    setCaptchaVisible(
+                      false,
+                    );
 
-                    <p>
-                      La connexion au service
-                      d’envoi d’e-mails sera ajoutée
-                      ultérieurement.
-                    </p>
-                  </div>
-                </div>
-              )}
+                    setError(
+                      "Le reCAPTCHA a expiré. Veuillez recommencer.",
+                    );
+                  }}
+                  onError={(
+                    captchaError,
+                  ) => {
+                    setCaptchaVisible(
+                      false,
+                    );
+
+                    setError(
+                      captchaError?.message ||
+                        "Impossible de vérifier reCAPTCHA.",
+                    );
+                  }}
+                />
+              </div>
 
               <div className="contact-form-footer">
                 <p>
-                  En envoyant ce formulaire, vous
-                  acceptez d’être contacté au sujet
-                  de votre demande.
+                  En envoyant ce formulaire,
+                  vous acceptez d’être
+                  contacté au sujet de votre
+                  demande.
                 </p>
 
                 <button
                   type="submit"
                   className="contact-submit-button"
+                  disabled={
+                    loading ||
+                    captchaVisible
+                  }
                 >
                   <span>
-                    Envoyer le message
+                    {loading
+                      ? "Envoi en cours..."
+                      : captchaVisible
+                        ? "Vérification..."
+                        : "Envoyer le message"}
                   </span>
 
-                  <span aria-hidden="true">
-                    →
-                  </span>
+                  {!loading &&
+                    !captchaVisible && (
+                      <span
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    )}
                 </button>
               </div>
             </form>

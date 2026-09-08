@@ -1,10 +1,19 @@
 import '../../styles/notion-landing.css';
 
-import HeroSection from './components/HeroSection/HeroSection';
-import PartnersSection from './components/PartnersSection/PartnersSection';
-import ProductShowcaseSection from './components/ProductShowcaseSection/ProductShowcaseSection';
-import SecuritySection from './components/SecuritySection/SecuritySection';
-import CallToAction from './components/CallToAction/CallToAction';
+import HeroSection
+  from './components/HeroSection/HeroSection';
+
+import PartnersSection
+  from './components/PartnersSection/PartnersSection';
+
+import ProductShowcaseSection
+  from './components/ProductShowcaseSection/ProductShowcaseSection';
+
+import SecuritySection
+  from './components/SecuritySection/SecuritySection';
+
+import CallToAction
+  from './components/CallToAction/CallToAction';
 
 function LandingPage() {
   return (
@@ -17,18 +26,18 @@ function LandingPage() {
         <ProductShowcaseSection />
       </section>
 
-
-
       <section id="securite">
         <SecuritySection />
       </section>
 
-      <section id="tarifs">
-        <PartnersSection />
-      </section>
-
+      {/* BLOC BLEU EN PREMIER */}
       <section id="contact">
         <CallToAction />
+      </section>
+
+      {/* PARTENAIRES APRÈS */}
+      <section id="tarifs">
+        <PartnersSection />
       </section>
     </main>
   );

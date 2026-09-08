@@ -10,11 +10,13 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import {
-  useTranslation,
-} from "react-i18next";
-
 import "./FeaturesSection.css";
+
+/*
+|--------------------------------------------------------------------------
+| FEATURE CATEGORIES
+|--------------------------------------------------------------------------
+*/
 
 const FEATURE_CATEGORIES = [
   {
@@ -35,6 +37,12 @@ const FEATURE_CATEGORIES = [
   },
 ];
 
+/*
+|--------------------------------------------------------------------------
+| FEATURES
+|--------------------------------------------------------------------------
+*/
+
 const FEATURES = [
   {
     id: "invoice-import",
@@ -43,10 +51,14 @@ const FEATURES = [
     title: "Import multicanal",
     description:
       "Importez une facture PDF native, une image scannée ou récupérez-la directement depuis votre ERP, sans changer d'outil.",
-    benefit: "Une seule entrée pour toutes vos factures",
-    metric: "PDF · OCR · ERP",
-    accent: "blue",
+    benefit:
+      "Une seule entrée pour toutes vos factures",
+    metric:
+      "PDF · OCR · ERP",
+    accent:
+      "blue",
   },
+
   {
     id: "intelligent-extraction",
     category: "automation",
@@ -54,10 +66,14 @@ const FEATURES = [
     title: "Extraction intelligente",
     description:
       "La plateforme détecte automatiquement le fournisseur, le client, les dates, les lignes, les taxes et les montants de la facture.",
-    benefit: "Moins de saisie et moins d'erreurs humaines",
-    metric: "Données structurées",
-    accent: "cyan",
+    benefit:
+      "Moins de saisie et moins d'erreurs humaines",
+    metric:
+      "Données structurées",
+    accent:
+      "cyan",
   },
+
   {
     id: "automatic-validation",
     category: "compliance",
@@ -65,10 +81,14 @@ const FEATURES = [
     title: "Contrôle et validation",
     description:
       "Les champs manquants, les montants incohérents, les erreurs de TVA et les écarts entre les lignes et les totaux sont détectés avant signature.",
-    benefit: "Les anomalies sont corrigées avant l'envoi",
-    metric: "Contrôles métier",
-    accent: "green",
+    benefit:
+      "Les anomalies sont corrigées avant l'envoi",
+    metric:
+      "Contrôles métier",
+    accent:
+      "green",
   },
+
   {
     id: "teif-generation",
     category: "compliance",
@@ -76,10 +96,14 @@ const FEATURES = [
     title: "Génération TEIF",
     description:
       "Les données validées sont automatiquement transformées en XML TEIF conforme au format attendu par les services de facturation électronique.",
-    benefit: "Aucune construction XML manuelle",
-    metric: "TEIF XML",
-    accent: "yellow",
+    benefit:
+      "Aucune construction XML manuelle",
+    metric:
+      "TEIF XML",
+    accent:
+      "yellow",
   },
+
   {
     id: "electronic-signature",
     category: "compliance",
@@ -87,10 +111,14 @@ const FEATURES = [
     title: "Signature électronique",
     description:
       "Le document TEIF est signé en XAdES-EPES avec le certificat électronique de l'entreprise et son token sécurisé.",
-    benefit: "Authenticité, intégrité et traçabilité",
-    metric: "XAdES-EPES",
-    accent: "purple",
+    benefit:
+      "Authenticité, intégrité et traçabilité",
+    metric:
+      "XAdES-EPES",
+    accent:
+      "purple",
   },
+
   {
     id: "ttn-transmission",
     category: "tracking",
@@ -98,10 +126,14 @@ const FEATURES = [
     title: "Transmission TTN",
     description:
       "La facture signée est envoyée automatiquement à TTN. Les indisponibilités temporaires déclenchent une nouvelle tentative contrôlée.",
-    benefit: "Aucun suivi manuel des transmissions",
-    metric: "Envoi automatisé",
-    accent: "pink",
+    benefit:
+      "Aucun suivi manuel des transmissions",
+    metric:
+      "Envoi automatisé",
+    accent:
+      "pink",
   },
+
   {
     id: "status-tracking",
     category: "tracking",
@@ -109,11 +141,16 @@ const FEATURES = [
     title: "Suivi des statuts",
     description:
       "Chaque facture possède un état clair et actualisé : acceptée, en attente, rejetée ou en erreur, avec le motif retourné par TTN.",
-    benefit: "Une visibilité immédiate sur chaque facture",
-    metric: "Temps réel",
-    accent: "orange",
-    hasStatusDemo: true,
+    benefit:
+      "Une visibilité immédiate sur chaque facture",
+    metric:
+      "Temps réel",
+    accent:
+      "orange",
+    hasStatusDemo:
+      true,
   },
+
   {
     id: "duplicate-protection",
     category: "tracking",
@@ -121,10 +158,14 @@ const FEATURES = [
     title: "Protection contre les doublons",
     description:
       "Une facture déjà acceptée ne peut pas être retraitée ou signée une deuxième fois. La plateforme reconnaît automatiquement les doublons.",
-    benefit: "Aucune double transmission accidentelle",
-    metric: "Contrôle d'unicité",
-    accent: "indigo",
+    benefit:
+      "Aucune double transmission accidentelle",
+    metric:
+      "Contrôle d'unicité",
+    accent:
+      "indigo",
   },
+
   {
     id: "error-management",
     category: "tracking",
@@ -132,64 +173,99 @@ const FEATURES = [
     title: "Gestion intelligente des erreurs",
     description:
       "Les erreurs sont classées selon leur origine : extraction, validation, signature, réseau ou TTN, avec une action adaptée à chaque situation.",
-    benefit: "Comprendre et corriger rapidement le problème",
-    metric: "Diagnostic précis",
-    accent: "red",
+    benefit:
+      "Comprendre et corriger rapidement le problème",
+    metric:
+      "Diagnostic précis",
+    accent:
+      "red",
   },
 ];
+
+/*
+|--------------------------------------------------------------------------
+| STATUS CYCLE
+|--------------------------------------------------------------------------
+*/
 
 const STATUS_CYCLE = [
   {
-    label: "Acceptée",
-    detail: "QR Code généré",
-    tone: "accepted",
-    icon: "✓",
+    label:
+      "Acceptée",
+    detail:
+      "QR Code généré",
+    tone:
+      "accepted",
+    icon:
+      "✓",
   },
+
   {
-    label: "En attente",
-    detail: "Nouvelle tentative planifiée",
-    tone: "pending",
-    icon: "…",
+    label:
+      "En attente",
+    detail:
+      "Nouvelle tentative planifiée",
+    tone:
+      "pending",
+    icon:
+      "…",
   },
+
   {
-    label: "Rejetée",
-    detail: "Motif TTN disponible",
-    tone: "rejected",
-    icon: "×",
+    label:
+      "Rejetée",
+    detail:
+      "Motif TTN disponible",
+    tone:
+      "rejected",
+    icon:
+      "×",
   },
+
   {
-    label: "Erreur",
-    detail: "Action corrective requise",
-    tone: "error",
-    icon: "!",
+    label:
+      "Erreur",
+    detail:
+      "Action corrective requise",
+    tone:
+      "error",
+    icon:
+      "!",
   },
 ];
 
-const PIPELINE_STEPS = [
-  "Import",
-  "Extraction",
-  "Validation",
-  "TEIF",
-  "Signature",
-  "TTN",
-];
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
+|--------------------------------------------------------------------------
+*/
 
 function useReducedMotion() {
-  const [reducedMotion, setReducedMotion] =
+  const [
+    reducedMotion,
+    setReducedMotion,
+  ] =
     useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (
+      typeof window ===
+      "undefined"
+    ) {
       return undefined;
     }
 
-    const mediaQuery = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
+    const mediaQuery =
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      );
 
-    const updatePreference = () => {
-      setReducedMotion(mediaQuery.matches);
-    };
+    const updatePreference =
+      () => {
+        setReducedMotion(
+          mediaQuery.matches,
+        );
+      };
 
     updatePreference();
 
@@ -209,29 +285,57 @@ function useReducedMotion() {
   return reducedMotion;
 }
 
+/*
+|--------------------------------------------------------------------------
+| STATUS BADGE
+|--------------------------------------------------------------------------
+*/
+
 function StatusBadge() {
-  const [index, setIndex] = useState(0);
-  const reducedMotion = useReducedMotion();
+  const [
+    index,
+    setIndex,
+  ] =
+    useState(0);
+
+  const reducedMotion =
+    useReducedMotion();
 
   useEffect(() => {
     if (reducedMotion) {
       return undefined;
     }
 
-    const intervalId = window.setInterval(() => {
-      setIndex(
-        (currentIndex) =>
-          (currentIndex + 1) %
-          STATUS_CYCLE.length,
+    const intervalId =
+      window.setInterval(
+        () => {
+          setIndex(
+            (
+              currentIndex,
+            ) =>
+              (
+                currentIndex +
+                1
+              ) %
+              STATUS_CYCLE.length,
+          );
+        },
+        2200,
       );
-    }, 2200);
 
     return () => {
-      window.clearInterval(intervalId);
+      window.clearInterval(
+        intervalId,
+      );
     };
-  }, [reducedMotion]);
+  }, [
+    reducedMotion,
+  ]);
 
-  const currentStatus = STATUS_CYCLE[index];
+  const currentStatus =
+    STATUS_CYCLE[
+      index
+    ];
 
   return (
     <div
@@ -242,101 +346,53 @@ function StatusBadge() {
         className="notion-live-status-icon"
         aria-hidden="true"
       >
-        {currentStatus.icon}
+        {
+          currentStatus.icon
+        }
       </span>
 
       <span className="notion-live-status-content">
-        <strong>{currentStatus.label}</strong>
-        <small>{currentStatus.detail}</small>
+        <strong>
+          {
+            currentStatus.label
+          }
+        </strong>
+
+        <small>
+          {
+            currentStatus.detail
+          }
+        </small>
       </span>
     </div>
   );
 }
 
-function PipelinePreview() {
-  const [activeStep, setActiveStep] =
-    useState(0);
-
-  const reducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setActiveStep(
-        PIPELINE_STEPS.length - 1,
-      );
-
-      return undefined;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setActiveStep((currentStep) => {
-        return (
-          (currentStep + 1) %
-          PIPELINE_STEPS.length
-        );
-      });
-    }, 1200);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [reducedMotion]);
-
-  return (
-    <div
-      className="notion-pipeline-preview"
-      aria-label="Aperçu du pipeline de traitement"
-    >
-      {PIPELINE_STEPS.map((step, index) => {
-        const isCompleted =
-          index < activeStep;
-
-        const isActive =
-          index === activeStep;
-
-        let stateClass = "";
-
-        if (isCompleted) {
-          stateClass = " is-completed";
-        }
-
-        if (isActive) {
-          stateClass = " is-active";
-        }
-
-        return (
-          <div
-            className={`notion-pipeline-preview-step${stateClass}`}
-            key={step}
-          >
-            <span
-              className="notion-pipeline-preview-dot"
-              aria-hidden="true"
-            >
-              {isCompleted ? "✓" : index + 1}
-            </span>
-
-            <small>{step}</small>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
+/*
+|--------------------------------------------------------------------------
+| FEATURE CARD
+|--------------------------------------------------------------------------
+*/
 
 function FeatureCard({
   feature,
   index,
 }) {
-  const cardRef = useRef(null);
+  const cardRef =
+    useRef(null);
 
-  const [visible, setVisible] =
+  const [
+    visible,
+    setVisible,
+  ] =
     useState(false);
 
-  const reducedMotion = useReducedMotion();
+  const reducedMotion =
+    useReducedMotion();
 
   useEffect(() => {
-    const node = cardRef.current;
+    const node =
+      cardRef.current;
 
     if (!node) {
       return undefined;
@@ -348,64 +404,95 @@ function FeatureCard({
         "undefined"
     ) {
       setVisible(true);
+
       return undefined;
     }
 
     const observer =
       new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
+        (
+          [
+            entry,
+          ],
+        ) => {
+          if (
+            entry.isIntersecting
+          ) {
+            setVisible(
+              true,
+            );
+
             observer.disconnect();
           }
         },
         {
-          threshold: 0.15,
+          threshold:
+            0.15,
+
           rootMargin:
             "0px 0px -40px 0px",
         },
       );
 
-    observer.observe(node);
+    observer.observe(
+      node,
+    );
 
     return () => {
       observer.disconnect();
     };
-  }, [reducedMotion]);
+  }, [
+    reducedMotion,
+  ]);
 
-  const handlePointerMove = useCallback(
-    (event) => {
-      const node = cardRef.current;
+  const handlePointerMove =
+    useCallback(
+      (
+        event,
+      ) => {
+        const node =
+          cardRef.current;
 
-      if (!node || reducedMotion) {
-        return;
-      }
+        if (
+          !node ||
+          reducedMotion
+        ) {
+          return;
+        }
 
-      const rect =
-        node.getBoundingClientRect();
+        const rect =
+          node.getBoundingClientRect();
 
-      node.style.setProperty(
-        "--spot-x",
-        `${event.clientX - rect.left}px`,
-      );
+        node.style.setProperty(
+          "--spot-x",
+          `${event.clientX - rect.left}px`,
+        );
 
-      node.style.setProperty(
-        "--spot-y",
-        `${event.clientY - rect.top}px`,
-      );
-    },
-    [reducedMotion],
-  );
+        node.style.setProperty(
+          "--spot-y",
+          `${event.clientY - rect.top}px`,
+        );
+      },
+      [
+        reducedMotion,
+      ],
+    );
 
   return (
     <article
-      ref={cardRef}
+      ref={
+        cardRef
+      }
       className={[
         "notion-feature-card",
         `notion-feature-card--${feature.accent}`,
-        visible ? "is-visible" : "",
+        visible
+          ? "is-visible"
+          : "",
       ]
-        .filter(Boolean)
+        .filter(
+          Boolean,
+        )
         .join(" ")}
       style={{
         transitionDelay:
@@ -413,21 +500,28 @@ function FeatureCard({
             ? "0ms"
             : `${index * 65}ms`,
       }}
-      onPointerMove={handlePointerMove}
+      onPointerMove={
+        handlePointerMove
+      }
     >
       <div className="notion-feature-card-top">
         <span
           className="notion-feature-step"
           aria-hidden="true"
         >
-          {String(index + 1).padStart(
+          {String(
+            index +
+              1,
+          ).padStart(
             2,
             "0",
           )}
         </span>
 
         <span className="notion-feature-metric">
-          {feature.metric}
+          {
+            feature.metric
+          }
         </span>
       </div>
 
@@ -436,18 +530,36 @@ function FeatureCard({
         aria-hidden="true"
       >
         <span className="notion-feature-icon">
-          {feature.icon}
+          {
+            feature.icon
+          }
         </span>
       </span>
 
-      <h3>{feature.title}</h3>
+      <h3>
+        {
+          feature.title
+        }
+      </h3>
 
-      <p>{feature.description}</p>
+      <p>
+        {
+          feature.description
+        }
+      </p>
 
       <div className="notion-feature-benefit">
-        <span aria-hidden="true">✓</span>
+        <span
+          aria-hidden="true"
+        >
+          ✓
+        </span>
 
-        <strong>{feature.benefit}</strong>
+        <strong>
+          {
+            feature.benefit
+          }
+        </strong>
       </div>
 
       {feature.hasStatusDemo && (
@@ -462,112 +574,68 @@ function FeatureCard({
   );
 }
 
-function FeaturesSection() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+/*
+|--------------------------------------------------------------------------
+| FEATURES SECTION
+|--------------------------------------------------------------------------
+*/
 
-  const headingRef = useRef(null);
+function FeaturesSection() {
+  const navigate =
+    useNavigate();
 
   const [
     activeCategory,
     setActiveCategory,
-  ] = useState("all");
-
-  const [
-    headingVisible,
-    setHeadingVisible,
-  ] = useState(false);
-
-  const reducedMotion = useReducedMotion();
-
-  const displayedFeatures = useMemo(() => {
-    if (activeCategory === "all") {
-      return FEATURES;
-    }
-
-    return FEATURES.filter(
-      (feature) =>
-        feature.category ===
-        activeCategory,
+  ] =
+    useState(
+      "all",
     );
-  }, [activeCategory]);
 
-  useEffect(() => {
-    const node = headingRef.current;
+  const displayedFeatures =
+    useMemo(
+      () => {
+        if (
+          activeCategory ===
+          "all"
+        ) {
+          return FEATURES;
+        }
 
-    if (!node) {
-      return undefined;
-    }
-
-    if (
-      reducedMotion ||
-      typeof IntersectionObserver ===
-        "undefined"
-    ) {
-      setHeadingVisible(true);
-      return undefined;
-    }
-
-    const observer =
-      new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setHeadingVisible(true);
-            observer.disconnect();
-          }
-        },
-        {
-          threshold: 0.3,
-        },
-      );
-
-    observer.observe(node);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [reducedMotion]);
+        return FEATURES.filter(
+          (
+            feature,
+          ) =>
+            feature.category ===
+            activeCategory,
+        );
+      },
+      [
+        activeCategory,
+      ],
+    );
 
   function openDemonstration() {
-    navigate("/demonstration");
+    navigate(
+      "/demonstration",
+    );
   }
 
   function openRegistration() {
-    navigate("/auth?mode=register");
+    navigate(
+      "/auth?mode=register",
+    );
   }
 
   return (
     <section className="notion-features-section">
       <div className="notion-shell">
-        <div
-          ref={headingRef}
-          className={[
-            "notion-section-heading",
-            headingVisible
-              ? "is-visible"
-              : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        >
-         
 
-          <h2>
-            {t("features.title", {
-              defaultValue:
-                "Tout le cycle de facturation dans une seule plateforme",
-            })}
-          </h2>
-
-          <p>
-            {t("features.description", {
-              defaultValue:
-                "De l'import de la facture jusqu'à son acceptation par TTN, chaque étape est automatisée, contrôlée et entièrement traçable.",
-            })}
-          </p>
-
-          <PipelinePreview />
-        </div>
+        {/*
+        |--------------------------------------------------------------------------
+        | FILTERS
+        |--------------------------------------------------------------------------
+        */}
 
         <div
           className="notion-features-filters"
@@ -575,37 +643,55 @@ function FeaturesSection() {
           aria-label="Catégories de fonctionnalités"
         >
           {FEATURE_CATEGORIES.map(
-            (category) => {
+            (
+              category,
+            ) => {
               const isActive =
                 activeCategory ===
                 category.id;
 
               return (
                 <button
-                  key={category.id}
+                  key={
+                    category.id
+                  }
                   type="button"
                   role="tab"
-                  aria-selected={isActive}
+                  aria-selected={
+                    isActive
+                  }
                   className={[
                     "notion-features-filter",
                     isActive
                       ? "is-active"
                       : "",
                   ]
-                    .filter(Boolean)
-                    .join(" ")}
+                    .filter(
+                      Boolean,
+                    )
+                    .join(
+                      " ",
+                    )}
                   onClick={() => {
                     setActiveCategory(
                       category.id,
                     );
                   }}
                 >
-                  {category.label}
+                  {
+                    category.label
+                  }
                 </button>
               );
             },
           )}
         </div>
+
+        {/*
+        |--------------------------------------------------------------------------
+        | FEATURES GRID
+        |--------------------------------------------------------------------------
+        */}
 
         <div className="notion-features-grid">
           <div
@@ -614,72 +700,32 @@ function FeaturesSection() {
           />
 
           {displayedFeatures.map(
-            (feature, index) => (
+            (
+              feature,
+              index,
+            ) => (
               <FeatureCard
-                key={feature.id}
-                feature={feature}
-                index={index}
+                key={
+                  feature.id
+                }
+                feature={
+                  feature
+                }
+                index={
+                  index
+                }
               />
             ),
           )}
         </div>
 
-        <div className="notion-features-summary">
-          <div className="notion-features-summary-content">
-            <span className="notion-section-label">
-              Une plateforme unifiée
-            </span>
-
-            <h3>
-              Une facture, un pipeline, une
-              traçabilité complète
-            </h3>
-
-            <p>
-              Centralisez l’extraction, la
-              validation, la génération TEIF,
-              la signature électronique et le
-              suivi TTN dans un seul espace.
-            </p>
+        {/*
+        |--------------------------------------------------------------------------
+        | SUMMARY
+        |--------------------------------------------------------------------------
+        */}
           </div>
-
-          <div className="notion-features-summary-stats">
-            <div>
-              <strong>4</strong>
-              <span>statuts suivis</span>
-            </div>
-
-            <div>
-              <strong>6</strong>
-              <span>étapes automatisées</span>
-            </div>
-
-            <div>
-              <strong>1</strong>
-              <span>historique centralisé</span>
-            </div>
-          </div>
-
-          <div className="notion-features-summary-actions">
-            <button
-              type="button"
-              className="notion-features-primary-button"
-              onClick={openRegistration}
-            >
-              Créer mon espace
-              <span aria-hidden="true">→</span>
-            </button>
-
-            <button
-              type="button"
-              className="notion-features-secondary-button"
-              onClick={openDemonstration}
-            >
-              Voir la démonstration
-            </button>
-          </div>
-        </div>
-      </div>
+     
     </section>
   );
 }

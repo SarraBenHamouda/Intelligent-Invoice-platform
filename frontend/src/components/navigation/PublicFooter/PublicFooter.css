@@ -1,10 +1,14 @@
 .notion-footer {
   margin-top: auto;
 
+  padding: 0;
+
   background: var(--card-background);
   color: var(--text-primary);
 
   border-top: 1px solid var(--border-color);
+
+  font-family: var(--font-body);
 
   transition:
     background-color 0.25s ease,
@@ -17,61 +21,94 @@
   margin: 0 auto;
 }
 
+/*
+|--------------------------------------------------------------------------
+| MAIN GRID — COMPACT
+|--------------------------------------------------------------------------
+*/
+
 .notion-footer-grid {
   display: grid;
+
   grid-template-columns:
     minmax(240px, 1.4fr)
     repeat(3, minmax(130px, 1fr));
 
-  gap: 40px;
-  padding: 38px 0 30px;
+  gap: 34px;
+
+  padding: 28px 0 22px;
 }
 
-/* Logo */
+/*
+|--------------------------------------------------------------------------
+| LOGO
+|--------------------------------------------------------------------------
+*/
 
 .notion-footer-logo {
   display: inline-flex;
-  width: 125px;
-  margin-bottom: 14px;
+
+  width: 112px;
+
+  margin-bottom: 10px;
 }
 
-/* Texte de description */
+/*
+|--------------------------------------------------------------------------
+| BRAND DESCRIPTION
+|--------------------------------------------------------------------------
+*/
 
 .notion-footer-brand p {
-  max-width: 330px;
+  max-width: 315px;
+
   margin: 0;
 
   color: var(--text-secondary);
 
+  font-family: var(--font-body);
+
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-/* Colonnes */
+/*
+|--------------------------------------------------------------------------
+| COLUMNS
+|--------------------------------------------------------------------------
+*/
 
 .notion-footer-grid > div:not(.notion-footer-brand) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+
+  gap: 8px;
 }
 
 .notion-footer-grid strong {
   display: block;
+
   margin-bottom: 2px;
 
   color: var(--text-primary);
 
+  font-family: var(--font-title);
+
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .notion-footer-grid a {
   color: var(--text-secondary);
+
   text-decoration: none;
 
+  font-family: var(--font-body);
+
   font-size: 13px;
-  line-height: 1.45;
+  font-weight: 500;
+  line-height: 1.4;
 
   transition:
     color 0.2s ease,
@@ -80,26 +117,39 @@
 
 .notion-footer-grid a:hover {
   color: var(--primary-color);
+
   transform: translateX(3px);
 }
 
-/* Partie inférieure */
+/*
+|--------------------------------------------------------------------------
+| BOTTOM
+|--------------------------------------------------------------------------
+*/
 
 .notion-footer-bottom {
   width: min(1100px, calc(100% - 48px));
 
   margin: 0 auto;
-  padding: 15px 0;
+
+  padding: 11px 0 12px;
 
   border-top: 1px solid var(--border-color);
 
   color: var(--text-muted);
 
+  font-family: var(--font-body);
+
   text-align: center;
+
   font-size: 12px;
 }
 
-/* Mode sombre */
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
 
 html[data-theme="dark"] .notion-footer {
   background: #050814;
@@ -123,10 +173,15 @@ html[data-theme="dark"] .notion-footer-grid a:hover {
 
 html[data-theme="dark"] .notion-footer-bottom {
   border-top-color: rgba(255, 255, 255, 0.09);
+
   color: #64748b;
 }
 
-/* Responsive */
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
 
 @media (max-width: 950px) {
   .notion-footer-grid {
@@ -134,7 +189,7 @@ html[data-theme="dark"] .notion-footer-bottom {
       minmax(240px, 1.4fr)
       repeat(2, minmax(130px, 1fr));
 
-    gap: 34px;
+    gap: 28px;
   }
 
   .notion-footer-brand {
@@ -150,8 +205,10 @@ html[data-theme="dark"] .notion-footer-bottom {
 
   .notion-footer-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 28px 22px;
-    padding: 36px 0 28px;
+
+    gap: 22px 18px;
+
+    padding: 24px 0 20px;
   }
 
   .notion-footer-brand {
@@ -159,14 +216,17 @@ html[data-theme="dark"] .notion-footer-bottom {
   }
 
   .notion-footer-logo {
-    width: 115px;
+    width: 104px;
   }
 }
 
 @media (max-width: 440px) {
   .notion-footer-grid {
     grid-template-columns: 1fr;
-    padding: 30px 0 24px;
+
+    gap: 18px;
+
+    padding: 22px 0 18px;
   }
 
   .notion-footer-brand {
@@ -174,7 +234,8 @@ html[data-theme="dark"] .notion-footer-bottom {
   }
 
   .notion-footer-bottom {
-    padding: 12px 0;
+    padding: 10px 0;
+
     text-align: left;
   }
 }

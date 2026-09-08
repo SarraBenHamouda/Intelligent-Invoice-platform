@@ -1,0 +1,1626 @@
+/*
+|--------------------------------------------------------------------------
+| PAGE
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail {
+  display: grid;
+  gap: 20px;
+
+  color: var(--admin-text);
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  font-size: 13px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| BREADCRUMB
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-breadcrumb {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 11px;
+}
+
+.admin-invoice-detail-breadcrumb a {
+  color:
+    var(--admin-text-secondary);
+
+  text-decoration: none;
+}
+
+.admin-invoice-detail-breadcrumb a:hover {
+  color:
+    var(--admin-purple);
+}
+
+.admin-invoice-detail-breadcrumb strong {
+  color:
+    var(--admin-purple);
+
+  font-weight: 700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADER ACTIONS
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-header-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-hero {
+  position: relative;
+
+  min-height: 185px;
+
+  padding: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(103, 85, 244, 0.1),
+      rgba(22, 142, 226, 0.045),
+      var(--admin-card)
+    );
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-invoice-detail-hero::after {
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  right: -80px;
+  top: -140px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(103, 85, 244, 0.07);
+
+  content: "";
+}
+
+.admin-invoice-detail-hero__main {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+}
+
+.admin-invoice-detail-hero__icon {
+  width: 78px;
+  height: 78px;
+
+  flex: 0 0 78px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(103, 85, 244, 0.15);
+
+  border-radius: 20px;
+
+  background:
+    rgba(103, 85, 244, 0.1);
+
+  font-size: 32px;
+}
+
+.admin-invoice-detail-hero__badges {
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.admin-invoice-detail-hero h2 {
+  margin:
+    12px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size:
+    clamp(
+      32px,
+      3vw,
+      44px
+    );
+
+  line-height: 1;
+
+  letter-spacing:
+    -0.025em;
+}
+
+.admin-invoice-detail-hero p {
+  margin:
+    9px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.admin-invoice-detail-hero__right {
+  position: relative;
+  z-index: 2;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATUS
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-status,
+.admin-invoice-detail-stage,
+.admin-invoice-detail-source {
+  min-height: 32px;
+
+  padding:
+    0
+    11px;
+
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 999px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.admin-invoice-detail-status--success {
+  background:
+    rgba(16, 166, 109, 0.1);
+
+  color:
+    var(--admin-green);
+}
+
+.admin-invoice-detail-status--warning {
+  background:
+    rgba(232, 154, 22, 0.1);
+
+  color:
+    var(--admin-orange);
+}
+
+.admin-invoice-detail-status--danger {
+  background:
+    rgba(217, 75, 75, 0.1);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-invoice-detail-status--processing {
+  background:
+    rgba(22, 142, 226, 0.1);
+
+  color:
+    var(--admin-blue);
+}
+
+.admin-invoice-detail-stage,
+.admin-invoice-detail-source {
+  border:
+    1px solid
+    var(--admin-border);
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+}
+
+/*
+|--------------------------------------------------------------------------
+| SEVERITY
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-severity {
+  min-width: 175px;
+
+  padding: 16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  border-radius: 15px;
+}
+
+.admin-invoice-detail-severity > span {
+  font-size: 24px;
+}
+
+.admin-invoice-detail-severity small {
+  display: block;
+
+  font-size: 10px;
+}
+
+.admin-invoice-detail-severity strong {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 13px;
+}
+
+.admin-invoice-detail-severity--high {
+  border:
+    1px solid
+    rgba(217, 75, 75, 0.18);
+
+  background:
+    rgba(217, 75, 75, 0.07);
+
+  color:
+    var(--admin-red);
+}
+
+.admin-invoice-detail-severity--medium {
+  border:
+    1px solid
+    rgba(232, 154, 22, 0.19);
+
+  background:
+    rgba(232, 154, 22, 0.08);
+
+  color:
+    var(--admin-orange);
+}
+
+.admin-invoice-detail-severity--low {
+  border:
+    1px solid
+    rgba(212, 178, 44, 0.19);
+
+  background:
+    rgba(212, 178, 44, 0.08);
+
+  color:
+    #b39318;
+}
+
+.admin-invoice-detail-severity--success {
+  border:
+    1px solid
+    rgba(16, 166, 109, 0.18);
+
+  background:
+    rgba(16, 166, 109, 0.07);
+
+  color:
+    var(--admin-green);
+}
+
+/*
+|--------------------------------------------------------------------------
+| DIAGNOSTIC
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-diagnostic {
+  padding: 22px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+
+  gap: 16px;
+
+  border:
+    1px solid
+    rgba(232, 154, 22, 0.2);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(232, 154, 22, 0.08),
+      rgba(217, 75, 75, 0.025),
+      var(--admin-card)
+    );
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-invoice-detail-diagnostic__icon {
+  width: 56px;
+  height: 56px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background:
+    rgba(232, 154, 22, 0.1);
+
+  font-size: 24px;
+}
+
+.admin-invoice-detail-diagnostic__content > span {
+  color:
+    var(--admin-orange);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-invoice-detail-diagnostic h2 {
+  margin:
+    6px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 18px;
+}
+
+.admin-invoice-detail-diagnostic p {
+  max-width: 950px;
+
+  margin:
+    9px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.admin-invoice-detail-diagnostic__tags {
+  margin-top: 14px;
+
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.admin-invoice-detail-diagnostic__tags span {
+  padding:
+    6px
+    9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 7px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| GRID
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 16px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CARD
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-card {
+  min-width: 0;
+
+  padding: 21px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 18px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-invoice-detail-card--full {
+  width: 100%;
+}
+
+.admin-invoice-detail-card > header {
+  padding-bottom: 16px;
+
+  margin-bottom: 16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-bottom:
+    1px solid
+    var(--admin-border-soft);
+}
+
+.admin-invoice-detail-card > header > span {
+  width: 43px;
+  height: 43px;
+
+  flex: 0 0 43px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background:
+    rgba(103, 85, 244, 0.08);
+
+  font-size: 18px;
+}
+
+.admin-invoice-detail-card header small {
+  display: block;
+
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  letter-spacing: 0.09em;
+
+  text-transform: uppercase;
+}
+
+.admin-invoice-detail-card header h3 {
+  margin:
+    4px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 22px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FIELDS
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+}
+
+.admin-invoice-detail-fields > div {
+  min-height: 72px;
+
+  padding: 12px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-invoice-detail-fields span,
+.admin-invoice-detail-organization span {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-invoice-detail-fields strong,
+.admin-invoice-detail-organization strong {
+  display: block;
+
+  margin-top: 6px;
+
+  overflow-wrap: anywhere;
+
+  color:
+    var(--admin-text);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-invoice-detail-fields--compact {
+  margin-top: 13px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CLIENT
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-client {
+  padding: 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-invoice-detail-client__avatar {
+  width: 48px;
+  height: 48px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7763ff,
+      #356dc2
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-invoice-detail-client strong {
+  display: block;
+
+  color:
+    var(--admin-text);
+
+  font-size: 13px;
+}
+
+.admin-invoice-detail-client div > span {
+  display: block;
+
+  margin-top: 4px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-invoice-detail-account-status {
+  padding:
+    6px
+    9px;
+
+  border-radius: 999px;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 9px;
+}
+
+.admin-invoice-detail-account-status--active {
+  background:
+    rgba(16, 166, 109, 0.1);
+
+  color:
+    var(--admin-green);
+}
+
+.admin-invoice-detail-account-status--inactive {
+  background:
+    rgba(217, 75, 75, 0.1);
+
+  color:
+    var(--admin-red);
+}
+
+/*
+|--------------------------------------------------------------------------
+| ORGANIZATION
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-organization {
+  display: grid;
+
+  gap: 10px;
+}
+
+.admin-invoice-detail-organization > div {
+  min-height: 68px;
+
+  padding: 12px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+/*
+|--------------------------------------------------------------------------
+| AMOUNTS
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-amounts {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+}
+
+.admin-invoice-detail-amounts > div {
+  min-height: 82px;
+
+  padding: 14px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-invoice-detail-amounts__total {
+  grid-column:
+    1 / -1;
+
+  background:
+    rgba(103, 85, 244, 0.07) !important;
+}
+
+.admin-invoice-detail-amounts span {
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-invoice-detail-amounts strong {
+  display: block;
+
+  margin-top: 9px;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 16px;
+}
+
+.admin-invoice-detail-amounts__total strong {
+  color:
+    var(--admin-purple);
+
+  font-size: 22px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| PIPELINE
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-pipeline {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      6,
+      minmax(0, 1fr)
+    );
+
+  gap: 9px;
+}
+
+.admin-invoice-detail-pipeline__step {
+  position: relative;
+
+  min-height: 100px;
+
+  padding: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 9px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+
+  text-align: center;
+}
+
+.admin-invoice-detail-pipeline__step > span {
+  width: 31px;
+  height: 31px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+.admin-invoice-detail-pipeline__step strong {
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 11px;
+}
+
+.admin-invoice-detail-pipeline__step--done {
+  border-color:
+    rgba(16, 166, 109, 0.16);
+
+  background:
+    rgba(16, 166, 109, 0.05);
+}
+
+.admin-invoice-detail-pipeline__step--done > span {
+  background:
+    rgba(16, 166, 109, 0.12);
+
+  color:
+    var(--admin-green);
+}
+
+.admin-invoice-detail-pipeline__step--current {
+  border-color:
+    rgba(103, 85, 244, 0.28);
+
+  background:
+    rgba(103, 85, 244, 0.08);
+
+  box-shadow:
+    inset
+    0
+    0
+    0
+    1px
+    rgba(103, 85, 244, 0.06);
+}
+
+.admin-invoice-detail-pipeline__step--current > span {
+  background:
+    var(--admin-purple);
+
+  color: #ffffff;
+}
+
+.admin-invoice-detail-pipeline__step--current strong {
+  color:
+    var(--admin-purple);
+}
+
+/*
+|--------------------------------------------------------------------------
+| TIMELINE
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-timeline {
+  position: relative;
+
+  display: grid;
+
+  gap: 0;
+}
+
+.admin-invoice-detail-timeline__item {
+  position: relative;
+
+  padding:
+    5px
+    0
+    22px
+    36px;
+}
+
+.admin-invoice-detail-timeline__item:not(:last-child)::before {
+  position: absolute;
+
+  left: 10px;
+  top: 18px;
+  bottom: -2px;
+
+  width: 1px;
+
+  background:
+    var(--admin-border);
+
+  content: "";
+}
+
+.admin-invoice-detail-timeline__dot {
+  position: absolute;
+
+  left: 3px;
+  top: 5px;
+
+  width: 15px;
+  height: 15px;
+
+  border:
+    3px solid
+    var(--admin-card);
+
+  border-radius: 50%;
+
+  background:
+    var(--admin-blue);
+}
+
+.admin-invoice-detail-timeline__item--done
+.admin-invoice-detail-timeline__dot {
+  background:
+    var(--admin-green);
+}
+
+.admin-invoice-detail-timeline__item--warning
+.admin-invoice-detail-timeline__dot {
+  background:
+    var(--admin-orange);
+}
+
+.admin-invoice-detail-timeline__item--error
+.admin-invoice-detail-timeline__dot {
+  background:
+    var(--admin-red);
+}
+
+.admin-invoice-detail-timeline strong {
+  color:
+    var(--admin-text);
+
+  font-size: 13px;
+}
+
+.admin-invoice-detail-timeline p {
+  margin:
+    5px
+    0
+    0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.admin-invoice-detail-timeline small {
+  display: block;
+
+  margin-top: 6px;
+
+  color:
+    var(--admin-text-muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| EXPANDABLE
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-expandable {
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 17px;
+
+  background:
+    var(--admin-card);
+
+  box-shadow:
+    var(--admin-shadow);
+}
+
+.admin-invoice-detail-expandable__header {
+  width: 100%;
+
+  min-height: 78px;
+
+  padding:
+    16px
+    19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--admin-text);
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.admin-invoice-detail-expandable__header > div {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.admin-invoice-detail-expandable__header > div > span {
+  width: 43px;
+  height: 43px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background:
+    rgba(103, 85, 244, 0.08);
+
+  font-size: 17px;
+}
+
+.admin-invoice-detail-expandable__header small {
+  color:
+    var(--admin-purple);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+.admin-invoice-detail-expandable__header h3 {
+  margin:
+    4px
+    0
+    0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 20px;
+}
+
+.admin-invoice-detail-expandable__body {
+  padding:
+    0
+    19px
+    19px;
+}
+
+.admin-invoice-detail-expandable__body pre {
+  max-height: 430px;
+
+  margin: 0;
+
+  padding: 16px;
+
+  overflow: auto;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 11px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 11px;
+
+  line-height: 1.65;
+
+  white-space: pre-wrap;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TECHNICAL
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-technical {
+  padding:
+    0
+    19px
+    19px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+}
+
+.admin-invoice-detail-technical > div {
+  padding: 13px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-card-soft);
+}
+
+.admin-invoice-detail-technical span {
+  display: block;
+
+  color:
+    var(--admin-text-muted);
+
+  font-size: 10px;
+}
+
+.admin-invoice-detail-technical code {
+  display: block;
+
+  margin-top: 6px;
+
+  overflow-wrap: anywhere;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-footer {
+  padding-top: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 9px;
+}
+
+.admin-invoice-detail-footer a {
+  min-height: 43px;
+
+  padding:
+    0
+    15px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  border-radius: 10px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.admin-invoice-detail-footer__secondary {
+  border:
+    1px solid
+    var(--admin-border);
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text-secondary);
+}
+
+.admin-invoice-detail-footer__primary {
+  border:
+    1px solid
+    rgba(103, 85, 244, 0.2);
+
+  background:
+    var(--admin-purple);
+
+  color: #ffffff;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOADING / ERROR
+|--------------------------------------------------------------------------
+*/
+
+.admin-invoice-detail-loading,
+.admin-invoice-detail-load-error {
+  min-height: 430px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 20px;
+
+  background:
+    var(--admin-card);
+
+  color:
+    var(--admin-text-muted);
+
+  text-align: center;
+
+  font-size: 12px;
+}
+
+.admin-invoice-detail-loading > span {
+  width: 36px;
+  height: 36px;
+
+  border:
+    3px solid
+    var(--admin-border);
+
+  border-top-color:
+    var(--admin-purple);
+
+  border-radius: 50%;
+
+  animation:
+    adminInvoiceDetailSpin
+    700ms
+    linear
+    infinite;
+}
+
+@keyframes adminInvoiceDetailSpin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+.admin-invoice-detail-load-error > span {
+  font-size: 40px;
+}
+
+.admin-invoice-detail-load-error h2 {
+  margin: 0;
+
+  color:
+    var(--admin-text);
+
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 25px;
+}
+
+.admin-invoice-detail-load-error p {
+  margin: 0;
+
+  color:
+    var(--admin-text-secondary);
+
+  font-size: 12px;
+}
+
+.admin-invoice-detail-load-error > div {
+  margin-top: 9px;
+
+  display: flex;
+
+  gap: 9px;
+}
+
+.admin-invoice-detail-load-error button {
+  min-height: 42px;
+
+  padding:
+    0
+    15px;
+
+  border:
+    1px solid
+    var(--admin-border);
+
+  border-radius: 10px;
+
+  background:
+    var(--admin-card-soft);
+
+  color:
+    var(--admin-text);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.admin-invoice-detail-muted {
+  color:
+    var(--admin-text-muted);
+
+  font-size: 11px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK
+|--------------------------------------------------------------------------
+*/
+
+:root[data-admin-theme="dark"]
+.admin-invoice-detail-card,
+:root[data-admin-theme="dark"]
+.admin-invoice-detail-expandable,
+:root[data-admin-theme="dark"]
+.admin-invoice-detail-hero {
+  background:
+    rgba(15, 29, 48, 0.94);
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media (
+  max-width: 1050px
+) {
+  .admin-invoice-detail-pipeline {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+@media (
+  max-width: 800px
+) {
+  .admin-invoice-detail-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-invoice-detail-hero {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+  .admin-invoice-detail-technical {
+    grid-template-columns:
+      1fr;
+  }
+}
+
+@media (
+  max-width: 560px
+) {
+  .admin-invoice-detail-hero {
+    padding: 20px;
+  }
+
+  .admin-invoice-detail-hero__main {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+  .admin-invoice-detail-hero h2 {
+    font-size: 30px;
+  }
+
+  .admin-invoice-detail-pipeline {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-invoice-detail-fields,
+  .admin-invoice-detail-amounts {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-invoice-detail-amounts__total {
+    grid-column:
+      auto;
+  }
+
+  .admin-invoice-detail-client {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .admin-invoice-detail-account-status {
+    grid-column:
+      1 / -1;
+  }
+
+  .admin-invoice-detail-footer {
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
+  }
+
+  .admin-invoice-detail-footer a {
+    justify-content:
+      center;
+  }
+}

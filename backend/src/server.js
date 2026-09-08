@@ -8,7 +8,7 @@ const {
 } = require('./config/database');
 
 const port = Number(
-  process.env.PORT || 3000
+  process.env.PORT || 5000
 );
 
 let server;

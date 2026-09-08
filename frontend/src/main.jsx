@@ -1,32 +1,40 @@
-import {
-  StrictMode,
-} from 'react';
-
-import {
-  createRoot,
-} from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
 import {
   GoogleOAuthProvider,
-} from '@react-oauth/google';
+} from "@react-oauth/google";
 
-import './i18n.js';
-import './index.css';
-
-import App from './App.jsx';
+import App from "./App";
+import "./index.css";
 
 const googleClientId =
-  import.meta.env
-    .VITE_GOOGLE_CLIENT_ID;
+  import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
 
-createRoot(
-  document.getElementById('root')
+console.log(
+  "Origine actuelle :",
+  window.location.origin,
+);
+
+console.log(
+  "Google Client ID chargé :",
+  googleClientId,
+);
+
+if (!googleClientId) {
+  console.error(
+    "VITE_GOOGLE_CLIENT_ID est absent du fichier frontend/.env",
+  );
+}
+
+ReactDOM.createRoot(
+  document.getElementById("root"),
 ).render(
-  <StrictMode>
+  <React.StrictMode>
     <GoogleOAuthProvider
-      clientId={googleClientId}
+      clientId={googleClientId || ""}
     >
       <App />
     </GoogleOAuthProvider>
-  </StrictMode>
+  </React.StrictMode>,
 );

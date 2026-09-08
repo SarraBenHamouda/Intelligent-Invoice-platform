@@ -905,3 +905,186 @@ a.contact-detail-card:hover {
     transition: none;
   }
 }
+/*
+|--------------------------------------------------------------------------
+| CONTACT ALERT
+|--------------------------------------------------------------------------
+*/
+
+.contact-alert {
+  display: grid;
+  grid-template-columns:
+    auto minmax(0, 1fr);
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+
+  padding: 15px;
+
+  border-radius: 13px;
+}
+
+.contact-alert > span {
+  width: 30px;
+  height: 30px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  font-weight: 900;
+}
+
+.contact-alert strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 0.8rem;
+}
+
+.contact-alert p {
+  margin: 0;
+
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.contact-alert--error {
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      #dc2626 28%,
+      var(--contact-border)
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      #dc2626 7%,
+      var(--contact-card)
+    );
+}
+
+.contact-alert--error > span {
+  background:
+    #dc2626;
+
+  color:
+    #ffffff;
+}
+
+.contact-alert--error strong {
+  color:
+    #dc2626;
+}
+
+.contact-alert--error p {
+  color:
+    var(--contact-muted);
+}
+
+/*
+|--------------------------------------------------------------------------
+| RECAPTCHA
+|--------------------------------------------------------------------------
+*/
+
+.contact-recaptcha-wrapper {
+  width: 100%;
+}
+
+.contact-recaptcha-wrapper
+  .password-reset-recaptcha {
+  display: grid;
+
+  gap: 12px;
+
+  padding: 18px;
+
+  border:
+    1px solid
+    var(--contact-border);
+
+  border-radius: 15px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--contact-card) 92%,
+      var(--contact-primary)
+    );
+}
+
+.contact-recaptcha-wrapper
+  .password-reset-recaptcha
+  p {
+  margin: 0;
+
+  color:
+    var(--contact-muted);
+
+  font-size: 0.75rem;
+
+  font-weight: 700;
+}
+
+.contact-recaptcha-wrapper
+  .password-reset-recaptcha
+  > div {
+  display: flex;
+
+  justify-content:
+    flex-start;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DISABLED BUTTON
+|--------------------------------------------------------------------------
+*/
+
+.contact-submit-button:disabled {
+  opacity: 0.62;
+
+  cursor:
+    not-allowed;
+
+  transform:
+    none;
+
+  box-shadow:
+    none;
+}
+
+.contact-submit-button:disabled:hover {
+  transform:
+    none;
+
+  box-shadow:
+    none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE RECAPTCHA
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 420px) {
+  .contact-recaptcha-wrapper {
+    overflow-x:
+      auto;
+  }
+
+  .contact-recaptcha-wrapper
+    .password-reset-recaptcha {
+    padding:
+      14px 8px;
+  }
+}

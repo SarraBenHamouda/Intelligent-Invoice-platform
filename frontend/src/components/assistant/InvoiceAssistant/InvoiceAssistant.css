@@ -1,0 +1,617 @@
+.invoice-assistant-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1200;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-height: 54px;
+
+  padding: 8px 18px 8px 8px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 18px 45px
+    rgba(37, 99, 235, 0.28);
+}
+
+.invoice-assistant-launcher > span {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.17);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.invoice-assistant-launcher > strong {
+  font-size: 13px;
+}
+
+.invoice-assistant-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 90px;
+  z-index: 1199;
+
+  width: 390px;
+  max-width:
+    calc(100vw - 32px);
+
+  height: 620px;
+  max-height:
+    calc(100vh - 130px);
+
+  display: grid;
+
+  grid-template-rows:
+    auto
+    minmax(0, 1fr)
+    auto
+    auto
+    auto;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    #dbe3ef;
+
+  border-radius: 22px;
+
+  background:
+    #ffffff;
+
+  color:
+    #0f172a;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+
+  box-shadow:
+    0 30px 90px
+    rgba(15, 23, 42, 0.22);
+}
+
+.invoice-assistant-header {
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 14px;
+
+  border-bottom:
+    1px solid
+    #e5e7eb;
+
+  background:
+    #f8fafc;
+}
+
+.invoice-assistant-header > div {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.invoice-assistant-header > div > span {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color:
+    #ffffff;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.invoice-assistant-header strong,
+.invoice-assistant-header small {
+  display: block;
+}
+
+.invoice-assistant-header strong {
+  font-family:
+    "Fraunces",
+    serif;
+
+  font-size: 16px;
+}
+
+.invoice-assistant-header small {
+  margin-top: 2px;
+
+  color:
+    #64748b;
+
+  font-size: 10px;
+}
+
+.invoice-assistant-header > button {
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background:
+    transparent;
+
+  color:
+    #64748b;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.invoice-assistant-messages {
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  padding: 16px 14px;
+
+  overflow-y: auto;
+
+  background:
+    #f8fafc;
+}
+
+.invoice-assistant-message {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.invoice-assistant-message--assistant {
+  align-items:
+    flex-start;
+}
+
+.invoice-assistant-message--user {
+  align-items:
+    flex-end;
+}
+
+.invoice-assistant-bubble {
+  max-width: 88%;
+
+  padding: 11px 13px;
+
+  border:
+    1px solid
+    #e2e8f0;
+
+  border-radius:
+    15px 15px 15px 5px;
+
+  background:
+    #ffffff;
+
+  color:
+    #334155;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+.invoice-assistant-message--user
+.invoice-assistant-bubble {
+  border-color:
+    #2563eb;
+
+  border-radius:
+    15px 15px 5px 15px;
+
+  background:
+    #2563eb;
+
+  color:
+    #ffffff;
+}
+
+.invoice-assistant-bubble--error {
+  border-color:
+    #fecaca;
+
+  background:
+    #fff5f5;
+
+  color:
+    #b91c1c;
+}
+
+.invoice-assistant-card {
+  width: 88%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+
+  padding: 11px;
+
+  border:
+    1px solid
+    #dbe3ef;
+
+  border-radius: 13px;
+
+  background:
+    #ffffff;
+}
+
+.invoice-assistant-card small,
+.invoice-assistant-card strong {
+  display: block;
+}
+
+.invoice-assistant-card small {
+  margin-bottom: 3px;
+
+  color:
+    #94a3b8;
+
+  font-size: 8px;
+
+  text-transform:
+    uppercase;
+}
+
+.invoice-assistant-card strong {
+  overflow: hidden;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 10px;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+.invoice-assistant-card button {
+  grid-column:
+    1 / -1;
+
+  min-height: 34px;
+
+  border:
+    1px solid
+    #bfdbfe;
+
+  border-radius: 9px;
+
+  background:
+    #eff6ff;
+
+  color:
+    #1d4ed8;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.invoice-assistant-suggestions {
+  display: flex;
+
+  gap: 6px;
+
+  padding: 9px 12px;
+
+  overflow-x: auto;
+
+  border-top:
+    1px solid
+    #e5e7eb;
+}
+
+.invoice-assistant-suggestions button {
+  flex: 0 0 auto;
+
+  max-width: 220px;
+
+  padding: 7px 10px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    #dbe3ef;
+
+  border-radius: 999px;
+
+  background:
+    #ffffff;
+
+  color:
+    #475569;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+  cursor: pointer;
+}
+
+.invoice-assistant-form {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    43px;
+
+  gap: 8px;
+
+  padding: 10px 12px;
+
+  border-top:
+    1px solid
+    #e5e7eb;
+}
+
+.invoice-assistant-form input {
+  min-width: 0;
+  min-height: 43px;
+
+  padding: 10px 12px;
+
+  border:
+    1px solid
+    #cbd5e1;
+
+  border-radius: 12px;
+
+  outline: none;
+
+  background:
+    #ffffff;
+
+  color:
+    #0f172a;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+}
+
+.invoice-assistant-form input:focus {
+  border-color:
+    #2563eb;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.1);
+}
+
+.invoice-assistant-form button {
+  width: 43px;
+  height: 43px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color:
+    #ffffff;
+
+  font-size: 18px;
+  font-weight: 900;
+
+  cursor: pointer;
+}
+
+.invoice-assistant-form button:disabled,
+.invoice-assistant-suggestions button:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.invoice-assistant-panel footer {
+  padding:
+    0 12px 10px;
+
+  color:
+    #94a3b8;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 8px;
+
+  text-align: center;
+}
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.invoice-assistant-panel {
+  border-color:
+    #263449;
+
+  background:
+    #111827;
+
+  color:
+    #f8fafc;
+}
+
+html[data-theme="dark"]
+.invoice-assistant-header,
+html[data-theme="dark"]
+.invoice-assistant-card,
+html[data-theme="dark"]
+.invoice-assistant-bubble,
+html[data-theme="dark"]
+.invoice-assistant-suggestions,
+html[data-theme="dark"]
+.invoice-assistant-form {
+  border-color:
+    #263449;
+
+  background:
+    #111827;
+}
+
+html[data-theme="dark"]
+.invoice-assistant-messages {
+  background:
+    #0b1220;
+}
+
+html[data-theme="dark"]
+.invoice-assistant-bubble {
+  color:
+    #dce5f2;
+}
+
+html[data-theme="dark"]
+.invoice-assistant-message--user
+.invoice-assistant-bubble {
+  background:
+    #2563eb;
+
+  color:
+    #ffffff;
+}
+
+html[data-theme="dark"]
+.invoice-assistant-form input {
+  border-color:
+    #35455c;
+
+  background:
+    #0e1726;
+
+  color:
+    #ffffff;
+}
+
+html[data-theme="dark"]
+.invoice-assistant-header strong,
+html[data-theme="dark"]
+.invoice-assistant-card strong {
+  color:
+    #f8fafc;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 640px) {
+  .invoice-assistant-launcher {
+    right: 14px;
+    bottom: 14px;
+
+    width: 54px;
+    height: 54px;
+
+    padding: 8px;
+  }
+
+  .invoice-assistant-launcher strong {
+    display: none;
+  }
+
+  .invoice-assistant-panel {
+    right: 10px;
+    bottom: 78px;
+
+    width:
+      calc(100vw - 20px);
+
+    height:
+      calc(100vh - 98px);
+
+    max-height:
+      650px;
+  }
+}

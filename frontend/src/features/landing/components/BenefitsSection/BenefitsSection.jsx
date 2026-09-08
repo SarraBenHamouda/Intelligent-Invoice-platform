@@ -1,27 +1,32 @@
+import "./BenefitsSection.css";
+
 const benefits = [
   {
-    icon: '⚡',
-    title: 'Traitement rapide',
+    icon: "⚡",
+    title: "Traitement rapide",
     description:
-      'Réduisez le temps consacré à la saisie et au contrôle des factures.',
+      "Gagnez du temps dans la gestion et le contrôle de vos factures.",
   },
+
   {
-    icon: '🔒',
-    title: 'Données sécurisées',
+    icon: "🔒",
+    title: "Données sécurisées",
     description:
-      'Protégez les accès, les comptes utilisateurs et les documents signés.',
+      "Vos informations, vos comptes et vos factures restent protégés.",
   },
+
   {
-    icon: '📊',
-    title: 'Suivi en temps réel',
+    icon: "📊",
+    title: "Suivi simplifié",
     description:
-      'Consultez à tout moment le statut et l’historique de chaque facture.',
+      "Consultez facilement l’état et l’historique de chaque facture.",
   },
+
   {
-    icon: '✅',
-    title: 'Réduction des erreurs',
+    icon: "✅",
+    title: "Moins d’erreurs",
     description:
-      'Détectez les incohérences avant la génération et la transmission.',
+      "Repérez les problèmes avant l’envoi de votre facture.",
   },
 ];
 
@@ -29,19 +34,11 @@ function BenefitsSection() {
   return (
     <section className="benefits-section">
       <div className="public-container">
-        <div className="public-section-heading light">
-          <span className="public-section-label">
-            Avantages
-          </span>
 
+        <div className="public-section-heading light">
           <h2>
             Pourquoi choisir notre plateforme ?
           </h2>
-
-          <p>
-            Gagnez en productivité tout en
-            conservant une traçabilité complète.
-          </p>
         </div>
 
         <div className="benefits-grid">
@@ -50,7 +47,10 @@ function BenefitsSection() {
               key={benefit.title}
               className="benefit-card"
             >
-              <div className="benefit-icon">
+              <div
+                className="benefit-icon"
+                aria-hidden="true"
+              >
                 {benefit.icon}
               </div>
 
@@ -64,6 +64,7 @@ function BenefitsSection() {
             </article>
           ))}
         </div>
+
       </div>
     </section>
   );

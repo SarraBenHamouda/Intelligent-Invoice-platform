@@ -1,0 +1,185 @@
+/*
+|--------------------------------------------------------------------------
+| BENEFITS SECTION
+|--------------------------------------------------------------------------
+*/
+
+.benefits-section {
+  position: relative;
+
+  width: 100%;
+  overflow: hidden;
+
+  padding: 100px 0 105px;
+
+  /* LIGHT MODE */
+  background:
+    radial-gradient(
+      circle at 8% 18%,
+      rgba(59, 130, 246, 0.10),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 90% 82%,
+      rgba(99, 102, 241, 0.08),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #f8fbff 0%,
+      #f3f7ff 52%,
+      #eef3ff 100%
+    );
+
+  color: #0f172a;
+
+  font-family:
+    "IBM Plex Sans",
+    sans-serif;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LIGHT MODE TEXT
+|--------------------------------------------------------------------------
+*/
+
+.benefits-section
+.public-section-heading h2 {
+  color: #0f172a;
+}
+
+.benefits-section
+.public-section-heading p {
+  color: #64748b;
+}
+
+.benefit-card {
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.22);
+
+  color: #0f172a;
+
+  box-shadow:
+    0 18px 42px
+    rgba(15, 23, 42, 0.07);
+
+  backdrop-filter:
+    blur(12px);
+}
+
+.benefit-card:hover {
+  border-color:
+    rgba(37, 99, 235, 0.28);
+
+  background:
+    rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    0 26px 58px
+    rgba(15, 23, 42, 0.11);
+}
+
+.benefit-icon {
+  background:
+    rgba(37, 99, 235, 0.08);
+}
+
+.benefit-card h3 {
+  color: #0f172a;
+}
+
+.benefit-card p {
+  color: #64748b;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DARK MODE — KEEP CURRENT DESIGN
+|--------------------------------------------------------------------------
+*/
+
+html[data-theme="dark"]
+.benefits-section {
+  background:
+    radial-gradient(
+      circle at 8% 18%,
+      rgba(14, 165, 233, 0.15),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 90% 82%,
+      rgba(79, 70, 229, 0.17),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #071426 0%,
+      #0d1b3d 52%,
+      #1d2864 100%
+    );
+
+  color: #ffffff;
+}
+
+html[data-theme="dark"]
+.benefits-section
+.public-section-heading h2 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"]
+.benefits-section
+.public-section-heading p {
+  color: #cbd5e1;
+}
+
+html[data-theme="dark"]
+.benefit-card {
+  border-color:
+    rgba(255, 255, 255, 0.14);
+
+  background:
+    rgba(255, 255, 255, 0.075);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 18px 42px
+    rgba(0, 0, 0, 0.14);
+}
+
+html[data-theme="dark"]
+.benefit-card:hover {
+  border-color:
+    rgba(96, 165, 250, 0.32);
+
+  background:
+    rgba(255, 255, 255, 0.105);
+
+  box-shadow:
+    0 26px 58px
+    rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"]
+.benefit-icon {
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"]
+.benefit-card h3 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"]
+.benefit-card p {
+  color: #cbd5e1;
+}

@@ -33,19 +33,10 @@ function SolutionsSection() {
     <section className="public-section">
       <div className="public-container">
         <div className="public-section-heading">
-          <span className="public-section-label">
-            Solutions
-          </span>
-
+       
           <h2>
             Une solution adaptée à chaque besoin
           </h2>
-
-          <p>
-            La plateforme accompagne les petites
-            structures comme les entreprises déjà
-            équipées d’un ERP.
-          </p>
         </div>
 
         <div className="solutions-grid">

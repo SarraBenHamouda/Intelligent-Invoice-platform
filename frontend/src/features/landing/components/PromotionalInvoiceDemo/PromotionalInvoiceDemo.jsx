@@ -2,110 +2,110 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   useTranslation,
-} from 'react-i18next';
+} from "react-i18next";
 
 const DEMO_STAGES = [
   {
-    key: 'waiting',
+    key: "waiting",
     duration: 900,
   },
   {
-    key: 'selected',
+    key: "selected",
     duration: 1100,
   },
   {
-    key: 'uploading',
+    key: "uploading",
     duration: 1700,
   },
   {
-    key: 'extracting',
+    key: "extracting",
     duration: 1900,
   },
   {
-    key: 'validating',
+    key: "validating",
     duration: 1500,
   },
   {
-    key: 'teif',
+    key: "teif",
     duration: 1300,
   },
   {
-    key: 'signing',
+    key: "signing",
     duration: 1500,
   },
   {
-    key: 'sending',
+    key: "sending",
     duration: 1500,
   },
   {
-    key: 'accepted',
+    key: "accepted",
     duration: 3500,
   },
 ];
 
 const PROCESS_STEPS = [
   {
-    key: 'import',
-    icon: '📥',
+    key: "import",
+    icon: "📥",
   },
   {
-    key: 'extraction',
-    icon: '🧠',
+    key: "extraction",
+    icon: "🔎",
   },
   {
-    key: 'validation',
-    icon: '✅',
+    key: "validation",
+    icon: "✅",
   },
   {
-    key: 'teif',
-    icon: '🧾',
+    key: "teif",
+    icon: "🧾",
   },
   {
-    key: 'signature',
-    icon: '✍️',
+    key: "signature",
+    icon: "🔒",
   },
   {
-    key: 'ttn',
-    icon: '📡',
+    key: "ttn",
+    icon: "📤",
   },
 ];
 
 const DEMO_FIELDS = [
   {
-    key: 'supplier',
-    value: 'Tenor Afrique',
+    key: "supplier",
+    value: "Tenor Afrique",
   },
   {
-    key: 'customer',
-    value: 'IT SOFT',
+    key: "customer",
+    value: "IT SOFT",
   },
   {
-    key: 'invoiceNumber',
-    value: 'FA260002',
+    key: "invoiceNumber",
+    value: "FA260002",
   },
   {
-    key: 'invoiceDate',
-    value: '31/12/2026',
+    key: "invoiceDate",
+    value: "31/12/2026",
   },
   {
-    key: 'lineCount',
-    value: '5',
+    key: "lineCount",
+    value: "5",
   },
   {
-    key: 'totalHt',
-    value: '1 762,800 TND',
+    key: "totalHt",
+    value: "1 762,800 TND",
   },
   {
-    key: 'vat',
-    value: '334,930 TND',
+    key: "vat",
+    value: "334,930 TND",
   },
   {
-    key: 'totalTtc',
-    value: '2 097,730 TND',
+    key: "totalTtc",
+    value: "2 097,730 TND",
   },
 ];
 
@@ -148,14 +148,14 @@ function PromotionalInvoiceDemo() {
 
     if (
       currentStage.key ===
-      'uploading'
+      "uploading"
     ) {
       startUploadAnimation();
     } else {
       setUploadProgress(
         currentStageIndex > 2
           ? 100
-          : 0
+          : 0,
       );
     }
 
@@ -170,14 +170,14 @@ function PromotionalInvoiceDemo() {
             if (isLastStage) {
               setPlayCount(
                 (previousCount) =>
-                  previousCount + 1
+                  previousCount + 1,
               );
 
               return 0;
             }
 
             return previousIndex + 1;
-          }
+          },
         );
       }, currentStage.duration);
 
@@ -193,7 +193,7 @@ function PromotionalInvoiceDemo() {
   function clearCurrentTimer() {
     if (timerRef.current) {
       window.clearTimeout(
-        timerRef.current
+        timerRef.current,
       );
 
       timerRef.current = null;
@@ -213,7 +213,7 @@ function PromotionalInvoiceDemo() {
 
         if (progress >= 100) {
           window.clearInterval(
-            intervalId
+            intervalId,
           );
         }
       }, 70);
@@ -228,19 +228,19 @@ function PromotionalInvoiceDemo() {
 
     setPlayCount(
       (previousCount) =>
-        previousCount + 1
+        previousCount + 1,
     );
   }
 
   function togglePause() {
     setIsPaused(
       (previousValue) =>
-        !previousValue
+        !previousValue,
     );
   }
 
   function getProcessStepState(
-    stepKey
+    stepKey,
   ) {
     const stageOrder = {
       waiting: 0,
@@ -273,26 +273,26 @@ function PromotionalInvoiceDemo() {
 
     if (
       currentStage.key ===
-      'accepted'
+      "accepted"
     ) {
-      return 'completed';
+      return "completed";
     }
 
     if (
       targetOrder <
       currentOrder
     ) {
-      return 'completed';
+      return "completed";
     }
 
     if (
       targetOrder ===
       currentOrder
     ) {
-      return 'active';
+      return "active";
     }
 
-    return 'waiting';
+    return "waiting";
   }
 
   function getVisibleFieldCount() {
@@ -321,25 +321,25 @@ function PromotionalInvoiceDemo() {
       {
         defaultValue: {
           waiting:
-            'Préparation du traitement',
+            "Préparation de votre facture",
           selected:
-            'Facture prête à être importée',
+            "Facture prête à être traitée",
           uploading:
-            'Import du fichier',
+            "Ajout de votre facture",
           extracting:
-            'Extraction des données',
+            "Lecture des informations",
           validating:
-            'Contrôle qualité',
+            "Vérification de la facture",
           teif:
-            'Génération du fichier TEIF',
+            "Préparation pour l’envoi",
           signing:
-            'Application de la signature',
+            "Sécurisation de la facture",
           sending:
-            'Envoi vers la TTN',
+            "Envoi de la facture",
           accepted:
-            'Facture acceptée',
+            "Facture validée",
         }[currentStage.key],
-      }
+      },
     );
   }
 
@@ -349,25 +349,25 @@ function PromotionalInvoiceDemo() {
       {
         defaultValue: {
           waiting:
-            'La configuration du processus est en cours.',
+            "La plateforme prépare la prise en charge de votre facture.",
           selected:
-            'Votre facture a été sélectionnée pour traitement.',
+            "Votre facture est prête à être prise en charge.",
           uploading:
-            'Le fichier est en cours d’import dans la plateforme.',
+            "Votre document est ajouté à votre espace.",
           extracting:
-            'Les informations clés sont extraites du document.',
+            "La plateforme lit automatiquement les informations importantes de votre facture.",
           validating:
-            'Les données sont vérifiées pour la conformité et l’exactitude.',
+            "Les informations sont vérifiées avant l’envoi.",
           teif:
-            'Le format TEIF est généré pour la transmission.',
+            "Votre facture est préparée dans le format attendu pour sa transmission.",
           signing:
-            'La facture est signée électroniquement.',
+            "Votre facture est sécurisée avant son envoi.",
           sending:
-            'La facture est envoyée à la plateforme TTN.',
+            "Votre facture est transmise au service officiel.",
           accepted:
-            'La facture est acceptée par la TTN et prête à être consultée.',
+            "Votre facture a été acceptée et son traitement est terminé.",
         }[currentStage.key],
-      }
+      },
     );
   }
 
@@ -381,35 +381,15 @@ function PromotionalInvoiceDemo() {
     >
       <div className="public-container">
         <div className="public-section-heading">
-          <span className="public-section-label">
-            {t(
-              'promotionalDemo.label',
-              {
-                defaultValue:
-                  'Démonstration automatique',
-              }
-            )}
-          </span>
-
           <h2>
             {t(
-              'promotionalDemo.title',
+              "promotionalDemo.title",
               {
                 defaultValue:
-                  'Suivez la facture jusqu’à son acceptation par la TTN.',
-              }
+                  "Suivez votre facture, de son ajout jusqu’à sa validation.",
+              },
             )}
           </h2>
-
-          <p>
-            {t(
-              'promotionalDemo.description',
-              {
-                defaultValue:
-                  'Chaque événement est horodaté afin de comprendre immédiatement où se trouve votre facture.',
-              }
-            )}
-          </p>
         </div>
 
         <div className="promotional-demo-player">
@@ -420,18 +400,17 @@ function PromotionalInvoiceDemo() {
               <span />
             </div>
 
-            <div className="demo-player-title">
-              Intelligent Invoice Platform
-            </div>
+            <div className="demo-player-title" />
 
             <div className="demo-live-badge">
               <span />
+
               {t(
-                'promotionalDemo.automatic',
+                "promotionalDemo.automatic",
                 {
                   defaultValue:
-                    'Démonstration automatique',
-                }
+                    "Démonstration automatique",
+                },
               )}
             </div>
           </div>
@@ -442,27 +421,27 @@ function PromotionalInvoiceDemo() {
                 <div>
                   <span>
                     {t(
-                      'promotionalDemo.importLabel',
+                      "promotionalDemo.importLabel",
                       {
                         defaultValue:
-                          'Source de la facture',
-                      }
+                          "Votre facture",
+                      },
                     )}
                   </span>
 
                   <h3>
                     {t(
-                      'promotionalDemo.importTitle',
+                      "promotionalDemo.importTitle",
                       {
                         defaultValue:
-                          'Importer une facture',
-                      }
+                          "Ajouter une facture",
+                      },
                     )}
                   </h3>
                 </div>
 
                 <span className="demo-source-badge">
-                  OCR
+                  Document
                 </span>
               </div>
 
@@ -485,8 +464,8 @@ function PromotionalInvoiceDemo() {
 
                 <div className="demo-file-selection-status">
                   {currentStageIndex === 0
-                    ? '···'
-                    : '✓'}
+                    ? "···"
+                    : "✓"}
                 </div>
               </div>
 
@@ -498,15 +477,15 @@ function PromotionalInvoiceDemo() {
 
                   <strong>
                     {currentStage.key ===
-                    'waiting'
-                      ? '0 %'
+                    "waiting"
+                      ? "0 %"
                       : currentStage.key ===
-                          'selected'
-                        ? '10 %'
+                          "selected"
+                        ? "10 %"
                         : currentStage.key ===
-                            'uploading'
+                            "uploading"
                           ? `${uploadProgress} %`
-                          : '100 %'}
+                          : "100 %"}
                   </strong>
                 </div>
 
@@ -516,15 +495,15 @@ function PromotionalInvoiceDemo() {
                     style={{
                       width:
                         currentStage.key ===
-                        'waiting'
-                          ? '0%'
+                        "waiting"
+                          ? "0%"
                           : currentStage.key ===
-                              'selected'
-                            ? '10%'
+                              "selected"
+                            ? "10%"
                             : currentStage.key ===
-                                'uploading'
+                                "uploading"
                               ? `${uploadProgress}%`
-                              : '100%',
+                              : "100%",
                     }}
                   />
                 </div>
@@ -569,7 +548,7 @@ function PromotionalInvoiceDemo() {
 
                 <div className="demo-document-total">
                   <span>
-                    Total TTC
+                    Montant total
                   </span>
 
                   <strong>
@@ -578,10 +557,10 @@ function PromotionalInvoiceDemo() {
                 </div>
 
                 {[
-                  'extracting',
-                  'validating',
+                  "extracting",
+                  "validating",
                 ].includes(
-                  currentStage.key
+                  currentStage.key,
                 ) && (
                   <div className="demo-scan-line" />
                 )}
@@ -595,9 +574,9 @@ function PromotionalInvoiceDemo() {
                 >
                   <span className="demo-main-status-icon">
                     {currentStage.key ===
-                    'accepted'
-                      ? '✓'
-                      : '●'}
+                    "accepted"
+                      ? "✓"
+                      : "●"}
                   </span>
 
                   <div>
@@ -617,7 +596,7 @@ function PromotionalInvoiceDemo() {
                   (step) => {
                     const state =
                       getProcessStepState(
-                        step.key
+                        step.key,
                       );
 
                     return (
@@ -627,8 +606,8 @@ function PromotionalInvoiceDemo() {
                       >
                         <span className="demo-process-step-icon">
                           {state ===
-                          'completed'
-                            ? '✓'
+                          "completed"
+                            ? "✓"
                             : step.icon}
                         </span>
 
@@ -639,58 +618,58 @@ function PromotionalInvoiceDemo() {
                               {
                                 defaultValue: {
                                   import:
-                                    'Import de la facture',
+                                    "Ajout de la facture",
                                   extraction:
-                                    'Extraction intelligente',
+                                    "Lecture des informations",
                                   validation:
-                                    'Validation métier',
+                                    "Vérification des données",
                                   teif:
-                                    'Génération TEIF',
+                                    "Préparation du document",
                                   signature:
-                                    'Signature XAdES',
+                                    "Validation",
                                   ttn:
-                                    'Transmission TTN',
+                                    "Envoi et confirmation",
                                 }[step.key],
-                              }
+                              },
                             )}
                           </strong>
 
                           <span>
                             {state ===
-                            'completed'
+                            "completed"
                               ? t(
-                                  'promotionalDemo.completed',
+                                  "promotionalDemo.completed",
                                   {
                                     defaultValue:
-                                      'Terminée',
-                                  }
+                                      "Terminée",
+                                  },
                                 )
                               : state ===
-                                  'active'
+                                  "active"
                                 ? t(
-                                    'promotionalDemo.inProgress',
+                                    "promotionalDemo.inProgress",
                                     {
                                       defaultValue:
-                                        'En cours',
-                                    }
+                                        "En cours",
+                                    },
                                   )
                                 : t(
-                                    'promotionalDemo.waiting',
+                                    "promotionalDemo.waiting",
                                     {
                                       defaultValue:
-                                        'En attente',
-                                    }
+                                        "En attente",
+                                    },
                                   )}
                           </span>
                         </div>
 
                         {state ===
-                          'active' && (
+                          "active" && (
                           <span className="demo-process-spinner" />
                         )}
                       </div>
                     );
-                  }
+                  },
                 )}
               </div>
 
@@ -698,16 +677,16 @@ function PromotionalInvoiceDemo() {
                 <div className="demo-data-header">
                   <strong>
                     {t(
-                      'promotionalDemo.detectedData',
+                      "promotionalDemo.detectedData",
                       {
                         defaultValue:
-                          'Données détectées',
-                      }
+                          "Informations de la facture",
+                      },
                     )}
                   </strong>
 
                   <span>
-                    JSON
+                    Vérifiées
                   </span>
                 </div>
 
@@ -715,15 +694,15 @@ function PromotionalInvoiceDemo() {
                   {DEMO_FIELDS.map(
                     (
                       field,
-                      index
+                      index,
                     ) => (
                       <div
                         key={field.key}
                         className={`demo-data-field ${
                           index <
                           visibleFieldCount
-                            ? 'visible'
-                            : ''
+                            ? "visible"
+                            : ""
                         }`}
                       >
                         <span>
@@ -732,23 +711,23 @@ function PromotionalInvoiceDemo() {
                             {
                               defaultValue: {
                                 supplier:
-                                  'Fournisseur',
+                                  "Fournisseur",
                                 customer:
-                                  'Client',
+                                  "Client",
                                 invoiceNumber:
-                                  'Facture',
+                                  "N° de facture",
                                 invoiceDate:
-                                  'Date',
+                                  "Date",
                                 lineCount:
-                                  'Lignes',
+                                  "Articles",
                                 totalHt:
-                                  'Total HT',
+                                  "Montant HT",
                                 vat:
-                                  'TVA',
+                                  "TVA",
                                 totalTtc:
-                                  'Total TTC',
+                                  "Montant total",
                               }[field.key],
-                            }
+                            },
                           )}
                         </span>
 
@@ -756,7 +735,7 @@ function PromotionalInvoiceDemo() {
                           {field.value}
                         </strong>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               </div>
@@ -764,9 +743,9 @@ function PromotionalInvoiceDemo() {
               <div
                 className={`demo-accepted-result ${
                   currentStage.key ===
-                  'accepted'
-                    ? 'visible'
-                    : ''
+                  "accepted"
+                    ? "visible"
+                    : ""
                 }`}
               >
                 <div className="accepted-result-icon">
@@ -776,16 +755,16 @@ function PromotionalInvoiceDemo() {
                 <div className="accepted-result-content">
                   <strong>
                     {t(
-                      'promotionalDemo.acceptedTitle',
+                      "promotionalDemo.acceptedTitle",
                       {
                         defaultValue:
-                          'Facture acceptée',
-                      }
+                          "Votre facture est validée",
+                      },
                     )}
                   </strong>
 
                   <span>
-                    TTN-20260729-FA260002
+                    Confirmation enregistrée
                   </span>
                 </div>
 
@@ -812,24 +791,24 @@ function PromotionalInvoiceDemo() {
                 onClick={togglePause}
               >
                 {isPaused
-                  ? '▶'
-                  : '⏸'}
+                  ? "▶"
+                  : "⏸"}
 
                 <span>
                   {isPaused
                     ? t(
-                        'promotionalDemo.play',
+                        "promotionalDemo.play",
                         {
                           defaultValue:
-                            'Lecture',
-                        }
+                            "Continuer",
+                        },
                       )
                     : t(
-                        'promotionalDemo.pause',
+                        "promotionalDemo.pause",
                         {
                           defaultValue:
-                            'Pause',
-                        }
+                            "Pause",
+                        },
                       )}
                 </span>
               </button>
@@ -843,11 +822,11 @@ function PromotionalInvoiceDemo() {
 
                 <span>
                   {t(
-                    'promotionalDemo.replay',
+                    "promotionalDemo.replay",
                     {
                       defaultValue:
-                        'Rejouer',
-                    }
+                        "Recommencer",
+                    },
                   )}
                 </span>
               </button>
@@ -857,32 +836,32 @@ function PromotionalInvoiceDemo() {
               {DEMO_STAGES.map(
                 (
                   stage,
-                  index
+                  index,
                 ) => (
                   <span
                     key={stage.key}
                     className={
                       index ===
                       currentStageIndex
-                        ? 'active'
+                        ? "active"
                         : index <
                             currentStageIndex
-                          ? 'completed'
-                          : ''
+                          ? "completed"
+                          : ""
                     }
                   />
-                )
+                ),
               )}
             </div>
 
             <span className="demo-auto-replay">
-              ●{' '}
+              ●{" "}
               {t(
-                'promotionalDemo.autoReplay',
+                "promotionalDemo.autoReplay",
                 {
                   defaultValue:
-                    'Relecture automatique',
-                }
+                    "La démonstration redémarre automatiquement",
+                },
               )}
             </span>
           </div>

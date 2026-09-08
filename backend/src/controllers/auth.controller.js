@@ -1,23 +1,46 @@
 const {
   authenticateWithGitHub,
   createGitHubAuthorizationUrl,
-} = require('../services/auth.service');
+} =
+  require(
+    "../services/auth.service",
+  );
 
-/**
- * Retourne l'adresse du frontend.
- *
- * @returns {string}
- */
+/*
+|--------------------------------------------------------------------------
+| FRONTEND URL
+|--------------------------------------------------------------------------
+*/
+
 function getFrontendUrl() {
   return (
-    process.env.FRONTEND_URL ||
-    'http://localhost:5173'
+    process.env
+      .FRONTEND_URL ||
+    "http://localhost:5173"
   );
 }
 
-/**
- * Redirige l'utilisateur vers GitHub.
- */
+/*
+|--------------------------------------------------------------------------
+| NORMALIZE MODE
+|--------------------------------------------------------------------------
+*/
+
+function normalizeMode(
+  mode,
+) {
+  return mode ===
+    "register"
+    ? "register"
+    : "login";
+}
+
+/*
+|--------------------------------------------------------------------------
+| REDIRECT TO GITHUB
+|--------------------------------------------------------------------------
+*/
+
 function redirectToGitHub(
   request,
   response,
@@ -25,10 +48,10 @@ function redirectToGitHub(
 ) {
   try {
     const mode =
-      request.query.mode ===
-      'register'
-        ? 'register'
-        : 'login';
+      normalizeMode(
+        request.query
+          .mode,
+      );
 
     const authorizationUrl =
       createGitHubAuthorizationUrl({
@@ -38,20 +61,30 @@ function redirectToGitHub(
     return response.redirect(
       authorizationUrl,
     );
-  } catch (error) {
-    return next(error);
+  } catch (
+    error
+  ) {
+    return next(
+      error,
+    );
   }
 }
 
-/**
- * Reçoit le retour OAuth de GitHub.
- */
+/*
+|--------------------------------------------------------------------------
+| GITHUB CALLBACK
+|--------------------------------------------------------------------------
+*/
+
 async function githubCallback(
   request,
   response,
 ) {
   const frontendUrl =
     getFrontendUrl();
+
+  let resolvedMode =
+    "login";
 
   try {
     const {
@@ -60,20 +93,42 @@ async function githubCallback(
       error,
       error_description:
         errorDescription,
-    } = request.query;
+    } =
+      request.query;
+
+    /*
+    |--------------------------------------------------------------------------
+    | GITHUB ERROR
+    |--------------------------------------------------------------------------
+    */
 
     if (error) {
       throw new Error(
         errorDescription ||
-        error,
+          error,
       );
     }
 
-    if (!code || !state) {
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATE CALLBACK
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+      !code ||
+      !state
+    ) {
       throw new Error(
-        'Code ou état GitHub manquant.',
+        "Code ou état GitHub manquant.",
       );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | AUTHENTICATE
+    |--------------------------------------------------------------------------
+    */
 
     const result =
       await authenticateWithGitHub({
@@ -81,58 +136,149 @@ async function githubCallback(
         state,
       });
 
+    resolvedMode =
+      normalizeMode(
+        result?.mode,
+      );
+
+    /*
+    |--------------------------------------------------------------------------
+    | CALLBACK URL
+    |--------------------------------------------------------------------------
+    */
+
     const callbackUrl =
       new URL(
-        '/oauth/github/callback',
+        "/oauth/github/callback",
         frontendUrl,
       );
 
-    callbackUrl.searchParams.set(
-      'accessToken',
-      result.accessToken,
-    );
+    /*
+    |--------------------------------------------------------------------------
+    | TOKEN
+    |--------------------------------------------------------------------------
+    */
 
-    callbackUrl.searchParams.set(
-      'user',
-      Buffer.from(
-        JSON.stringify(
-          result.user,
+    callbackUrl
+      .searchParams
+      .set(
+        "accessToken",
+        result.accessToken,
+      );
+
+    /*
+    |--------------------------------------------------------------------------
+    | USER
+    |--------------------------------------------------------------------------
+    */
+
+    callbackUrl
+      .searchParams
+      .set(
+        "user",
+        Buffer.from(
+          JSON.stringify(
+            result.user,
+          ),
+        ).toString(
+          "base64url",
         ),
-      ).toString('base64url'),
-    );
+      );
 
-    callbackUrl.searchParams.set(
-      'isNewUser',
-      String(
-        result.isNewUser,
-      ),
-    );
+    /*
+    |--------------------------------------------------------------------------
+    | MODE
+    |--------------------------------------------------------------------------
+    */
+
+    callbackUrl
+      .searchParams
+      .set(
+        "mode",
+        resolvedMode,
+      );
+
+    /*
+    |--------------------------------------------------------------------------
+    | NEW USER
+    |--------------------------------------------------------------------------
+    */
+
+    callbackUrl
+      .searchParams
+      .set(
+        "isNewUser",
+        String(
+          Boolean(
+            result.isNewUser,
+          ),
+        ),
+      );
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILE COMPLETION
+    |--------------------------------------------------------------------------
+    */
+
+    callbackUrl
+      .searchParams
+      .set(
+        "profileCompletionRequired",
+        String(
+          Boolean(
+            result
+              .profileCompletionRequired,
+          ),
+        ),
+      );
 
     return response.redirect(
       callbackUrl.toString(),
     );
-  } catch (error) {
+  } catch (
+    error
+  ) {
     console.error(
-      'GITHUB CALLBACK ERROR:',
+      "GITHUB CALLBACK ERROR:",
       error,
     );
 
+    /*
+    |--------------------------------------------------------------------------
+    | MODE ATTACHED BY SERVICE
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+      error?.mode
+    ) {
+      resolvedMode =
+        normalizeMode(
+          error.mode,
+        );
+    }
+
     const errorUrl =
       new URL(
-        '/auth',
+        "/auth",
         frontendUrl,
       );
 
-    errorUrl.searchParams.set(
-      'mode',
-      'login',
-    );
+    errorUrl
+      .searchParams
+      .set(
+        "mode",
+        resolvedMode,
+      );
 
-    errorUrl.searchParams.set(
-      'error',
-      error.message ||
-        'La connexion GitHub a échoué.',
-    );
+    errorUrl
+      .searchParams
+      .set(
+        "error",
+        error?.message ||
+          "L’authentification GitHub a échoué.",
+      );
 
     return response.redirect(
       errorUrl.toString(),
